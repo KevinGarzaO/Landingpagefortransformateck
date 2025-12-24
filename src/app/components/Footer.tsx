@@ -1,29 +1,30 @@
-import logo from "figma:asset/bb848190a08071a62de5538bc705b11bae3cdcef.png";
-import { Facebook, Instagram, Linkedin, Twitter } from 'lucide-react';
+import logo from "../../assets/logo_3.png";
+
+import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
 
 interface FooterProps {
-  onNavigate?: (page: 'home' | 'landing-web') => void;
+  onNavigate?: (page: "home" | "landing-web") => void;
 }
 
 export function Footer({ onNavigate }: FooterProps) {
   const currentYear = new Date().getFullYear();
 
   const services = [
-    'Apps Mobile',
-    'Apps Web',
-    'Landing Pages',
-    'E-commerce',
-    'Sistemas Web',
-    'Chatbot IA WhatsApp',
-    'Copywriting',
-    'Marketing Ads'
+    "Apps Mobile",
+    "Apps Web",
+    "Landing Pages",
+    "E-commerce",
+    "Sistemas Web",
+    "Chatbot IA WhatsApp",
+    "Copywriting",
+    "Marketing Ads",
   ];
 
   const socialLinks = [
-    { name: 'Facebook', icon: Facebook, url: 'https://facebook.com' },
-    { name: 'Instagram', icon: Instagram, url: 'https://instagram.com' },
-    { name: 'LinkedIn', icon: Linkedin, url: 'https://linkedin.com' },
-    { name: 'Twitter', icon: Twitter, url: 'https://twitter.com' }
+    { name: "Facebook", icon: Facebook, url: "https://facebook.com" },
+    { name: "Instagram", icon: Instagram, url: "https://instagram.com" },
+    { name: "LinkedIn", icon: Linkedin, url: "https://linkedin.com" },
+    { name: "Twitter", icon: Twitter, url: "https://twitter.com" },
   ];
 
   return (
@@ -38,13 +39,13 @@ export function Footer({ onNavigate }: FooterProps) {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
           {/* Company Info */}
           <div>
-            <button 
-              onClick={() => onNavigate?.('home')}
+            <button
+              onClick={() => onNavigate?.("home")}
               className="flex items-center gap-3 group mb-4"
             >
-              <img 
-                src={logo} 
-                alt="Transformateck" 
+              <img
+                src={logo}
+                alt="Transformateck"
                 className="h-10 brightness-0 invert group-hover:scale-110 transition-transform duration-300"
               />
               <span className="text-white text-xl bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
@@ -52,7 +53,8 @@ export function Footer({ onNavigate }: FooterProps) {
               </span>
             </button>
             <p className="text-gray-400 mb-6 leading-relaxed">
-              Fábrica de productos digitales. Transformamos ideas en realidad con tecnología de vanguardia.
+              Fábrica de productos digitales. Transformamos ideas en realidad
+              con tecnología de vanguardia.
             </p>
             <a
               href="https://wa.me/528118582060?text=Hola%20me%20interesa%20m%C3%A1s%20informaci%C3%B3n%20sobre%20los%20servicios"
@@ -73,7 +75,7 @@ export function Footer({ onNavigate }: FooterProps) {
               {services.map((service, i) => (
                 <li key={i}>
                   <button
-                    onClick={() => onNavigate?.('home')}
+                    onClick={() => onNavigate?.("home")}
                     className="text-gray-400 hover:text-cyan-400 transition-colors duration-300 text-sm"
                   >
                     {service}
@@ -106,14 +108,14 @@ export function Footer({ onNavigate }: FooterProps) {
               })}
             </div>
             <div className="text-gray-500 text-sm space-y-2">
-              <a 
+              <a
                 href="mailto:kevin.garza@transformateck.com"
                 className="flex items-center gap-2 hover:text-cyan-400 transition-colors duration-300"
               >
                 <span>📧</span>
                 <span>kevin.garza@transformateck.com</span>
               </a>
-              <a 
+              <a
                 href="https://wa.me/528118582060?text=Hola%20me%20interesa%20m%C3%A1s%20informaci%C3%B3n%20de%20los%20servicios"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -133,13 +135,22 @@ export function Footer({ onNavigate }: FooterProps) {
               © {currentYear} Transformateck. Todos los derechos reservados.
             </p>
             <div className="flex gap-6 text-sm">
-              <a href="#" className="text-gray-500 hover:text-cyan-400 transition-colors">
+              <a
+                href="#"
+                className="text-gray-500 hover:text-cyan-400 transition-colors"
+              >
                 Privacidad
               </a>
-              <a href="#" className="text-gray-500 hover:text-cyan-400 transition-colors">
+              <a
+                href="#"
+                className="text-gray-500 hover:text-cyan-400 transition-colors"
+              >
                 Términos
               </a>
-              <a href="#" className="text-gray-500 hover:text-cyan-400 transition-colors">
+              <a
+                href="#"
+                className="text-gray-500 hover:text-cyan-400 transition-colors"
+              >
                 Cookies
               </a>
             </div>

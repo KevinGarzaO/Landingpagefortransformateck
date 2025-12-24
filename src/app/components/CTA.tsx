@@ -1,4 +1,4 @@
-import logo from "figma:asset/bb848190a08071a62de5538bc705b11bae3cdcef.png";
+import logo from "../../assets/logo.png";
 
 export function CTA() {
   return (
@@ -6,31 +6,34 @@ export function CTA() {
       {/* Animated background */}
       <div className="absolute inset-0 opacity-20">
         <div className="absolute top-20 left-20 w-96 h-96 bg-cyan-500 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-purple-500 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1.5s' }}></div>
+        <div
+          className="absolute bottom-20 right-20 w-96 h-96 bg-purple-500 rounded-full blur-3xl animate-pulse"
+          style={{ animationDelay: "1.5s" }}
+        ></div>
       </div>
 
       <div className="max-w-5xl mx-auto text-center relative z-10">
-        <img 
-          src={logo} 
-          alt="Transformateck" 
+        <img
+          src={logo}
+          alt="Transformateck"
           className="h-16 md:h-24 mx-auto mb-8 brightness-0 invert"
         />
-        
+
         <div className="inline-block mb-6 px-4 py-2 bg-cyan-500/20 border border-cyan-500/50 rounded-full text-cyan-300 text-sm">
           🚀 Lanza Tu Proyecto Hoy
         </div>
-        
+
         <h2 className="text-4xl md:text-6xl text-white mb-6 leading-tight">
           Convierte Tu Idea en Realidad
           <span className="block bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
             Con un Equipo Profesional
           </span>
         </h2>
-        
+
         <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed">
-          Únete a cientos de emprendedores y negocios que ya transformaron 
-          su presencia digital con Transformateck. No es solo un sitio web, 
-          es tu fábrica de crecimiento.
+          Únete a cientos de emprendedores y negocios que ya transformaron su
+          presencia digital con Transformateck. No es solo un sitio web, es tu
+          fábrica de crecimiento.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
@@ -59,7 +62,9 @@ export function CTA() {
           <div className="text-center">
             <div className="text-4xl mb-3">👥</div>
             <div className="text-3xl text-purple-400 mb-2">Equipo Pro</div>
-            <p className="text-gray-400">Diseñadores y developers certificados</p>
+            <p className="text-gray-400">
+              Diseñadores y developers certificados
+            </p>
           </div>
           <div className="text-center">
             <div className="text-4xl mb-3">💎</div>
