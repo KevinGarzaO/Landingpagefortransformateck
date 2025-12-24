@@ -1,4 +1,5 @@
 import { Routes, Route, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 import { Navbar } from "./components/Navbar";
 import { Home } from "./pages/Home";
 import { LandingWeb } from "./pages/LandingWeb";
@@ -8,6 +9,13 @@ import { Footer } from "./components/Footer";
 
 export default function App() {
   const location = useLocation();
+
+  // 🔥 Facebook Pixel – PageView por cambio de ruta
+  useEffect(() => {
+    if (typeof window.fbq === "function") {
+      window.fbq("track", "PageView");
+    }
+  }, [location.pathname]);
 
   return (
     <div className="min-h-screen bg-black">

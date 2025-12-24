@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import logo from "../../assets/logo.png";
 
 export function Home() {
