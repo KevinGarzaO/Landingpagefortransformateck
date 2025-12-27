@@ -3,10 +3,12 @@ import App from "./app/App.tsx";
 import "./styles/index.css";
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
+import { ScrollToTop } from "./app/components/ScrollToTop.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
+      <ScrollToTop />
       <App />
     </BrowserRouter>
   </React.StrictMode>
