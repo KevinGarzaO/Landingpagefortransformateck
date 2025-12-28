@@ -48,7 +48,7 @@ export function Pricing() {
     },
     {
       name: "Landing Brand",
-      price: "$3,999",
+      price: "$4,999",
       period: "MXN",
       popular: false,
       badge: "Premium",
