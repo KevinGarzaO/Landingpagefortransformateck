@@ -12,6 +12,8 @@ import { trackPageView } from "../utils/metaPixel";
 export default function App() {
   const location = useLocation();
 
+  const isPaymentPage = location.pathname.startsWith("/payments");
+
   // 🔥 Facebook Pixel – PageView por cambio de ruta
   useEffect(() => {
     trackPageView();
@@ -19,7 +21,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-black">
-      <Navbar />
+      {!isPaymentPage && <Navbar />}
 
       <Routes>
         <Route path="/" element={<Home />} />
@@ -27,8 +29,9 @@ export default function App() {
         <Route path="/payments" element={<PaymentPage />} />
       </Routes>
 
-      <Footer />
-      <WhatsAppButton />
+      {!isPaymentPage && <Footer />}
+      {!isPaymentPage && <WhatsAppButton />}
+
       <ScrollToTop />
     </div>
   );
