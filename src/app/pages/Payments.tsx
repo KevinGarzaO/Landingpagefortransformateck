@@ -115,7 +115,16 @@ function PaymentForm({ token }: { token: string }) {
             text: result.error.message || "Error en pago",
           });
         } else if (result.paymentIntent?.status === "succeeded")
-          trackPurchase(paymentDetails[selectedPayment].amount);
+          trackPurchase(
+            paymentDetails[selectedPayment].amount,
+            paymentDetails[selectedPayment].breakdown.filter(
+              (i: any) =>
+                !i.name.toLowerCase().includes("subtotal") &&
+                !i.name.toLowerCase().includes("iva") &&
+                !i.name.toLowerCase().includes("anticipo") &&
+                !i.name.toLowerCase().includes("liquidación")
+            )
+          );
         MySwal.fire({
           icon: "success",
           title: "¡Pago exitoso!",
