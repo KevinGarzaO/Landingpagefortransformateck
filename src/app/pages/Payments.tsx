@@ -10,6 +10,7 @@ import logo from "../../assets/logo.png";
 import { useLocation } from "react-router-dom";
 import { MySwal } from "../../utils/alert";
 import { trackInitiateCheckout, trackPurchase } from "../../utils/metaPixel";
+import { formatMxPhone, normalizeMxPhone } from "../../utils/phoneFormatter";
 
 const stripeKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
 if (!stripeKey) throw new Error("Falta la clave pública de Stripe");
@@ -56,6 +57,13 @@ function PaymentForm({ token }: { token: string }) {
 
     fetchPaymentDetails();
   }, [token]);
+
+  useEffect(() => {
+    if (paymentDetails?.customer?.phone) {
+      const cleanPhone = normalizeMxPhone(paymentDetails.customer.phone);
+      setPhone(formatMxPhone(cleanPhone));
+    }
+  }, [paymentDetails]);
 
   useEffect(() => {
     if (!paymentDetails || !selectedPayment) return;
@@ -131,13 +139,16 @@ function PaymentForm({ token }: { token: string }) {
           text:
             "Gracias por tu compra." +
             "\n\n" +
-            "tu pago por " +
-            "$" +
+            "Tu pago por $" +
             paymentDetails[selectedPayment].amount.toFixed(2) +
-            " MXN" +
-            " ha sido procesado exitosamente. " +
+            " MXN ha sido procesado exitosamente." +
             "\n\n" +
             "Recibirás un correo de confirmación en breve.",
+          confirmButtonText: "Ir al inicio",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = "/";
+          }
         });
       } else if (paymentMethod === "oxxo") {
         const result = await stripe.confirmOxxoPayment(client_secret, {
@@ -208,41 +219,98 @@ function PaymentForm({ token }: { token: string }) {
         <input
           type="tel"
           placeholder="Teléfono"
-          className="w-full p-3 rounded-lg bg-gray-800 text-white border border-gray-700 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+          inputMode="numeric"
           value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          required
+          readOnly
+          tabIndex={-1}
+          className="
+            w-full p-3 rounded-lg
+            bg-gray-800 text-white border border-gray-700
+            opacity-70
+            pointer-events-none
+            select-none
+          "
         />
+
+        <p className="text-sm text-cyan-400 italic">
+          Este número fue tomado de tu información de compra y no puede
+          modificarse.
+        </p>
       </div>
 
       {/* Opciones de Pago */}
       <div className="space-y-4">
-        <label className="text-white font-bold text-lg block mb-2">
-          Opciones de Pago
-        </label>
+        <div className="text-center mt-6">
+          <h3 className="text-2xl font-bold text-white mb-2 flex items-center justify-center gap-2">
+            <span className="text-cyan-400">💳</span>
+            Opciones de Pago
+          </h3>
+
+          <p className="text-gray-300 max-w-md mx-auto leading-relaxed text-center">
+            Puedes elegir la forma de pago que mejor se adapte a ti. Inicia tu
+            proyecto con un{" "}
+            <span className="text-cyan-400 font-semibold">
+              anticipo del 50%
+            </span>{" "}
+            y liquida el resto{" "}
+            <span className="text-cyan-400 font-semibold">contra entrega</span>,
+            o bien realiza el{" "}
+            <span className="text-cyan-400 font-semibold">pago total</span>{" "}
+            desde el inicio para avanzar sin pagos pendientes.
+            <br />
+            <br />
+            Aceptamos pagos con{" "}
+            <span className="text-cyan-400 font-semibold">
+              Visa, Mastercard y American Express
+            </span>{" "}
+            , así como{" "}
+            <span className="text-cyan-400 font-semibold">
+              pago en efectivo en OXXO
+            </span>
+            . Todas las transacciones se procesan de forma segura mediante{" "}
+            <span className="text-cyan-400 font-semibold">Stripe</span>.
+          </p>
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {["pago1", "pago2", "total"].map((key) => (
-            <div
-              key={key}
-              className={`cursor-pointer p-6 rounded-xl border text-white flex flex-col items-center justify-center transition-transform duration-300 ${
-                selectedPayment === key
-                  ? "border-cyan-500 bg-gray-700 scale-110 shadow-lg"
-                  : "border-gray-700 bg-gray-800 hover:border-cyan-500 hover:scale-105"
-              }`}
-              onClick={() => setSelectedPayment(key)}
-            >
-              <span className="font-bold text-xl">
-                {key === "pago1"
-                  ? "Pago Anticipo"
-                  : key === "pago2"
-                  ? "Pago Final"
-                  : "Pago Total"}
-              </span>
-              <span className="text-gray-300 text-lg">
-                ${paymentDetails?.[key]?.amount?.toFixed(2) || "0.00"}
-              </span>
-            </div>
-          ))}
+          {["pago1", "pago2", "total"].map((key) => {
+            const payment = paymentDetails?.[key];
+            const isEnabled = payment?.enabled;
+
+            return (
+              <div
+                key={key}
+                onClick={() => {
+                  if (!isEnabled) return;
+                  setSelectedPayment(key);
+                }}
+                className={`
+          p-6 rounded-xl border text-white flex flex-col items-center justify-center
+          transition-all duration-300
+          ${
+            !isEnabled
+              ? "cursor-not-allowed opacity-40 border-gray-700 bg-gray-900"
+              : selectedPayment === key
+              ? "cursor-pointer border-cyan-500 bg-gray-700 scale-110 shadow-lg"
+              : "cursor-pointer border-gray-700 bg-gray-800 hover:border-cyan-500 hover:scale-105"
+          }
+        `}
+              >
+                <span className="font-bold text-xl">{payment?.label}</span>
+
+                <span className="text-gray-300 text-lg mt-1">
+                  ${payment?.amount?.toFixed(2) || "0.00"}
+                </span>
+
+                {/* Mensaje opcional si está bloqueado */}
+                {!isEnabled && payment?.reason && (
+                  <span className="text-xs text-gray-400 mt-2 text-center">
+                    {payment.reason}
+                  </span>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -317,8 +385,10 @@ function PaymentForm({ token }: { token: string }) {
           value={paymentMethod}
           onChange={(e) => setPaymentMethod(e.target.value)}
         >
-          <option value="card">Tarjeta</option>
-          <option value="oxxo">OXXO</option>
+          <option value="card">
+            Tarjeta de crédito o débito — Pago inmediato
+          </option>
+          <option value="oxxo">OXXO — Paga en efectivo en tienda</option>
         </select>
       </div>
 
