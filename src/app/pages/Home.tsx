@@ -45,10 +45,6 @@ export function Home() {
       <div className="pt-20">
         {/* Hero Section */}
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
-          <img
-            src={ogimage}
-            alt="Transformateck - Fábrica de Productos Digitales"
-          />
           {/* Futuristic Grid Background */}
           <div className="absolute inset-0 opacity-20">
             <div
@@ -113,6 +109,12 @@ export function Home() {
                 Futuro Digital
               </span>
             </h1>
+
+            <img
+              src={ogimage}
+              alt="Transformateck - Fábrica de Productos Digitales"
+              className="mx-auto mb-8 rounded-xl shadow-2xl shadow-black/50 animate-in slide-in-from-bottom duration-700 delay-250"
+            />
 
             <p className="text-xl md:text-2xl text-gray-400 mb-12 max-w-4xl mx-auto leading-relaxed animate-in slide-in-from-bottom duration-700 delay-300">
               Transformamos ideas en productos digitales extraordinarios. Desde
