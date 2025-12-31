@@ -440,7 +440,7 @@ export function PaymentPage() {
   return (
     <>
       <Helmet>
-        <title>Transformateck | Landing pages</title>
+        <title>Transformateck | Paga seguro</title>
         <meta
           name="description"
           content="Transformateck - Paga de forma segura y rápida tus proyectos de landings profesionales optimizadas para conversión. Diseño premium, hosting incluido y entrega express en 48-72hrs."
