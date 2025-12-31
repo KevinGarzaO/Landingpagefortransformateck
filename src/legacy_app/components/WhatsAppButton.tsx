@@ -1,7 +1,8 @@
-import { useLocation } from "react-router-dom";
+"use client";
+import { usePathname } from "next/navigation";
 
 export function WhatsAppButton() {
-  const { pathname } = useLocation();
+  const pathname = usePathname();
 
   const message =
     pathname === "/"

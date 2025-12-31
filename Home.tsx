@@ -1,6 +1,6 @@
-import { useEffect } from "react";
-import logo from "../../assets/logo.png";
-import { Helmet } from "react-helmet-async";
+"use client";
+// Update logo path to public asset
+const logo = "/assets/logo.png";
 
 export function Home() {
   const scrollToServices = () => {
@@ -12,35 +12,6 @@ export function Home() {
 
   return (
     <>
-      <Helmet>
-        <title>Transformateck | Home</title>
-        <meta
-          name="description"
-          content="Transformateck - Somos una fábrica de productos digitales que utiliza IA para crear apps móviles, web, e-commerce y más en 48-72hrs."
-        />
-        <meta name="robots" content="index, follow" />
-
-        {/* Open Graph (Facebook, WhatsApp) */}
-        <meta property="og:title" content="Transformateck" />
-        <meta
-          property="og:description"
-          content="Transformateck - Somos una fábrica de productos digitales que utiliza IA para crear apps móviles, web, e-commerce y más en 48-72hrs."
-        />
-        <meta property="og:type" content="website" />
-        <meta
-          property="og:image"
-          content="https://transformateck.com/assets/og-image-xbh9Qoxc.jpg"
-        />
-        <meta property="og:url" content="https://transformateck.com" />
-
-        {/* Twitter */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Transformateck" />
-        <meta
-          name="twitter:description"
-          content="Transformateck - Somos una fábrica de productos digitales que utiliza IA para crear apps móviles, web, e-commerce y más en 48-72hrs."
-        />
-      </Helmet>
       <div className="pt-20">
         {/* Hero Section */}
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">

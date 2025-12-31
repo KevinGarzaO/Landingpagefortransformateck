@@ -1,4 +1,6 @@
-import { useState, useEffect } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
+import { useState, useEffect, Suspense } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import {
   Elements,
@@ -6,16 +8,16 @@ import {
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
-import logo from "../../assets/logo.png";
-import { Helmet } from "react-helmet-async";
-import { useLocation } from "react-router-dom";
+// Update logo path to public asset
+const logo = "/assets/logo.png";
+import { useSearchParams } from "next/navigation";
 import { MySwal } from "../../utils/alert";
 import { trackInitiateCheckout, trackPurchase } from "../../utils/metaPixel";
 import { formatMxPhone, normalizeMxPhone } from "../../utils/phoneFormatter";
 
-const stripeKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
-if (!stripeKey) throw new Error("Falta la clave pública de Stripe");
-const stripePromise = loadStripe(stripeKey);
+const stripeKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+// Prevent build crash if key is missing (e.g. during CI/CD or before .env update)
+const stripePromise = stripeKey ? loadStripe(stripeKey) : null;
 
 function PaymentForm({ token }: { token: string }) {
   const stripe = useStripe();
@@ -432,47 +434,24 @@ function PaymentForm({ token }: { token: string }) {
   );
 }
 
-export function PaymentPage() {
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const token = queryParams.get("token") || ""; // obtiene token desde ?token=xxxx
+// Internal component that uses search params
+function PaymentContent() {
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token") || "";
 
   return (
-    <>
-      <Helmet>
-        <title>Transformateck | Paga seguro</title>
-        <meta
-          name="description"
-          content="Transformateck - Paga de forma segura y rápida tus proyectos de landings profesionales optimizadas para conversión. Diseño premium, hosting incluido y entrega express en 48-72hrs."
-        />
-        <meta name="robots" content="index, follow" />
+    <div className="min-h-screen bg-gray-900 py-24 px-4">
+      <Elements stripe={stripePromise}>
+        <PaymentForm token={token} />
+      </Elements>
+    </div>
+  );
+}
 
-        {/* Open Graph (Facebook, WhatsApp) */}
-        <meta property="og:title" content="Transformateck" />
-        <meta
-          property="og:description"
-          content="Transformateck - Paga de forma segura y rápida tus proyectos de landings profesionales optimizadas para conversión. Diseño premium, hosting incluido y entrega express en 48-72hrs."
-        />
-        <meta property="og:type" content="website" />
-        <meta
-          property="og:image"
-          content="https://transformateck.com/assets/og-image-xbh9Qoxc.jpg"
-        />
-        <meta property="og:url" content="https://transformateck.com" />
-
-        {/* Twitter */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Transformateck" />
-        <meta
-          name="twitter:description"
-          content="Transformateck - Paga de forma segura y rápida tus proyectos de landings profesionales optimizadas para conversión. Diseño premium, hosting incluido y entrega express en 48-72hrs."
-        />
-      </Helmet>
-      <div className="min-h-screen bg-gray-900 py-24 px-4">
-        <Elements stripe={stripePromise}>
-          <PaymentForm token={token} />
-        </Elements>
-      </div>
-    </>
+export function PaymentPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-900 flex items-center justify-center text-white">Cargando...</div>}>
+      <PaymentContent />
+    </Suspense>
   );
 }

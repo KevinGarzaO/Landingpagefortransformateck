@@ -1,10 +1,14 @@
+"use client";
 import { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import logo from "../../assets/logo_3.png";
+import { usePathname, useRouter } from "next/navigation";
+import LinkComponent from "next/link";
+// Image generic path, assuming assets were moved to public/assets
+const logo = "/assets/logo_3.png";
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const navigate = useNavigate();
+  const router = useRouter();
+  const pathname = usePathname();
 
   const menuItems = [
     { path: "/", label: "Inicio", icon: "🏠" },
@@ -17,7 +21,7 @@ export function Navbar() {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <button
-            onClick={() => navigate("/")}
+            onClick={() => router.push("/")}
             className="flex items-center gap-3 group"
           >
             <img
@@ -32,12 +36,13 @@ export function Navbar() {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-6">
-            {menuItems.map((item) => (
-              <NavLink
+            {menuItems.map((item) => {
+              const isActive = pathname === item.path;
+              return (
+              <LinkComponent
                 key={item.path}
-                to={item.path}
-                className={({ isActive }) =>
-                  `px-4 py-2 rounded-lg transition-all duration-300 ${
+                href={item.path}
+                className={`px-4 py-2 rounded-lg transition-all duration-300 ${
                     isActive
                       ? "bg-gradient-to-r from-cyan-500 to-purple-600 text-white shadow-lg shadow-cyan-500/50"
                       : "text-gray-400 hover:text-white hover:bg-white/5"
@@ -46,8 +51,8 @@ export function Navbar() {
               >
                 <span className="mr-2">{item.icon}</span>
                 {item.label}
-              </NavLink>
-            ))}
+              </LinkComponent>
+            )})}
 
             <a
               href="https://wa.me/528118582060?text=Hola%20me%20interesa%20más%20información%20sobre%20los%20servicios"
@@ -93,13 +98,14 @@ export function Navbar() {
         {/* Mobile Menu */}
         {isMenuOpen && (
           <div className="md:hidden py-4 border-t border-cyan-500/20 animate-in slide-in-from-top">
-            {menuItems.map((item) => (
-              <NavLink
+            {menuItems.map((item) => {
+              const isActive = pathname === item.path;
+              return (
+              <LinkComponent
                 key={item.path}
-                to={item.path}
+                href={item.path}
                 onClick={() => setIsMenuOpen(false)}
-                className={({ isActive }) =>
-                  `block w-full text-left px-4 py-3 rounded-lg transition-all duration-300 mb-2 ${
+                className={`block w-full text-left px-4 py-3 rounded-lg transition-all duration-300 mb-2 ${
                     isActive
                       ? "bg-gradient-to-r from-cyan-500 to-purple-600 text-white"
                       : "text-gray-400 hover:text-white hover:bg-white/5"
@@ -108,8 +114,8 @@ export function Navbar() {
               >
                 <span className="mr-2">{item.icon}</span>
                 {item.label}
-              </NavLink>
-            ))}
+              </LinkComponent>
+            )})}
 
             <a
               href="https://wa.me/528118582060?text=Hola%20me%20interesa%20más%20información%20sobre%20los%20servicios"

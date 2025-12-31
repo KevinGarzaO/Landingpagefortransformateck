@@ -1,12 +1,10 @@
-import logo from "../../assets/logo_3.png";
-
+import Link from "next/link";
 import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
 
-interface FooterProps {
-  onNavigate?: (page: "home" | "landing-web") => void;
-}
+// Update logo path
+const logo = "/assets/logo_3.png";
 
-export function Footer({ onNavigate }: FooterProps) {
+export function Footer() {
   const currentYear = new Date().getFullYear();
 
   const services = [
@@ -25,6 +23,7 @@ export function Footer({ onNavigate }: FooterProps) {
     { name: "Instagram", icon: Instagram, url: "https://instagram.com" },
     { name: "LinkedIn", icon: Linkedin, url: "https://linkedin.com" },
     { name: "Twitter", icon: Twitter, url: "https://twitter.com" },
+    { name: "Twitter", icon: Twitter, url: "https://twitter.com" },
   ];
 
   return (
@@ -39,8 +38,8 @@ export function Footer({ onNavigate }: FooterProps) {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
           {/* Company Info */}
           <div>
-            <button
-              onClick={() => onNavigate?.("home")}
+            <Link
+              href="/"
               className="flex items-center gap-3 group mb-4"
             >
               <img
@@ -51,7 +50,7 @@ export function Footer({ onNavigate }: FooterProps) {
               <span className="text-white text-xl bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
                 Transformateck
               </span>
-            </button>
+            </Link>
             <p className="text-gray-400 mb-6 leading-relaxed">
               Fábrica de productos digitales. Transformamos ideas en realidad
               con tecnología de vanguardia.
@@ -74,12 +73,12 @@ export function Footer({ onNavigate }: FooterProps) {
             <ul className="space-y-2">
               {services.map((service, i) => (
                 <li key={i}>
-                  <button
-                    onClick={() => onNavigate?.("home")}
+                  <Link
+                    href="#"
                     className="text-gray-400 hover:text-cyan-400 transition-colors duration-300 text-sm"
                   >
                     {service}
-                  </button>
+                  </Link>
                 </li>
               ))}
             </ul>

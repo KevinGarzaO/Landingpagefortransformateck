@@ -1,39 +1,9 @@
 import { Pricing } from "../components/Pricing";
 import { Upsells } from "../components/Upsells";
-import { Helmet } from "react-helmet-async";
 
 export function LandingWeb() {
   return (
     <>
-      <Helmet>
-        <title>Transformateck | Landing pages</title>
-        <meta
-          name="description"
-          content="Transformateck - Creamos landings profesionales optimizadas para conversión. Diseño premium, hosting incluido y entrega express en 48-72hrs."
-        />
-        <meta name="robots" content="index, follow" />
-
-        {/* Open Graph (Facebook, WhatsApp) */}
-        <meta property="og:title" content="Transformateck" />
-        <meta
-          property="og:description"
-          content="Transformateck - Creamos landings profesionales optimizadas para conversión. Diseño premium, hosting incluido y entrega express en 48-72hrs."
-        />
-        <meta property="og:type" content="website" />
-        <meta
-          property="og:image"
-          content="https://transformateck.com/assets/og-image-xbh9Qoxc.jpg"
-        />
-        <meta property="og:url" content="https://transformateck.com" />
-
-        {/* Twitter */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Transformateck" />
-        <meta
-          name="twitter:description"
-          content="Transformateck - Creamos landings profesionales optimizadas para conversión. Diseño premium, hosting incluido y entrega express en 48-72hrs."
-        />
-      </Helmet>
       <div className="pt-20 bg-black">
         {/* Hero Section */}
         <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">

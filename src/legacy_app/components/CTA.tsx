@@ -1,4 +1,5 @@
-import logo from "../../assets/logo.png";
+// Update logo path to public asset
+const logo = "/assets/logo.png";
 
 export function CTA() {
   return (
