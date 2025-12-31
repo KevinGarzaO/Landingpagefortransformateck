@@ -2,9 +2,41 @@ import type { Metadata } from 'next'
 import '@/styles/index.css'
 import { Toaster } from 'sonner'
 
+// Define the base URL for metadata resolution
+// Use VERCEL_URL if present, otherwise fallback to localhost or the production domain
+const baseUrl = process.env.VERCEL_URL 
+  ? `https://${process.env.VERCEL_URL}` 
+  : "https://transformateck.com";
+
 export const metadata: Metadata = {
-  title: 'Transformateck',
-  description: 'Landing page for Transformateck',
+  metadataBase: new URL(baseUrl),
+  title: {
+    default: 'Transformateck',
+    template: '%s | Transformateck',
+  },
+  description: 'Transformateck - Somos una fábrica de productos digitales que utiliza IA para crear apps móviles, web, e-commerce y más en 48-72hrs.',
+  openGraph: {
+    title: 'Transformateck',
+    description: 'Transformateck - Somos una fábrica de productos digitales que utiliza IA para crear apps móviles, web, e-commerce y más en 48-72hrs.',
+    url: baseUrl,
+    siteName: 'Transformateck',
+    locale: 'es_MX',
+    type: 'website',
+    images: [
+      {
+        url: '/assets/transformateck-social-card.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Transformateck Social Card',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Transformateck',
+    description: 'Fábrica de productos digitales con IA.',
+    images: ['/assets/transformateck-social-card.jpg'],
+  },
 }
 
 export default function RootLayout({
