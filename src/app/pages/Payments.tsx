@@ -7,6 +7,7 @@ import {
   useElements,
 } from "@stripe/react-stripe-js";
 import logo from "../../assets/logo.png";
+import { Helmet } from "react-helmet-async";
 import { useLocation } from "react-router-dom";
 import { MySwal } from "../../utils/alert";
 import { trackInitiateCheckout, trackPurchase } from "../../utils/metaPixel";
@@ -437,10 +438,41 @@ export function PaymentPage() {
   const token = queryParams.get("token") || ""; // obtiene token desde ?token=xxxx
 
   return (
-    <div className="min-h-screen bg-gray-900 py-24 px-4">
-      <Elements stripe={stripePromise}>
-        <PaymentForm token={token} />
-      </Elements>
-    </div>
+    <>
+      <Helmet>
+        <title>Transformateck | Landing pages</title>
+        <meta
+          name="description"
+          content="Transformateck - Paga de forma segura y rápida tus proyectos de landings profesionales optimizadas para conversión. Diseño premium, hosting incluido y entrega express en 48-72hrs."
+        />
+        <meta name="robots" content="index, follow" />
+
+        {/* Open Graph (Facebook, WhatsApp) */}
+        <meta property="og:title" content="Transformateck" />
+        <meta
+          property="og:description"
+          content="Transformateck - Paga de forma segura y rápida tus proyectos de landings profesionales optimizadas para conversión. Diseño premium, hosting incluido y entrega express en 48-72hrs."
+        />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:image"
+          content="https://transformateck.com/assets/og-image.jpg"
+        />
+        <meta property="og:url" content="https://transformateck.com" />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Transformateck" />
+        <meta
+          name="twitter:description"
+          content="Transformateck - Paga de forma segura y rápida tus proyectos de landings profesionales optimizadas para conversión. Diseño premium, hosting incluido y entrega express en 48-72hrs."
+        />
+      </Helmet>
+      <div className="min-h-screen bg-gray-900 py-24 px-4">
+        <Elements stripe={stripePromise}>
+          <PaymentForm token={token} />
+        </Elements>
+      </div>
+    </>
   );
 }
