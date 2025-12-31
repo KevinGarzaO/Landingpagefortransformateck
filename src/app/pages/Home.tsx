@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import logo from "../../assets/logo.png";
+import ogimage from "../../assets/og-image.jpg";
 import { Helmet } from "react-helmet-async";
 
 export function Home() {
@@ -92,6 +93,12 @@ export function Home() {
             <h2 className="text-5xl md:hidden bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent mb-8 animate-in fade-in zoom-in duration-700">
               Transformateck
             </h2>
+
+            <img
+              src={ogimage}
+              alt="Transformateck - Fábrica de Productos Digitales"
+              className="w-full max-w-3xl mx-auto mb-8 rounded-lg shadow-lg animate-in fade-in duration-700 md:hidden"
+            />
 
             <div className="mb-8 animate-in slide-in-from-bottom duration-700 delay-100">
               <div className="inline-block px-6 py-3 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-500/50 rounded-full backdrop-blur-sm mb-6">
