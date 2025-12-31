@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import logo from "../../assets/logo.png";
-import ogimage from "../../assets/og-image.jpg";
 import { Helmet } from "react-helmet-async";
 
 export function Home() {
@@ -30,7 +29,7 @@ export function Home() {
         <meta property="og:type" content="website" />
         <meta
           property="og:image"
-          content="https://transformateck.com/assets/og-image.jpg"
+          content="https://transformateck.com/assets/og-image-xbh9Qoxc.jpg"
         />
         <meta property="og:url" content="https://transformateck.com" />
 
@@ -109,12 +108,6 @@ export function Home() {
                 Futuro Digital
               </span>
             </h1>
-
-            <img
-              src={ogimage}
-              alt="Transformateck - Fábrica de Productos Digitales"
-              className="mx-auto mb-8 rounded-xl shadow-2xl shadow-black/50 animate-in slide-in-from-bottom duration-700 delay-250"
-            />
 
             <p className="text-xl md:text-2xl text-gray-400 mb-12 max-w-4xl mx-auto leading-relaxed animate-in slide-in-from-bottom duration-700 delay-300">
               Transformamos ideas en productos digitales extraordinarios. Desde

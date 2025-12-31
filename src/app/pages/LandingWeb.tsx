@@ -22,7 +22,7 @@ export function LandingWeb() {
         <meta property="og:type" content="website" />
         <meta
           property="og:image"
-          content="https://transformateck.com/assets/og-image.jpg"
+          content="https://transformateck.com/assets/og-image-xbh9Qoxc.jpg"
         />
         <meta property="og:url" content="https://transformateck.com" />
 
