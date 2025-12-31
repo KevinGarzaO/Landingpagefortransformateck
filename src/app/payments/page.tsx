@@ -2,10 +2,10 @@ import { PaymentPage } from "@/legacy_app/pages/Payments";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Transformateck | Paga seguro",
+  title: "Paga Seguro",
   description: "Transformateck - Paga de forma segura y rápida tus proyectos de landings profesionales optimizadas para conversión.",
   openGraph: {
-    title: "Transformateck | Paga seguro",
+    title: "Paga Seguro | Transformateck",
     description: "Transformateck - Paga de forma segura y rápida tus proyectos de landings profesionales optimizadas para conversión.",
   },
 };

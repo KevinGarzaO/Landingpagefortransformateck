@@ -2,11 +2,8 @@ import type { Metadata } from 'next'
 import '@/styles/index.css'
 import { Toaster } from 'sonner'
 
-// Define the base URL for metadata resolution
-// Use VERCEL_URL if present, otherwise fallback to localhost or the production domain
-const baseUrl = process.env.VERCEL_URL 
-  ? `https://${process.env.VERCEL_URL}` 
-  : "https://transformateck.com";
+// Use the production domain to ensure WhatsApp/Socials always find the image
+const baseUrl = "https://transformateck.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -24,7 +21,7 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/assets/transformateck-social-card.jpg',
+        url: 'https://transformateck.com/assets/transformateck-social-card.jpg',
         width: 1200,
         height: 630,
         alt: 'Transformateck Social Card',
@@ -35,7 +32,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Transformateck',
     description: 'Fábrica de productos digitales con IA.',
-    images: ['/assets/transformateck-social-card.jpg'],
+    images: ['https://transformateck.com/assets/transformateck-social-card.jpg'],
   },
 }
 
