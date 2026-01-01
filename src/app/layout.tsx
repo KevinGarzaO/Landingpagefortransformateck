@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import '@/styles/index.css'
 import { Toaster } from 'sonner'
 
+import MetaPixel from '@/components/MetaPixel'
+
 // Use the production domain to ensure WhatsApp/Socials always find the image
 const baseUrl = "https://transformateck.com";
 
@@ -38,6 +40,9 @@ export const metadata: Metadata = {
   icons: {
     icon: '/assets/favicon.png',
   },
+  verification: {
+    google: 'dMk6KakNFe4mmGMtDxf3PoNBO5xV-S8cS38Ar6BtwBo',
+  },
 }
 
 export default function RootLayout({
@@ -48,6 +53,7 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className="min-h-screen bg-black text-white antialiased">
+        <MetaPixel />
         {children}
         <Toaster />
       </body>
