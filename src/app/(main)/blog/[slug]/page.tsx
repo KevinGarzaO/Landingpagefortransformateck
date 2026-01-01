@@ -1,4 +1,4 @@
-import { getBlogPostBySlug, getBlogPosts, type BlogPost } from "@/lib/firestore";
+import { getBlogPostBySlug, getBlogPosts } from "@/lib/firestore";
 import { Timestamp } from "firebase/firestore";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
