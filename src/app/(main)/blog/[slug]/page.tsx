@@ -68,7 +68,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   // Parallel fetching
   const [post, recentFn] = await Promise.all([
     getBlogPostBySlug(slug),
-    getBlogPosts(4) // Fetch 4 to allow filtering out the current one
+    getBlogPosts(7) // Fetch 7 to allow filtering out the current one
   ]);
 
   if (!post) {
@@ -93,7 +93,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   // Filter related posts
   const relatedPosts = recentFn.posts
     .filter(p => p.id !== post.id)
-    .slice(0, 3);
+    .slice(0, 6);
 
   // Date Formatting
   const dateToDisplay = post.date instanceof Timestamp 
@@ -337,8 +337,29 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               </div>
             </div>
           )}
+
         </article>
       </main>
+
+      {/* CTA Section - Full Width */}
+      <section className="py-20 px-4 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden border-t border-white/10">
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <h2 className="text-4xl md:text-5xl text-white mb-6">
+            ¿Tienes un Proyecto en Mente?
+          </h2>
+          <p className="text-xl text-gray-300 mb-8">
+            Hablemos sobre cómo podemos ayudarte a hacerlo realidad
+          </p>
+          <a
+            href="https://wa.me/528118582060?text=Hola%20me%20interesa%20m%C3%A1s%20informaci%C3%B3n%20sobre%20los%20servicios"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block px-10 py-5 bg-gradient-to-r from-cyan-500 to-purple-600 text-white rounded-xl hover:shadow-2xl hover:shadow-cyan-500/50 transition-all duration-300 transform hover:scale-105"
+          >
+            💬 Contactar Ahora
+          </a>
+        </div>
+      </section>
     </div>
   );
 }
