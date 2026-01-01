@@ -1,7 +1,10 @@
 "use client";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { getBlogPosts, type BlogPost } from "@/lib/firestore";
 import { Timestamp } from "firebase/firestore";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 export function Blog() {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
@@ -148,87 +151,91 @@ export function Blog() {
                       animation: `fadeInUp 0.6s ease-out ${index * 0.1}s both`,
                     }}
                   >
-                    {/* Gradient Overlay on Hover */}
-                    <div
-                      className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}
-                    ></div>
-
-                    {/* Image */}
-                    <div className="relative h-48 bg-gradient-to-br from-cyan-500/20 to-purple-500/20 flex items-center justify-center overflow-hidden">
+                    <Link href={`/blog/${post.slug}`} className="block h-full">
+                      {/* Gradient Overlay on Hover */}
                       <div
-                        className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-30`}
+                        className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}
                       ></div>
-                      {post.image ? (
-                        <img
-                          src={post.image}
-                          alt={post.title}
-                          className="w-full h-full object-cover relative z-10 group-hover:scale-110 transition-transform duration-300"
-                        />
-                      ) : (
-                        <img
-                          src="/assets/logo.png"
-                          alt={post.title}
-                          className="h-20 brightness-0 invert relative z-10 group-hover:scale-110 transition-transform duration-300"
-                        />
-                      )}
-                    </div>
 
-                    {/* Content */}
-                    <div className="p-6 relative z-10">
-                      {/* Category & Read Time */}
-                      <div className="flex items-center gap-3 mb-3">
-                        <span className="px-3 py-1 bg-cyan-500/20 text-cyan-400 text-xs rounded-full capitalize">
-                          {post.type || 'General'}
-                        </span>
-                        <span className="text-gray-500 text-xs">
-                          {readTime} min
-                        </span>
+                      {/* Image */}
+                      <div className="relative h-48 bg-gradient-to-br from-cyan-500/20 to-purple-500/20 flex items-center justify-center overflow-hidden">
+                        <div
+                          className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-30`}
+                        ></div>
+                        {post.image ? (
+                          <img
+                            src={post.image}
+                            alt={post.title}
+                            className="w-full h-full object-cover relative z-10 group-hover:scale-110 transition-transform duration-300"
+                          />
+                        ) : (
+                          <img
+                            src="/assets/logo.png"
+                            alt={post.title}
+                            className="h-20 brightness-0 invert relative z-10 group-hover:scale-110 transition-transform duration-300"
+                          />
+                        )}
                       </div>
 
-                      {/* Title */}
-                      <h3 className="text-xl text-white mb-3 group-hover:text-cyan-400 transition-colors duration-300">
-                        {post.title}
-                      </h3>
+                      {/* Content */}
+                      <div className="p-6 relative z-10">
+                        {/* Category & Read Time */}
+                        <div className="flex items-center gap-3 mb-3">
+                          <span className="px-3 py-1 bg-cyan-500/20 text-cyan-400 text-xs rounded-full capitalize">
+                            {post.type || 'General'}
+                          </span>
+                          <span className="text-gray-500 text-xs">
+                            {readTime} min
+                          </span>
+                        </div>
 
-                      {/* Excerpt */}
-                      <p className="text-gray-400 text-sm mb-4 line-clamp-3">
-                        {post.excerpt}
-                      </p>
+                        {/* Title */}
+                        <h3 className="text-xl text-white mb-3 group-hover:text-cyan-400 transition-colors duration-300">
+                          {post.title}
+                        </h3>
 
-                      {/* Footer */}
-                      <div className="flex items-center justify-between pt-4 border-t border-white/10">
-                        <span className="text-gray-500 text-xs">
-                          {(() => {
-                            const dateToDisplay = post.date instanceof Timestamp 
-                              ? post.date.toDate() 
-                              : new Date(post.date);
-                            return dateToDisplay.toLocaleString('es-MX', {
-                              year: 'numeric',
-                              month: 'short',
-                              day: 'numeric',
-                              hour: '2-digit',
-                              minute: '2-digit'
-                            });
-                          })()}
-                        </span>
-                        <button className="text-cyan-400 text-sm flex items-center gap-1 group-hover:gap-2 transition-all duration-300">
-                          Leer más
-                          <svg
-                            className="w-4 h-4"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M17 8l4 4m0 0l-4 4m4-4H3"
-                            />
-                          </svg>
-                        </button>
+                        {/* Excerpt */}
+                        <div className="text-gray-400 text-sm mb-4 line-clamp-3">
+                          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                            {post.excerpt || ""}
+                          </ReactMarkdown>
+                        </div>
+
+                        {/* Footer */}
+                        <div className="flex items-center justify-between pt-4 border-t border-white/10">
+                          <span className="text-gray-500 text-xs">
+                            {(() => {
+                              const dateToDisplay = post.date instanceof Timestamp 
+                                ? post.date.toDate() 
+                                : new Date(post.date);
+                              return dateToDisplay.toLocaleString('es-MX', {
+                                year: 'numeric',
+                                month: 'short',
+                                day: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                              });
+                            })()}
+                          </span>
+                          <span className="text-cyan-400 text-sm flex items-center gap-1 group-hover:gap-2 transition-all duration-300">
+                            Leer más
+                            <svg
+                              className="w-4 h-4"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M17 8l4 4m0 0l-4 4m4-4H3"
+                              />
+                            </svg>
+                          </span>
+                        </div>
                       </div>
-                    </div>
+                    </Link>
 
                     {/* Corner Accent */}
                     <div

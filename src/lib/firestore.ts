@@ -1,4 +1,4 @@
-import { collection, getDocs, query, where, Timestamp } from 'firebase/firestore';
+import { collection, getDocs, query, where, Timestamp, limit, doc } from 'firebase/firestore';
 import { db } from './firebase';
 
 export interface BlogPost {
@@ -16,7 +16,7 @@ export interface BlogPost {
   updatedAt: string | Timestamp; // Can be string or Timestamp from Firestore
 }
 
-export async function getBlogPosts(limit: number = 12, lastDoc?: any): Promise<{ posts: BlogPost[], hasMore: boolean, lastVisible: any }> {
+export async function getBlogPosts(pageSize: number = 12, lastDoc?: any): Promise<{ posts: BlogPost[], hasMore: boolean, lastVisible: any }> {
   try {
     const entradasRef = collection(db, 'entradas');
     
@@ -59,8 +59,8 @@ export async function getBlogPosts(limit: number = 12, lastDoc?: any): Promise<{
 
     // Implement pagination manually after sorting
     const startIndex = lastDoc ? allPosts.findIndex(p => p.id === lastDoc.id) + 1 : 0;
-    const paginatedPosts = allPosts.slice(startIndex, startIndex + limit);
-    const hasMore = startIndex + limit < allPosts.length;
+    const paginatedPosts = allPosts.slice(startIndex, startIndex + pageSize);
+    const hasMore = startIndex + pageSize < allPosts.length;
     const lastVisible = paginatedPosts.length > 0 ? paginatedPosts[paginatedPosts.length - 1] : null;
 
     return {
@@ -71,5 +71,32 @@ export async function getBlogPosts(limit: number = 12, lastDoc?: any): Promise<{
   } catch (error) {
     console.error('Error fetching blog posts:', error);
     return { posts: [], hasMore: false, lastVisible: null };
+  }
+}
+
+export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
+  try {
+    const entradasRef = collection(db, 'entradas');
+    const q = query(
+      entradasRef, 
+      where('publico', '==', true),
+      where('slug', '==', slug),
+      limit(1)
+    );
+    
+    const querySnapshot = await getDocs(q);
+    
+    if (querySnapshot.empty) {
+      return null;
+    }
+
+    const doc = querySnapshot.docs[0];
+    return {
+      id: doc.id,
+      ...doc.data()
+    } as BlogPost;
+  } catch (error) {
+    console.error('Error fetching blog post by slug:', error);
+    return null;
   }
 }
