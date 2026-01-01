@@ -2,7 +2,8 @@ import { ImageResponse } from 'next/og'
 import { getBlogPostBySlug } from "@/lib/firestore";
  
 // Route segment config
-export const runtime = 'edge'
+// export const runtime = 'edge' // Firebase SDK requires Node.js runtime usually
+export const revalidate = 86400 // Cache for 24 hours
  
 // Image metadata
 export const alt = 'Blog Post Transformateck'
