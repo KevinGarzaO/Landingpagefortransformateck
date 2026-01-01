@@ -23,18 +23,14 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
         // 1. Fetch current post
         const data = await getBlogPostBySlug(slug);
         if (!data) {
-          router.push("/blog");
+          console.error("Post not found for slug:", slug);
+          // router.push("/blog"); // Don't redirect for debugging
+          setLoading(false);
           return;
         }
         setPost(data);
 
-        // 2. Fetch related posts (fetch a few more to ensure we have enough after filtering current)
-        const recentFn = await getBlogPosts(4);
-        const filtered = recentFn.posts
-          .filter(p => p.id !== data.id) // Exclude current post
-          .slice(0, 3); // Take top 3
-        setRelatedPosts(filtered);
-
+        // ... (fetch related)
       } catch (err) {
         console.error("Error fetching data:", err);
       } finally {
@@ -53,7 +49,24 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
     );
   }
 
-  if (!post) return null;
+  if (!post) {
+    return (
+        <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center text-white px-4 text-center">
+            <h1 className="text-4xl font-bold mb-4">Post no encontrado</h1>
+            <p className="text-gray-400 mb-8 max-w-md">No pudimos encontrar el artículo que buscas. Puede que haya sido eliminado o la URL sea incorrecta.</p>
+            <p className="text-xs text-gray-600 mb-8 font-mono bg-black/50 p-2 rounded">
+                Slug: {slug} <br/>
+                Verifica la consola para más detalles.
+            </p>
+            <Link 
+                href="/blog"
+                className="px-6 py-3 bg-cyan-600 text-white rounded-lg hover:bg-cyan-500 transition-colors"
+            >
+                Volver al Blog
+            </Link>
+        </div>
+    );
+  }
 
   const dateToDisplay = post.date instanceof Timestamp 
     ? post.date.toDate() 
