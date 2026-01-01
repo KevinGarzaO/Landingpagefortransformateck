@@ -1,58 +1,87 @@
-"use client";
-import { useEffect, useState, use } from "react";
 import { getBlogPostBySlug, getBlogPosts, type BlogPost } from "@/lib/firestore";
 import { Timestamp } from "firebase/firestore";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
 import Image from "next/image";
+import { Metadata } from "next";
 
-export default function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = use(params);
-  const [post, setPost] = useState<BlogPost | null>(null);
-  const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([]);
-  const [loading, setLoading] = useState(true);
-  const router = useRouter();
+// JSON-LD Helper Component
+function JsonLd({ data }: { data: any }) {
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+    />
+  );
+}
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        setLoading(true);
-        // 1. Fetch current post
-        const data = await getBlogPostBySlug(slug);
-        if (!data) {
-          console.error("Post not found for slug:", slug);
-          // router.push("/blog"); // Don't redirect for debugging
-          setLoading(false);
-          return;
-        }
-        setPost(data);
+// Generate Metadata for SEO
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const post = await getBlogPostBySlug(slug);
 
-        // 2. Fetch related posts (fetch a few more to ensure we have enough after filtering current)
-        const recentFn = await getBlogPosts(4);
-        const filtered = recentFn.posts
-          .filter(p => p.id !== data.id) // Exclude current post
-          .slice(0, 3); // Take top 3
-        setRelatedPosts(filtered);
-      } catch (err) {
-        console.error("Error fetching data:", err);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchData();
-  }, [slug, router]);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
-      </div>
-    );
+  if (!post) {
+    return {
+      title: 'Post no encontrado',
+    };
   }
+
+  const publishedTime = post.date instanceof Timestamp 
+    ? post.date.toDate().toISOString() 
+    : new Date(post.date).toISOString();
+    
+  const modifiedTime = post.updatedAt instanceof Timestamp 
+    ? post.updatedAt.toDate().toISOString() 
+    : new Date(post.updatedAt).toISOString();
+
+  // Use fallback image if none provided
+  const ogImage = post.image || "https://transformateck.com/assets/logo.png";
+
+  return {
+    title: `${post.title} | Transformateck`,
+    description: post.excerpt || `Lee el artículo "${post.title}" en Transformateck.`,
+    openGraph: {
+      title: `${post.title} | Transformateck`,
+      description: post.excerpt || `Lee el artículo "${post.title}" en Transformateck.`,
+      url: `https://transformateck.com/blog/${slug}`,
+      siteName: "Transformateck",
+      locale: "es_MX",
+      type: "article",
+      publishedTime,
+      modifiedTime,
+      authors: [post.authorName || "Transformateck Team"],
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${post.title} | Transformateck`,
+      description: post.excerpt || `Lee el artículo "${post.title}" en Transformateck.`,
+      images: [ogImage],
+      creator: "@Transformateck", 
+    },
+    alternates: {
+      canonical: `https://transformateck.com/blog/${slug}`,
+    },
+  };
+}
+
+export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+
+  // Parallel fetching
+  const [post, recentFn] = await Promise.all([
+    getBlogPostBySlug(slug),
+    getBlogPosts(4) // Fetch 4 to allow filtering out the current one
+  ]);
 
   if (!post) {
     return (
@@ -73,6 +102,12 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
     );
   }
 
+  // Filter related posts
+  const relatedPosts = recentFn.posts
+    .filter(p => p.id !== post.id)
+    .slice(0, 3);
+
+  // Date Formatting
   const dateToDisplay = post.date instanceof Timestamp 
     ? post.date.toDate() 
     : new Date(post.date);
@@ -83,9 +118,46 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
     day: 'numeric'
   });
 
+  const publishedTime = dateToDisplay.toISOString();
+  const modifiedTime = post.updatedAt instanceof Timestamp 
+    ? post.updatedAt.toDate().toISOString() 
+    : new Date(post.updatedAt).toISOString();
+  
+  const ogImage = post.image || "https://transformateck.com/assets/logo.png";
+
+  // Construct JSON-LD
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.excerpt || "Lee este artículo en Transformateck",
+    image: ogImage,
+    author: {
+      "@type": "Person",
+      name: post.authorName || "Transformateck Team",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Transformateck",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://transformateck.com/assets/logo.png",
+      },
+    },
+    datePublished: publishedTime,
+    dateModified: modifiedTime,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://transformateck.com/blog/${slug}`,
+    },
+  };
+
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-gray-200 selection:bg-cyan-500/30 selection:text-cyan-200">
       
+      {/* Inject JSON-LD */}
+      <JsonLd data={jsonLd} />
+
       {/* Navigation Bar */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/80 backdrop-blur-md border-b border-white/5">
         <div className="max-w-4xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -155,8 +227,6 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
             </div>
           </header>
 
-
-
           {/* Content - Enhanced Typography (Custom Components) */}
           <div className="max-w-none mb-24">
             <ReactMarkdown
@@ -181,7 +251,6 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
                   />
                 ),
                 p: ({ node, children, ...props }) => {
-                  // ... (keep node here as it is used)
                   if (
                     node?.children &&
                     node.children.length === 1 &&
