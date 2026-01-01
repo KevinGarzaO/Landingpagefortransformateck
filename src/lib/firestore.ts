@@ -21,7 +21,7 @@ export async function getBlogPosts(limit: number = 12, lastDoc?: any): Promise<{
     const entradasRef = collection(db, 'entradas');
     
     // Query only public posts (filter images client-side to avoid index)
-    let q = query(
+    const q = query(
       entradasRef,
       where('publico', '==', true)
     );
