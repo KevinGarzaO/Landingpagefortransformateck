@@ -14,6 +14,7 @@ import { useSearchParams } from "next/navigation";
 import { MySwal } from "../../utils/alert";
 import { trackInitiateCheckout, trackPurchase } from "../../utils/metaPixel";
 import { formatMxPhone, normalizeMxPhone } from "../../utils/phoneFormatter";
+import "../../styles/global.css";
 
 const stripeKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
 // Prevent build crash if key is missing (e.g. during CI/CD or before .env update)
@@ -37,13 +38,16 @@ function PaymentForm({ token }: { token: string }) {
       if (!token) return;
       setLoading(true);
       try {
-        const res = await fetch("http://localhost:3000/v1/payment-details", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await fetch(
+          process.env.NEXT_PUBLIC_API_URL + "/v1/payment-details",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (!res.ok) throw new Error("Error obteniendo detalles de pago");
 
@@ -94,7 +98,7 @@ function PaymentForm({ token }: { token: string }) {
     try {
       // Crear PaymentIntent en backend
       const res = await fetch(
-        "http://localhost:3000/v1/create-payment-intent",
+        process.env.NEXT_PUBLIC_API_URL + "/v1/create-payment-intent",
         {
           method: "POST",
           headers: {
@@ -102,9 +106,24 @@ function PaymentForm({ token }: { token: string }) {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            amount: paymentDetails[selectedPayment].amount * 100, // centavos
-            payment_method_type: paymentMethod, // card | oxxo
-            customer: { name, email, phone },
+            amount: Math.round(paymentDetails[selectedPayment].amount * 100), // centavos
+            payment_method_type: paymentMethod, // "card"
+            selectedPayment, // "pago1" | "total"
+
+            customer: {
+              name,
+              email,
+              phone,
+            },
+
+            // 🧾 Items que se mostrarán en Stripe
+            items: paymentDetails[selectedPayment].breakdown.filter(
+              (i: any) =>
+                !i.name.toLowerCase().includes("subtotal") &&
+                !i.name.toLowerCase().includes("iva") &&
+                !i.name.toLowerCase().includes("anticipo") &&
+                !i.name.toLowerCase().includes("liquidación")
+            ),
           }),
         }
       );
@@ -136,22 +155,53 @@ function PaymentForm({ token }: { token: string }) {
                 !i.name.toLowerCase().includes("liquidación")
             )
           );
+        const isAnticipo = selectedPayment === "pago1";
+
         MySwal.fire({
           icon: "success",
           title: "¡Pago exitoso!",
-          text:
-            "Gracias por tu compra." +
-            "\n\n" +
-            "Tu pago por $" +
-            paymentDetails[selectedPayment].amount.toFixed(2) +
-            " MXN ha sido procesado exitosamente." +
-            "\n\n" +
-            "Recibirás un correo de confirmación en breve.",
-          confirmButtonText: "Ir al inicio",
-        }).then((result) => {
-          if (result.isConfirmed) {
+          html: `
+    <div style="color:#000; text-align:center;">
+      
+      <div style="font-size:2.2rem; margin-bottom:8px;">
+        ${isAnticipo ? "💳" : "⚡"}
+      </div>
+
+      <p style="margin:0 0 6px; font-size:1.05rem; font-weight:600;">
+        ${isAnticipo ? "Anticipo recibido" : "Pago total exprés recibido"}
+      </p>
+
+      <p style="margin:0 0 14px; font-size:1rem;">
+        Tu pago de
+      </p>
+
+      <div style="
+        font-size:1.9rem;
+        font-weight:700;
+        color:#2563eb;
+        margin-bottom:14px;
+      ">
+        $${paymentDetails[selectedPayment].amount.toFixed(2)} MXN
+      </div>
+
+      <p style="margin:0; font-size:0.95rem;">
+        ha sido procesado correctamente.
+      </p>
+
+      <p style="margin:8px 0 0; font-size:0.9rem;">
+        Recibirás un correo de confirmación en breve.
+      </p>
+
+    </div>
+  `,
+          confirmButtonText: "De acuerdo",
+          buttonsStyling: false, // ⛔ desactiva estilos por defecto
+          customClass: {
+            confirmButton: "swal-confirm-gradient",
+          },
+          preConfirm: () => {
             window.location.href = "/";
-          }
+          },
         });
       } else if (paymentMethod === "oxxo") {
         const result = await stripe.confirmOxxoPayment(client_secret, {
@@ -250,28 +300,29 @@ function PaymentForm({ token }: { token: string }) {
           </h3>
 
           <p className="text-gray-300 max-w-md mx-auto leading-relaxed text-center">
-            Puedes elegir la forma de pago que mejor se adapte a ti. Inicia tu
-            proyecto con un{" "}
+            Elige la forma de pago que mejor se adapte a tu proyecto. Puedes
+            iniciar con un{" "}
             <span className="text-cyan-400 font-semibold">
               anticipo del 50%
             </span>{" "}
-            y liquida el resto{" "}
+            y liquidar el resto{" "}
             <span className="text-cyan-400 font-semibold">contra entrega</span>,
-            o bien realiza el{" "}
-            <span className="text-cyan-400 font-semibold">pago total</span>{" "}
-            desde el inicio para avanzar sin pagos pendientes.
-            <br />
-            <br />
-            Aceptamos pagos con{" "}
+            o bien realizar el{" "}
             <span className="text-cyan-400 font-semibold">
-              Visa, Mastercard y American Express
+              pago total exprés
             </span>{" "}
-            , así como{" "}
+            cuando el monto sea{" "}
+            <span className="text-cyan-400 font-semibold">menor a $1,000</span>{" "}
+            para avanzar sin pagos pendientes.
+            <br />
+            <br />
+            Los pagos se realizan{" "}
             <span className="text-cyan-400 font-semibold">
-              pago en efectivo en OXXO
-            </span>
-            . Todas las transacciones se procesan de forma segura mediante{" "}
-            <span className="text-cyan-400 font-semibold">Stripe</span>.
+              únicamente con tarjeta
+            </span>{" "}
+            (Visa, Mastercard y American Express) y se procesan de forma segura
+            mediante <span className="text-cyan-400 font-semibold">Stripe</span>
+            .
           </p>
         </div>
 
@@ -387,6 +438,7 @@ function PaymentForm({ token }: { token: string }) {
           className="w-full p-3 rounded-lg bg-gray-800 text-white border border-gray-700 focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
           value={paymentMethod}
           onChange={(e) => setPaymentMethod(e.target.value)}
+          disabled
         >
           <option value="card">
             Tarjeta de crédito o débito — Pago inmediato
@@ -450,7 +502,13 @@ function PaymentContent() {
 
 export function PaymentPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-gray-900 flex items-center justify-center text-white">Cargando...</div>}>
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gray-900 flex items-center justify-center text-white">
+          Cargando...
+        </div>
+      }
+    >
       <PaymentContent />
     </Suspense>
   );
