@@ -1,0 +1,21 @@
+
+> @figma/my-make-file@0.0.1 build
+> next build
+
+   ▲ Next.js 15.1.11
+   - Environments: .env
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+
+Failed to compile.
+
+./src/app/(main)/blog/[slug]/opengraph-image.tsx
+46:13  Warning: img elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
+118:25  Warning: img elements must have an alt prop, either with meaningful text, or an empty string for decorative images.  jsx-a11y/alt-text
+
+./src/app/sitemap.ts
+46:16  Error: 'e' is defined but never used.  @typescript-eslint/no-unused-vars
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
