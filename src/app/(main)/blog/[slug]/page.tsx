@@ -1,42 +1,54 @@
 "use client";
 import { useEffect, useState, use } from "react";
-import { getBlogPostBySlug, type BlogPost } from "@/lib/firestore";
+import { getBlogPostBySlug, getBlogPosts, type BlogPost } from "@/lib/firestore";
 import { Timestamp } from "firebase/firestore";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import remarkBreaks from "remark-breaks";
+import Image from "next/image";
 
 export default function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
   const [post, setPost] = useState<BlogPost | null>(null);
+  const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    async function fetchPost() {
+    async function fetchData() {
       try {
         setLoading(true);
+        // 1. Fetch current post
         const data = await getBlogPostBySlug(slug);
         if (!data) {
           router.push("/blog");
           return;
         }
         setPost(data);
+
+        // 2. Fetch related posts (fetch a few more to ensure we have enough after filtering current)
+        const recentFn = await getBlogPosts(4);
+        const filtered = recentFn.posts
+          .filter(p => p.id !== data.id) // Exclude current post
+          .slice(0, 3); // Take top 3
+        setRelatedPosts(filtered);
+
       } catch (err) {
-        console.error("Error fetching post:", err);
+        console.error("Error fetching data:", err);
       } finally {
         setLoading(false);
       }
     }
 
-    fetchPost();
+    fetchData();
   }, [slug, router]);
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="w-16 h-16 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
+      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -50,107 +62,214 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
   const formattedDate = dateToDisplay.toLocaleString('es-MX', {
     year: 'numeric',
     month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
+    day: 'numeric'
   });
 
   return (
-    <div className="min-h-screen bg-black text-white pt-20">
-      {/* Hero Header */}
-      <section className="relative py-20 px-4 overflow-hidden">
-        <div className="absolute inset-0 opacity-20">
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: `
-                linear-gradient(to right, rgba(6, 182, 212, 0.1) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(6, 182, 212, 0.1) 1px, transparent 1px)
-              `,
-              backgroundSize: "50px 50px",
-            }}
-          ></div>
-        </div>
-
-        <div className="relative z-10 max-w-4xl mx-auto">
+    <div className="min-h-screen bg-[#0a0a0a] text-gray-200 selection:bg-cyan-500/30 selection:text-cyan-200">
+      
+      {/* Navigation Bar */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/80 backdrop-blur-md border-b border-white/5">
+        <div className="max-w-4xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link 
             href="/blog"
-            className="inline-flex items-center text-cyan-400 hover:text-cyan-300 transition-colors mb-8 group"
+            className="group flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors"
           >
             <svg
-              className="w-5 h-5 mr-2 transform group-hover:-translate-x-1 transition-transform"
+              className="w-4 h-4 transform group-hover:-translate-x-1 transition-transform"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 19l-7-7 7-7" />
             </svg>
             Volver al Blog
           </Link>
-
-          <div className="flex items-center gap-3 mb-6">
-            <span className="px-4 py-1 bg-cyan-500/20 text-cyan-400 text-sm rounded-full capitalize border border-cyan-500/30">
-              {post.type || 'General'}
-            </span>
-            <span className="text-gray-500 text-sm">{formattedDate}</span>
-          </div>
-
-          <h1 className="text-4xl md:text-6xl font-bold mb-8 bg-gradient-to-r from-white via-white to-gray-500 bg-clip-text text-transparent">
-            {post.title}
-          </h1>
-
-          <div className="flex items-center gap-4 py-6 border-y border-white/10">
-            <div className="w-12 h-12 rounded-full overflow-hidden bg-gradient-to-br from-cyan-500 to-purple-500 p-0.5">
-              <img 
-                src={post.authorImg || "/assets/logo.png"} 
-                alt={post.authorName} 
-                className="w-full h-full object-cover rounded-full bg-black"
-              />
-            </div>
-            <div>
-              <p className="text-white font-medium">{post.authorName || "Equipo Transformateck"}</p>
-              <p className="text-gray-500 text-sm">Escrito por Transformateck</p>
-            </div>
+          
+          <div className="text-sm font-medium text-gray-500">
+            {post.type || 'Blog'}
           </div>
         </div>
-      </section>
+      </nav>
 
-      {/* Article Content */}
-      <section className="py-12 px-4">
-        <article className="max-w-4xl mx-auto">
-          {post.image && (
-            <div className="rounded-3xl overflow-hidden mb-12 shadow-2xl shadow-cyan-500/10 border border-white/10">
-              <img 
-                src={post.image} 
-                alt={post.title} 
-                className="w-full h-auto object-cover max-h-[600px]"
-              />
+      {/* Main Content */}
+      <main className="pt-32 pb-20 px-6">
+        <article className="max-w-3xl mx-auto">
+          
+          {/* Header */}
+          <header className="mb-12 text-center">
+             {/* Category & Date */}
+             <div className="flex items-center justify-center gap-3 text-sm mb-6">
+              <span className="px-3 py-1 bg-cyan-500/10 text-cyan-400 rounded-full border border-cyan-500/20 font-medium tracking-wide uppercase text-xs">
+                {post.type || 'Blog'}
+              </span>
+              <span className="text-gray-500">•</span>
+              <time className="text-gray-400">{formattedDate}</time>
+            </div>
+
+            {/* Title */}
+            <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-white mb-8 leading-[1.1]">
+              {post.title}
+            </h1>
+
+            {/* Author Section - Enhanced */}
+            <div className="flex items-center justify-center gap-4 mt-8 p-4 bg-white/5 rounded-2xl border border-white/5 inline-flex">
+              <div className="relative">
+                <div className="w-12 h-12 rounded-full overflow-hidden ring-2 ring-cyan-500/20 p-0.5 bg-black">
+                  <img 
+                    src={post.authorImg || "/assets/logo.png"} 
+                    alt={post.authorName} 
+                    className="w-full h-full object-cover rounded-full"
+                  />
+                </div>
+                <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-cyan-500 text-black text-[10px] flex items-center justify-center rounded-full border-2 border-black font-bold">
+                  T
+                </div>
+              </div>
+              <div className="text-left">
+                <p className="text-white font-medium text-sm leading-none mb-1">
+                  {post.authorName || "Transformateck Team"}
+                </p>
+                <p className="text-cyan-400 text-xs font-medium">
+                  {post.type ? `Editor de ${post.type}` : 'Editor de Contenido'}
+                </p>
+              </div>
+            </div>
+          </header>
+
+
+
+          {/* Content - Enhanced Typography (Custom Components) */}
+          <div className="max-w-none mb-24">
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm, remarkBreaks]}
+              components={{
+                h1: ({ node, ...props }) => (
+                   <h1
+                    className="mb-8 text-3xl font-bold leading-tight text-white sm:text-4xl"
+                    {...props}
+                  />
+                ),
+                h2: ({ node, ...props }) => (
+                  <h2
+                    className="mb-6 mt-12 text-[20px] font-bold leading-normal text-white sm:text-2xl sm:leading-snug md:text-3xl md:leading-snug border-b border-white/10 pb-2"
+                    {...props}
+                  />
+                ),
+                h3: ({ node, ...props }) => (
+                  <h3
+                    className="mb-4 mt-8 text-[18px] font-semibold text-cyan-200"
+                    {...props}
+                  />
+                ),
+                p: ({ node, children, ...props }) => {
+                  // If paragraph contains only an image, don't wrap in <p>
+                  // Note: simple check for common image-only paragraphs
+                  /* 
+                     The user's snippet used a check on node.children. 
+                     However, types for 'node' can be tricky in some versions.
+                     We will attempt to use the logic provided or a safe fallback.
+                  */
+                  if (
+                    node?.children &&
+                    node.children.length === 1 &&
+                    (node.children[0] as any).tagName === "img"
+                  ) {
+                    return <>{children}</>;
+                  }
+                  return (
+                    <p
+                      className="mb-6 text-base leading-relaxed text-gray-300 text-justify text-lg"
+                      {...props}
+                    >
+                      {children}
+                    </p>
+                  );
+                },
+                strong: ({ node, ...props }) => (
+                  <strong className="font-bold text-white" {...props} />
+                ),
+                ul: ({ node, ...props }) => (
+                  <ul className="list-disc ml-6 mb-6 text-gray-300 space-y-2" {...props} />
+                ),
+                ol: ({ node, ...props }) => (
+                  <ol className="list-decimal ml-6 mb-6 text-gray-300 space-y-2" {...props} />
+                ),
+                li: ({ node, ...props }) => <li className="mb-2 pl-2" {...props} />,
+                blockquote: ({ node, ...props }) => (
+                  <blockquote className="border-l-4 border-cyan-500 pl-4 py-2 my-6 bg-white/5 rounded-r italic text-gray-400" {...props} />
+                ),
+                code: ({ node, className, children, ...props }: any) => {
+                   const match = /language-(\w+)/.exec(className || '')
+                   const isInline = !match
+                   return (
+                     <code className={`${isInline ? 'bg-cyan-900/30 text-cyan-300 px-1 py-0.5 rounded text-sm' : 'block bg-gray-900 p-4 rounded-lg overflow-x-auto text-sm text-gray-200 border border-white/10 my-4'}`} {...props}>
+                       {children}
+                     </code>
+                   )
+                },
+                img: ({ node, ...props }) => (
+                  <div className="overflow-hidden rounded-xl border border-white/10 my-8 shadow-2xl bg-black">
+                    <img
+                      className="w-full h-auto object-cover"
+                      alt={props.alt || ""}
+                      src={props.src || ""}
+                    />
+                  </div>
+                ),
+              }}
+            >
+              {post?.markdownContent ?? ""}
+            </ReactMarkdown>
+          </div>
+
+          {/* Related Posts Section */}
+          {relatedPosts.length > 0 && (
+            <div className="border-t border-white/10 pt-16">
+              <h3 className="text-2xl font-bold text-white mb-8">Artículos Similares</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {relatedPosts.map((relatedPost) => (
+                  <Link 
+                    key={relatedPost.id}
+                    href={`/blog/${relatedPost.slug}`}
+                    className="group bg-white/5 rounded-xl overflow-hidden border border-white/5 hover:border-cyan-500/50 transition-all duration-300 block"
+                  >
+                    <div className="aspect-video relative overflow-hidden bg-black">
+                      {relatedPost.image ? (
+                        <Image
+                          src={relatedPost.image}
+                          alt={relatedPost.title}
+                          fill
+                          className="object-cover group-hover:scale-105 transition-transform duration-500"
+                          sizes="(max-width: 768px) 100vw, 33vw"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-gray-900">
+                          <Image
+                            src="/assets/logo.png"
+                            alt="Logo"
+                            width={40}
+                            height={40}
+                            className="opacity-50 brightness-0 invert"
+                          />
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-4">
+                      <div className="flex items-center gap-2 mb-2 text-xs">
+                        <span className="text-cyan-400 font-medium uppercase tracking-wider">{relatedPost.type || 'Blog'}</span>
+                      </div>
+                      <h4 className="text-white font-medium line-clamp-2 group-hover:text-cyan-400 transition-colors">
+                        {relatedPost.title}
+                      </h4>
+                    </div>
+                  </Link>
+                ))}
+              </div>
             </div>
           )}
-
-          <div className="bg-white/5 backdrop-blur-md rounded-3xl p-8 md:p-12 border border-white/10">
-            <div className="prose prose-invert prose-cyan max-w-none">
-  <ReactMarkdown remarkPlugins={[remarkGfm]}>
-    {post?.markdownContent ?? ""}
-  </ReactMarkdown>
-</div>
-          </div>
         </article>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 px-4 bg-gradient-to-t from-slate-900 to-transparent">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">¿Te gustó este artículo?</h2>
-          <p className="text-gray-400 mb-10 text-lg">Hablemos sobre cómo la tecnología puede transformar tu negocio.</p>
-          <a
-            href={`https://wa.me/528118582060?text=Hola%20le%C3%AD%20su%20art%C3%ADculo%20sobre%20${encodeURIComponent(post.title)}%20y%20me%20gustar%C3%ADa%20saber%20m%C3%A1s`}
-            className="inline-block px-10 py-5 bg-gradient-to-r from-cyan-500 to-purple-600 text-white rounded-xl hover:shadow-2xl hover:shadow-cyan-500/50 transition-all duration-300 transform hover:scale-105"
-          >
-            💬 Contactar Ahora
-          </a>
-        </div>
-      </section>
+      </main>
     </div>
   );
 }

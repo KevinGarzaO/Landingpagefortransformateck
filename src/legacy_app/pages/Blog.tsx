@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { getBlogPosts, type BlogPost } from "@/lib/firestore";
 import { Timestamp } from "firebase/firestore";
@@ -80,14 +81,8 @@ export function Blog() {
           ></div>
         </div>
 
-        {/* Animated Orbs */}
-        <div className="absolute inset-0">
-          <div className="absolute top-20 left-10 w-96 h-96 bg-cyan-500 rounded-full blur-3xl opacity-20 animate-pulse"></div>
-          <div
-            className="absolute bottom-20 right-10 w-96 h-96 bg-purple-500 rounded-full blur-3xl opacity-20 animate-pulse"
-            style={{ animationDelay: "1s" }}
-          ></div>
-        </div>
+        {/* Animated Orbs Removed */}
+
 
         <div className="relative z-10 max-w-7xl mx-auto text-center">
           <div className="inline-block px-4 py-2 bg-cyan-500/20 border border-cyan-500/50 rounded-full text-cyan-400 text-sm mb-6">
@@ -154,25 +149,29 @@ export function Blog() {
                     <Link href={`/blog/${post.slug}`} className="block h-full">
                       {/* Gradient Overlay on Hover */}
                       <div
-                        className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}
+                        className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300 pointer-events-none`}
                       ></div>
 
                       {/* Image */}
-                      <div className="relative h-48 bg-gradient-to-br from-cyan-500/20 to-purple-500/20 flex items-center justify-center overflow-hidden">
+                      <div className="relative h-48 bg-gray-900 border-b border-white/10 flex items-center justify-center overflow-hidden">
                         <div
-                          className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-30`}
+                          className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-20 pointer-events-none`}
                         ></div>
                         {post.image ? (
-                          <img
+                          <Image
                             src={post.image}
                             alt={post.title}
-                            className="w-full h-full object-cover relative z-10 group-hover:scale-110 transition-transform duration-300"
+                            fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            className="object-cover relative z-10 group-hover:scale-110 transition-transform duration-500"
                           />
                         ) : (
-                          <img
+                          <Image
                             src="/assets/logo.png"
                             alt={post.title}
-                            className="h-20 brightness-0 invert relative z-10 group-hover:scale-110 transition-transform duration-300"
+                            width={80}
+                            height={80}
+                            className="brightness-0 invert relative z-10 group-hover:scale-110 transition-transform duration-500"
                           />
                         )}
                       </div>
@@ -181,7 +180,7 @@ export function Blog() {
                       <div className="p-6 relative z-10">
                         {/* Category & Read Time */}
                         <div className="flex items-center gap-3 mb-3">
-                          <span className="px-3 py-1 bg-cyan-500/20 text-cyan-400 text-xs rounded-full capitalize">
+                          <span className="px-3 py-1 bg-white/10 text-cyan-400 text-xs rounded-full capitalize border border-white/5">
                             {post.type || 'General'}
                           </span>
                           <span className="text-gray-500 text-xs">
@@ -190,12 +189,12 @@ export function Blog() {
                         </div>
 
                         {/* Title */}
-                        <h3 className="text-xl text-white mb-3 group-hover:text-cyan-400 transition-colors duration-300">
+                        <h3 className="text-xl text-white font-medium mb-3 group-hover:text-cyan-400 transition-colors duration-300">
                           {post.title}
                         </h3>
 
                         {/* Excerpt */}
-                        <div className="text-gray-400 text-sm mb-4 line-clamp-3">
+                        <div className="text-gray-400 text-sm mb-4 line-clamp-3 leading-relaxed">
                           <ReactMarkdown remarkPlugins={[remarkGfm]}>
                             {post.excerpt || ""}
                           </ReactMarkdown>
@@ -211,16 +210,14 @@ export function Blog() {
                               return dateToDisplay.toLocaleString('es-MX', {
                                 year: 'numeric',
                                 month: 'short',
-                                day: 'numeric',
-                                hour: '2-digit',
-                                minute: '2-digit'
+                                day: 'numeric'
                               });
                             })()}
                           </span>
                           <span className="text-cyan-400 text-sm flex items-center gap-1 group-hover:gap-2 transition-all duration-300">
-                            Leer más
+                            Leer artículo
                             <svg
-                              className="w-4 h-4"
+                              className="w-4 h-4 ml-1"
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"
@@ -228,7 +225,7 @@ export function Blog() {
                               <path
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
-                                strokeWidth={2}
+                                strokeWidth={1.5}
                                 d="M17 8l4 4m0 0l-4 4m4-4H3"
                               />
                             </svg>
@@ -236,11 +233,6 @@ export function Blog() {
                         </div>
                       </div>
                     </Link>
-
-                    {/* Corner Accent */}
-                    <div
-                      className={`absolute top-0 right-0 w-20 h-20 bg-gradient-to-br ${gradient} opacity-20 blur-2xl group-hover:opacity-30 transition-opacity duration-300`}
-                    ></div>
                   </article>
                 );
               })}
@@ -274,13 +266,7 @@ export function Blog() {
       {/* CTA Section */}
       <section className="py-20 px-4 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
         {/* Animated Circles */}
-        <div className="absolute inset-0">
-          <div className="absolute top-10 left-10 w-72 h-72 bg-cyan-500 rounded-full blur-3xl opacity-20 animate-pulse"></div>
-          <div
-            className="absolute bottom-10 right-10 w-96 h-96 bg-purple-500 rounded-full blur-3xl opacity-20 animate-pulse"
-            style={{ animationDelay: "1s" }}
-          ></div>
-        </div>
+
 
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <h2 className="text-4xl md:text-5xl text-white mb-6">
