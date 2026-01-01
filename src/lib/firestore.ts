@@ -1,4 +1,4 @@
-import { collection, getDocs, query, where, Timestamp, limit, doc } from 'firebase/firestore';
+import { collection, getDocs, query, where, Timestamp, limit } from 'firebase/firestore';
 import { db } from './firebase';
 
 export interface BlogPost {
