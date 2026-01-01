@@ -30,7 +30,12 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
         }
         setPost(data);
 
-        // ... (fetch related)
+        // 2. Fetch related posts (fetch a few more to ensure we have enough after filtering current)
+        const recentFn = await getBlogPosts(4);
+        const filtered = recentFn.posts
+          .filter(p => p.id !== data.id) // Exclude current post
+          .slice(0, 3); // Take top 3
+        setRelatedPosts(filtered);
       } catch (err) {
         console.error("Error fetching data:", err);
       } finally {
