@@ -36,47 +36,28 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     ? post.updatedAt.toDate().toISOString() 
     : new Date(post.updatedAt).toISOString();
 
-  // Optimize image for WhatsApp/Socials (Resize to 1200px, quality 75) to avoid size limits
-  // Requires consistent base URL - assuming transformateck.com as defined in layout
-  const baseUrl = "https://transformateck.com";
-  const rawImage = post.image || `${baseUrl}/assets/logo.png`;
-  
-  // Construct the optimized Next.js image URL. 
-  // We use the absolute path to the _next/image endpoint.
-  const ogImage = `${baseUrl}/_next/image?url=${encodeURIComponent(rawImage)}&w=1200&q=75`;
-
   return {
     title: `${post.title} | Transformateck`,
     description: post.excerpt || `Lee el artículo "${post.title}" en Transformateck.`,
     openGraph: {
       title: `${post.title} | Transformateck`,
       description: post.excerpt || `Lee el artículo "${post.title}" en Transformateck.`,
-      url: `${baseUrl}/blog/${slug}`,
+      url: `https://transformateck.com/blog/${slug}`,
       siteName: "Transformateck",
       locale: "es_MX",
       type: "article",
       publishedTime,
       modifiedTime,
       authors: [post.authorName || "Transformateck Team"],
-      images: [
-        {
-          url: ogImage,
-          width: 1200,
-          height: 630,
-          alt: post.title,
-          type: "image/jpeg", 
-        },
-      ],
     },
     twitter: {
       card: "summary_large_image",
       title: `${post.title} | Transformateck`,
       description: post.excerpt || `Lee el artículo "${post.title}" en Transformateck.`,
-      images: [ogImage],
       creator: "@Transformateck", 
     },
     alternates: {
-      canonical: `${baseUrl}/blog/${slug}`,
+      canonical: `https://transformateck.com/blog/${slug}`,
     },
   };
 }
