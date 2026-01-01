@@ -144,32 +144,26 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
             <ReactMarkdown
               remarkPlugins={[remarkGfm, remarkBreaks]}
               components={{
-                h1: ({ node, ...props }) => (
+                h1: ({ ...props }) => (
                    <h1
                     className="mb-8 text-3xl font-bold leading-tight text-white sm:text-4xl"
                     {...props}
                   />
                 ),
-                h2: ({ node, ...props }) => (
+                h2: ({ ...props }) => (
                   <h2
                     className="mb-6 mt-12 text-[20px] font-bold leading-normal text-white sm:text-2xl sm:leading-snug md:text-3xl md:leading-snug border-b border-white/10 pb-2"
                     {...props}
                   />
                 ),
-                h3: ({ node, ...props }) => (
+                h3: ({ ...props }) => (
                   <h3
                     className="mb-4 mt-8 text-[18px] font-semibold text-cyan-200"
                     {...props}
                   />
                 ),
                 p: ({ node, children, ...props }) => {
-                  // If paragraph contains only an image, don't wrap in <p>
-                  // Note: simple check for common image-only paragraphs
-                  /* 
-                     The user's snippet used a check on node.children. 
-                     However, types for 'node' can be tricky in some versions.
-                     We will attempt to use the logic provided or a safe fallback.
-                  */
+                  // ... (keep node here as it is used)
                   if (
                     node?.children &&
                     node.children.length === 1 &&
@@ -186,20 +180,20 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
                     </p>
                   );
                 },
-                strong: ({ node, ...props }) => (
+                strong: ({ ...props }) => (
                   <strong className="font-bold text-white" {...props} />
                 ),
-                ul: ({ node, ...props }) => (
+                ul: ({ ...props }) => (
                   <ul className="list-disc ml-6 mb-6 text-gray-300 space-y-2" {...props} />
                 ),
-                ol: ({ node, ...props }) => (
+                ol: ({ ...props }) => (
                   <ol className="list-decimal ml-6 mb-6 text-gray-300 space-y-2" {...props} />
                 ),
-                li: ({ node, ...props }) => <li className="mb-2 pl-2" {...props} />,
-                blockquote: ({ node, ...props }) => (
+                li: ({ ...props }) => <li className="mb-2 pl-2" {...props} />,
+                blockquote: ({ ...props }) => (
                   <blockquote className="border-l-4 border-cyan-500 pl-4 py-2 my-6 bg-white/5 rounded-r italic text-gray-400" {...props} />
                 ),
-                code: ({ node, className, children, ...props }: any) => {
+                code: ({ className, children, ...props }: any) => {
                    const match = /language-(\w+)/.exec(className || '')
                    const isInline = !match
                    return (
@@ -208,7 +202,7 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
                      </code>
                    )
                 },
-                img: ({ node, ...props }) => (
+                img: ({ ...props }) => (
                   <div className="overflow-hidden rounded-xl border border-white/10 my-8 shadow-2xl bg-black">
                     <img
                       className="w-full h-auto object-cover"

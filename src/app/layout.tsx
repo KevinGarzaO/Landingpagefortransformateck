@@ -35,6 +35,9 @@ export const metadata: Metadata = {
     description: 'Fábrica de productos digitales con IA.',
     images: ['https://transformateck.com/assets/transformateck-social-card.jpg'],
   },
+  icons: {
+    icon: '/assets/favicon.png',
+  },
 }
 
 export default function RootLayout({
