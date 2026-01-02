@@ -158,7 +158,6 @@ function PaymentForm({ token }: { token: string }) {
                   items: paymentDetails[selectedPayment].breakdown.filter(
                     (i: any) =>
                       !i.name.toLowerCase().includes("subtotal") &&
-                      !i.name.toLowerCase().includes("iva") &&
                       !i.name.toLowerCase().includes("anticipo") &&
                       !i.name.toLowerCase().includes("liquidación")
                   ),
@@ -186,7 +185,6 @@ function PaymentForm({ token }: { token: string }) {
           title: "¡Pago exitoso!",
           html: `
     <div style="color:#000; text-align:center;">
-      
       <div style="font-size:2.2rem; margin-bottom:8px;">
         ${isAnticipo ? "💳" : "⚡"}
       </div>
@@ -215,7 +213,6 @@ function PaymentForm({ token }: { token: string }) {
       <p style="margin:8px 0 0; font-size:0.9rem;">
         Recibirás un correo de confirmación en breve.
       </p>
-
     </div>
   `,
           confirmButtonText: "De acuerdo",
@@ -223,6 +220,7 @@ function PaymentForm({ token }: { token: string }) {
           customClass: {
             confirmButton: "swal-confirm-gradient",
           },
+          allowOutsideClick: false, // ❌ evita cerrar haciendo clic fuera
           preConfirm: () => {
             window.location.href = "/";
           },
