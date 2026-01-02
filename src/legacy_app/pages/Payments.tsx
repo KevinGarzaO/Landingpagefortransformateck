@@ -145,16 +145,25 @@ function PaymentForm({ token }: { token: string }) {
             text: result.error.message || "Error en pago",
           });
         } else if (result.paymentIntent?.status === "succeeded")
-          trackPurchase(
-            paymentDetails[selectedPayment].amount,
-            paymentDetails[selectedPayment].breakdown.filter(
-              (i: any) =>
-                !i.name.toLowerCase().includes("subtotal") &&
-                !i.name.toLowerCase().includes("iva") &&
-                !i.name.toLowerCase().includes("anticipo") &&
-                !i.name.toLowerCase().includes("liquidación")
-            )
+          await fetch(
+            process.env.NEXT_PUBLIC_API_URL + "/v1/send-payment-message",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ paymentIntent: result.paymentIntent }),
+            }
           );
+
+        trackPurchase(
+          paymentDetails[selectedPayment].amount,
+          paymentDetails[selectedPayment].breakdown.filter(
+            (i: any) =>
+              !i.name.toLowerCase().includes("subtotal") &&
+              !i.name.toLowerCase().includes("iva") &&
+              !i.name.toLowerCase().includes("anticipo") &&
+              !i.name.toLowerCase().includes("liquidación")
+          )
+        );
         const isAnticipo = selectedPayment === "pago1";
 
         MySwal.fire({
