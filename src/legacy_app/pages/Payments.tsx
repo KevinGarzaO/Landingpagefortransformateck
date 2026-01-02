@@ -145,26 +145,29 @@ function PaymentForm({ token }: { token: string }) {
             text: result.error.message || "Error en pago",
           });
         } else if (result.paymentIntent?.status === "succeeded")
-          await fetch("/v1/send-payment-message", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              customer: {
-                name: name,
-                phone: phone,
-                email: email,
-                items: paymentDetails[selectedPayment].breakdown.filter(
-                  (i: any) =>
-                    !i.name.toLowerCase().includes("subtotal") &&
-                    !i.name.toLowerCase().includes("iva") &&
-                    !i.name.toLowerCase().includes("anticipo") &&
-                    !i.name.toLowerCase().includes("liquidación")
-                ),
-                tipo_pago: selectedPayment,
-                total_mxn: paymentDetails[selectedPayment].amount,
-              },
-            }),
-          });
+          await fetch(
+            process.env.NEXT_PUBLIC_API_URL + "/v1/send-payment-message",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                customer: {
+                  name: name,
+                  phone: phone,
+                  email: email,
+                  items: paymentDetails[selectedPayment].breakdown.filter(
+                    (i: any) =>
+                      !i.name.toLowerCase().includes("subtotal") &&
+                      !i.name.toLowerCase().includes("iva") &&
+                      !i.name.toLowerCase().includes("anticipo") &&
+                      !i.name.toLowerCase().includes("liquidación")
+                  ),
+                  tipo_pago: selectedPayment,
+                  total_mxn: paymentDetails[selectedPayment].amount,
+                },
+              }),
+            }
+          );
 
         trackPurchase(
           paymentDetails[selectedPayment].amount,
