@@ -144,7 +144,8 @@ function PaymentForm({ token }: { token: string }) {
             title: "Error en el pago",
             text: result.error.message || "Error en pago",
           });
-        } else if (result.paymentIntent?.status === "succeeded")
+        } else if (result.paymentIntent?.status === "succeeded") {
+          // Pago exitoso
           await fetch(
             process.env.NEXT_PUBLIC_API_URL + "/v1/send-payment-message",
             {
@@ -168,23 +169,22 @@ function PaymentForm({ token }: { token: string }) {
               }),
             }
           );
+          trackPurchase(
+            paymentDetails[selectedPayment].amount,
+            paymentDetails[selectedPayment].breakdown.filter(
+              (i: any) =>
+                !i.name.toLowerCase().includes("subtotal") &&
+                !i.name.toLowerCase().includes("iva") &&
+                !i.name.toLowerCase().includes("anticipo") &&
+                !i.name.toLowerCase().includes("liquidación")
+            )
+          );
+          const isAnticipo = selectedPayment === "pago1";
 
-        trackPurchase(
-          paymentDetails[selectedPayment].amount,
-          paymentDetails[selectedPayment].breakdown.filter(
-            (i: any) =>
-              !i.name.toLowerCase().includes("subtotal") &&
-              !i.name.toLowerCase().includes("iva") &&
-              !i.name.toLowerCase().includes("anticipo") &&
-              !i.name.toLowerCase().includes("liquidación")
-          )
-        );
-        const isAnticipo = selectedPayment === "pago1";
-
-        MySwal.fire({
-          icon: "success",
-          title: "¡Pago exitoso!",
-          html: `
+          MySwal.fire({
+            icon: "success",
+            title: "¡Pago exitoso!",
+            html: `
     <div style="color:#000; text-align:center;">
       <div style="font-size:2.2rem; margin-bottom:8px;">
         ${isAnticipo ? "💳" : "⚡"}
@@ -212,20 +212,42 @@ function PaymentForm({ token }: { token: string }) {
       </p>
 
       <p style="margin:8px 0 0; font-size:0.9rem;">
-        Recibirás un correo de confirmación en breve.
+        Recibirás un mensaje de WhatsApp de confirmación en breve.
       </p>
     </div>
   `,
-          confirmButtonText: "De acuerdo",
-          buttonsStyling: false, // ⛔ desactiva estilos por defecto
-          customClass: {
-            confirmButton: "swal-confirm-gradient",
-          },
-          allowOutsideClick: false, // ❌ evita cerrar haciendo clic fuera
-          preConfirm: () => {
-            window.location.href = "/";
-          },
-        });
+            confirmButtonText: "De acuerdo",
+            buttonsStyling: false, // ⛔ desactiva estilos por defecto
+            customClass: {
+              confirmButton: "swal-confirm-gradient",
+            },
+            allowOutsideClick: false, // ❌ evita cerrar haciendo clic fuera
+            preConfirm: () => {
+              window.location.href = "/";
+            },
+          });
+        } else {
+          // pago no exitoso por alguna razón desconocida
+          MySwal.fire({
+            icon: "error",
+            title: "Error en el pago",
+            html: `
+    <div style="color:#000; text-align:center;">
+      <p style="margin:0 0 10px;">Tu pago no se pudo procesar.</p>
+      <p style="margin:0 0 10px;">
+        ${
+          (result.error as any)?.message ||
+          "Intenta nuevamente con otro método de pago."
+        }
+      </p>
+    </div>
+  `,
+            confirmButtonText: "Ok",
+            buttonsStyling: false,
+            customClass: { confirmButton: "swal-confirm-gradient" },
+            allowOutsideClick: false,
+          });
+        }
       } else if (paymentMethod === "oxxo") {
         const result = await stripe.confirmOxxoPayment(client_secret, {
           payment_method: { billing_details: { name, email, phone } },
