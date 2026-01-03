@@ -15,6 +15,7 @@ import { MySwal } from "../../utils/alert";
 import { trackInitiateCheckout, trackPurchase } from "../../utils/metaPixel";
 import { formatMxPhone, normalizeMxPhone } from "../../utils/phoneFormatter";
 import "../../styles/global.css";
+import getStripeErrorMessage from "@/utils/parserStripeErrorMessage";
 
 const stripeKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
 // Prevent build crash if key is missing (e.g. during CI/CD or before .env update)
@@ -236,13 +237,13 @@ function PaymentForm({ token }: { token: string }) {
       <p style="margin:0 0 10px;">Tu pago no se pudo procesar.</p>
       <p style="margin:0 0 10px;">
         ${
-          (result.error as any)?.message ||
+          getStripeErrorMessage(result.error) ||
           "Intenta nuevamente con otro método de pago."
         }
       </p>
     </div>
   `,
-            confirmButtonText: "Ok",
+            confirmButtonText: "De acuerdo",
             buttonsStyling: false,
             customClass: { confirmButton: "swal-confirm-gradient" },
             allowOutsideClick: false,
