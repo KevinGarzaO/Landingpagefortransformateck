@@ -143,7 +143,18 @@ function PaymentForm({ token }: { token: string }) {
           MySwal.fire({
             icon: "error",
             title: "Error en el pago",
-            text: result.error.message || "Error en pago",
+            html: `
+    <div style="color:#000; text-align:center;">
+      <p style="margin:0 0 10px;">Tu pago no se pudo procesar.</p>
+      <p style="margin:0 0 10px;">
+        ${result.error.message || "Intenta nuevamente con otro método de pago."}
+      </p>
+    </div>
+  `,
+            confirmButtonText: "De acuerdo",
+            buttonsStyling: false,
+            customClass: { confirmButton: "swal-error-gradient" },
+            allowOutsideClick: false,
           });
         } else if (result.paymentIntent?.status === "succeeded") {
           // Pago exitoso
