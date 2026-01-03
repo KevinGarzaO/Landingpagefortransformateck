@@ -11,6 +11,26 @@
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
+.swal-error-gradient {
+  background: linear-gradient(90deg, #ef4444, #f97316);
+  color: #ffffff;
+  border: none;
+  border-radius: 9999px; /* 🔴 totalmente redondo */
+  padding: 12px 28px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.swal-error-gradient:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.35);
+}
+.swal-error-gradient:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+}
 .swal-confirm-gradient:hover {
   transform: translateY(-1px);
   box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);

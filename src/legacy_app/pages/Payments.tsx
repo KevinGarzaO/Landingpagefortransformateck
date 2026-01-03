@@ -245,7 +245,7 @@ function PaymentForm({ token }: { token: string }) {
   `,
             confirmButtonText: "De acuerdo",
             buttonsStyling: false,
-            customClass: { confirmButton: "swal-confirm-gradient" },
+            customClass: { confirmButton: "swal-error-gradient" },
             allowOutsideClick: false,
           });
         }
