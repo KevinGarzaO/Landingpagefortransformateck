@@ -158,6 +158,7 @@ function PaymentForm({ token }: { token: string }) {
                   items: paymentDetails[selectedPayment].breakdown.filter(
                     (i: any) =>
                       !i.name.toLowerCase().includes("subtotal") &&
+                      !i.name.toLowerCase().includes("iva") &&
                       !i.name.toLowerCase().includes("anticipo") &&
                       !i.name.toLowerCase().includes("liquidación")
                   ),
