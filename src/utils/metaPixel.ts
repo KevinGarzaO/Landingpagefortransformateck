@@ -46,3 +46,9 @@ export const trackPageView = () => {
 
   (window as any).fbq("track", "PageView");
 };
+
+export const trackContact = () => {
+  if (!canUseFbq()) return;
+
+  (window as any).fbq("track", "Contact");
+};
