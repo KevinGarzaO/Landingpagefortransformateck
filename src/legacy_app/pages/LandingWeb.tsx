@@ -208,8 +208,8 @@ export function LandingWeb() {
             </div>
 
             <div className="bg-gradient-to-r from-purple-900/20 to-blue-900/20 border border-purple-500/30 p-10 rounded-3xl mb-16 backdrop-blur-sm shadow-2xl">
-               <p className="text-2xl md:text-3xl text-gray-100 italic font-medium leading-relaxed">
-                 "💡 La mayoría de las landings <span className="text-green-400">sí pueden convertir</span>, solo necesitan los ajustes correctos."
+                <p className="text-2xl md:text-3xl text-gray-100 italic font-medium leading-relaxed">
+                 &quot;💡 La mayoría de las landings <span className="text-green-400">sí pueden convertir</span>, solo necesitan los ajustes correctos.&quot;
                </p>
             </div>
 

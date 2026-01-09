@@ -44,7 +44,8 @@ export default async function Image({ params }: { params: { slug: string } }) {
         {/* Background Image (Dimmed) */}
         {postImage && (
             <img 
-                src={postImage} 
+                src={postImage}
+                alt={title} 
                 style={{
                     position: 'absolute',
                     top: 0,
@@ -117,6 +118,7 @@ export default async function Image({ params }: { params: { slug: string } }) {
                     {post.authorImg && (
                         <img 
                             src={post.authorImg}
+                            alt={post.authorName}
                             style={{
                                 width: 40,
                                 height: 40,
