@@ -89,27 +89,46 @@ export const trackContactCapi = async (data: { message?: string, phone?: string,
     });
   }
 
-  // 3. Server-side CAPI
+  // 3. Server-side CAPI - Use sendBeacon for reliability during page navigation
   try {
     const externalId = localStorage.getItem('fbp_external_id');
     const fbp = getCookie('_fbp') || undefined;
     const fbc = getCookie('_fbc') || undefined;
     const url = window.location.href;
     
-    // Fire and forget fetch
-    fetch('/api/capi/contact', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        externalId,
-        eventId, // Send shared ID
-        fbp,
-        fbc,
-        url,
-        message: data.message,
-      }),
-      keepalive: true,
+    const payload = JSON.stringify({
+      externalId,
+      eventId,
+      fbp,
+      fbc,
+      url,
+      message: data.message,
     });
+
+    // sendBeacon is designed to survive page navigation/closure
+    // Works on all modern browsers including iOS Safari, Android Chrome, etc.
+    if (navigator.sendBeacon) {
+      const blob = new Blob([payload], { type: 'application/json' });
+      const sent = navigator.sendBeacon('/api/capi/contact', blob);
+      
+      // Fallback to fetch if sendBeacon fails (e.g., payload too large)
+      if (!sent) {
+        fetch('/api/capi/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: payload,
+          keepalive: true,
+        });
+      }
+    } else {
+      // Fallback for older browsers without sendBeacon
+      fetch('/api/capi/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: payload,
+        keepalive: true,
+      });
+    }
   } catch (e) {
     console.error("CAPI Contact Error", e);
   }
