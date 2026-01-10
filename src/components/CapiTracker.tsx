@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { usePathname } from 'next/navigation';
 
@@ -30,12 +30,11 @@ export const getExternalId = (): string => {
 
 export default function CapiTracker() {
   const pathname = usePathname();
-  const [externalId, setExternalId] = useState<string>('');
 
   useEffect(() => {
     // 1. Generate/Get External ID
     const id = getExternalId();
-    setExternalId(id);
+    // setExternalId(id); // Removed unused state
 
     // 2. Trigger Server-side PageView
     const triggerPageView = async () => {
