@@ -63,6 +63,10 @@ export const trackContact = (eventId?: string) => {
   }, { eventID: eventId });
 };
 
+// Helper to check if gtag is available
+const canUseGtag = () =>
+  typeof window !== "undefined" && typeof (window as any).gtag === "function";
+
 export const trackContactCapi = async (data: { message?: string, phone?: string, email?: string } = {}) => {
   // Generate a unique event ID for Deduplication
   const eventId = `contact-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -70,7 +74,22 @@ export const trackContactCapi = async (data: { message?: string, phone?: string,
   // 1. Client-side Pixel with Event ID
   trackContact(eventId);
 
-  // 2. Server-side CAPI
+  // 2. Google Analytics Event
+  if (canUseGtag()) {
+    (window as any).gtag('event', 'generate_lead', {
+      event_category: 'engagement',
+      event_label: 'whatsapp_contact',
+      method: 'WhatsApp',
+      currency: 'MXN',
+      value: 0,
+      content_name: 'Lead',
+      page_location: window.location.href,
+      page_title: document.title,
+      event_id: eventId,
+    });
+  }
+
+  // 3. Server-side CAPI
   try {
     const externalId = localStorage.getItem('fbp_external_id');
     const fbp = getCookie('_fbp') || undefined;
