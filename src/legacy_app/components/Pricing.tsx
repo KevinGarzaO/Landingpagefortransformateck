@@ -1,3 +1,6 @@
+"use client";
+import { WhatsAppLink } from "../../components/WhatsAppLink";
+
 export function Pricing() {
   const plans = [
     {
@@ -152,10 +155,8 @@ export function Pricing() {
                 ))}
               </ul>
 
-              <a
-                href="https://wa.me/528118582060?text=Hola%20me%20interesa%20el%20servicio%20de%20la%20landing%20web"
-                target="_blank"
-                rel="noopener noreferrer"
+              <WhatsAppLink
+                message="Hola me interesa el servicio de la landing web"
                 className={`block text-center py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 ${
                   plan.popular
                     ? 'bg-white text-purple-700 hover:bg-gray-100 shadow-xl'
@@ -163,7 +164,7 @@ export function Pricing() {
                 }`}
               >
                 🚀 Contratar Ahora
-              </a>
+              </WhatsAppLink>
             </div>
           ))}
         </div>

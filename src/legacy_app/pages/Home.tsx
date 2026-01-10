@@ -1,6 +1,7 @@
 "use client";
 // Update logo path to public asset
 const logo = "/assets/logo.png";
+import { WhatsAppLink } from "../../components/WhatsAppLink";
 
 export function Home() {
   const scrollToServices = () => {
@@ -108,14 +109,12 @@ export function Home() {
                   </svg>
                 </span>
               </button>
-              <a
-                href="https://wa.me/528118582060?text=Hola%20me%20interesa%20m%C3%A1s%20informaci%C3%B3n%20sobre%20los%20servicios"
-                target="_blank"
-                rel="noopener noreferrer"
+              <WhatsAppLink
+                message="Hola me interesa más información sobre los servicios"
                 className="px-8 py-4 border-2 border-cyan-400 text-cyan-400 rounded-xl hover:bg-cyan-400/10 backdrop-blur-sm transition-all duration-300"
               >
                 💬 Hablar con Expertos
-              </a>
+              </WhatsAppLink>
             </div>
 
             {/* Stats */}
@@ -378,14 +377,12 @@ export function Home() {
               >
                 🚀 Explorar Servicios
               </button>
-              <a
-                href="https://wa.me/528118582060?text=Hola%20me%20interesa%20m%C3%A1s%20informaci%C3%B3n%20sobre%20los%20servicios"
-                target="_blank"
-                rel="noopener noreferrer"
+              <WhatsAppLink
+                message="Hola me interesa más información sobre los servicios"
                 className="px-10 py-5 border-2 border-cyan-400 text-cyan-400 rounded-xl hover:bg-cyan-400/10 transition-all duration-300"
               >
                 💬 Agendar Consultoría
-              </a>
+              </WhatsAppLink>
             </div>
           </div>
         </section>

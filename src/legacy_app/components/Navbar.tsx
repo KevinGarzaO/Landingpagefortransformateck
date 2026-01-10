@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import LinkComponent from "next/link";
+import { WhatsAppLink } from "../../components/WhatsAppLink";
 // Image generic path, assuming assets were moved to public/assets
 const logo = "/assets/logo_3.png";
 
@@ -55,14 +56,12 @@ export function Navbar() {
               </LinkComponent>
             )})}
 
-            <a
-              href="https://wa.me/528118582060?text=Hola%20me%20interesa%20más%20información%20sobre%20los%20servicios"
-              target="_blank"
-              rel="noopener noreferrer"
+            <WhatsAppLink
+              message="Hola me interesa más información sobre los servicios"
               className="px-4 py-2 border-2 border-cyan-400 text-cyan-400 rounded-lg hover:bg-cyan-400/10 transition-all duration-300"
             >
               Contacto
-            </a>
+            </WhatsAppLink>
           </div>
 
           {/* Mobile Menu Button */}
@@ -118,14 +117,12 @@ export function Navbar() {
               </LinkComponent>
             )})}
 
-            <a
-              href="https://wa.me/528118582060?text=Hola%20me%20interesa%20más%20información%20sobre%20los%20servicios"
-              target="_blank"
-              rel="noopener noreferrer"
+            <WhatsAppLink
+              message="Hola me interesa más información sobre los servicios"
               className="block w-full text-center px-4 py-3 border-2 border-cyan-400 text-cyan-400 rounded-lg hover:bg-cyan-400/10 transition-all duration-300"
             >
               Contacto
-            </a>
+            </WhatsAppLink>
           </div>
         )}
       </div>

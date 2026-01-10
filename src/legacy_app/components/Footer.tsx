@@ -1,5 +1,7 @@
+"use client";
 import Link from "next/link";
 import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
+import { WhatsAppLink } from "../../components/WhatsAppLink";
 
 // Update logo path
 const logo = "/assets/logo_3.png";
@@ -55,14 +57,12 @@ export function Footer() {
               Fábrica de productos digitales. Transformamos ideas en realidad
               con tecnología de vanguardia.
             </p>
-            <a
-              href="https://wa.me/528118582060?text=Hola%20me%20interesa%20m%C3%A1s%20informaci%C3%B3n%20sobre%20los%20servicios"
-              target="_blank"
-              rel="noopener noreferrer"
+            <WhatsAppLink
+              message="Hola me interesa más información sobre los servicios"
               className="inline-block px-6 py-3 bg-gradient-to-r from-cyan-500 to-purple-600 text-white rounded-lg hover:shadow-xl hover:shadow-cyan-500/50 transition-all duration-300 transform hover:scale-105"
             >
               💬 Contactar
-            </a>
+            </WhatsAppLink>
           </div>
 
           {/* Services */}
@@ -114,15 +114,13 @@ export function Footer() {
                 <span>📧</span>
                 <span>kevin.garza@transformateck.com</span>
               </a>
-              <a
-                href="https://wa.me/528118582060?text=Hola%20me%20interesa%20m%C3%A1s%20informaci%C3%B3n%20de%20los%20servicios"
-                target="_blank"
-                rel="noopener noreferrer"
+              <WhatsAppLink
+                message="Hola me interesa más información de los servicios"
                 className="flex items-center gap-2 hover:text-cyan-400 transition-colors duration-300"
               >
                 <span>📱</span>
                 <span>+52 81 1858 2060</span>
-              </a>
+              </WhatsAppLink>
             </div>
           </div>
         </div>

@@ -1,4 +1,5 @@
 "use client";
+import { WhatsAppLink } from "../../components/WhatsAppLink";
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -275,14 +276,12 @@ export function Blog() {
           <p className="text-xl text-gray-300 mb-8">
             Hablemos sobre cómo podemos ayudarte a hacerlo realidad
           </p>
-          <a
-            href="https://wa.me/528118582060?text=Hola%20me%20interesa%20m%C3%A1s%20informaci%C3%B3n%20sobre%20los%20servicios"
-            target="_blank"
-            rel="noopener noreferrer"
+          <WhatsAppLink
+            message="Hola me interesa más información sobre los servicios"
             className="inline-block px-10 py-5 bg-gradient-to-r from-cyan-500 to-purple-600 text-white rounded-xl hover:shadow-2xl hover:shadow-cyan-500/50 transition-all duration-300 transform hover:scale-105"
           >
             💬 Contactar Ahora
-          </a>
+          </WhatsAppLink>
         </div>
       </section>
 

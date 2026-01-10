@@ -1,14 +1,25 @@
 "use client";
+import { trackContactCapi } from "./src/utils/metaPixel";
+
 // Update logo path to public asset
 const logo = "/assets/logo.png";
 
 export function Home() {
+  const whatsappBaseUrl = "https://wa.me/528118582060";
+
+  const handleWhatsappClick = (message: string) => {
+    trackContactCapi({ message });
+    const link = `${whatsappBaseUrl}?text=${encodeURIComponent(message)}`;
+    window.open(link, "_blank");
+  };
+
   const scrollToServices = () => {
     const servicesSection = document.getElementById("services");
     if (servicesSection) {
       servicesSection.scrollIntoView({ behavior: "smooth" });
     }
   };
+
 
   return (
     <>
@@ -108,14 +119,12 @@ export function Home() {
                   </svg>
                 </span>
               </button>
-              <a
-                href="https://wa.me/528118582060?text=Hola%20me%20interesa%20m%C3%A1s%20informaci%C3%B3n%20sobre%20los%20servicios"
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                onClick={() => handleWhatsappClick("Hola me interesa más información sobre los servicios")}
                 className="px-8 py-4 border-2 border-cyan-400 text-cyan-400 rounded-xl hover:bg-cyan-400/10 backdrop-blur-sm transition-all duration-300"
               >
                 💬 Hablar con Expertos
-              </a>
+              </button>
             </div>
 
             {/* Stats */}
@@ -378,14 +387,12 @@ export function Home() {
               >
                 🚀 Explorar Servicios
               </button>
-              <a
-                href="https://wa.me/528118582060?text=Hola%20me%20interesa%20m%C3%A1s%20informaci%C3%B3n%20sobre%20los%20servicios"
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                onClick={() => handleWhatsappClick("Hola me interesa agendar una consultoría")}
                 className="px-10 py-5 border-2 border-cyan-400 text-cyan-400 rounded-xl hover:bg-cyan-400/10 transition-all duration-300"
               >
                 💬 Agendar Consultoría
-              </a>
+              </button>
             </div>
           </div>
         </section>

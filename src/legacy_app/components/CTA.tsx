@@ -1,5 +1,7 @@
+"use client";
 // Update logo path to public asset
 const logo = "/assets/logo.png";
+import { WhatsAppLink } from "../../components/WhatsAppLink";
 
 export function CTA() {
   return (
@@ -38,14 +40,12 @@ export function CTA() {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-          <a
-            href="https://wa.me/528118582060?text=Hola%20me%20interesa%20m%C3%A1s%20informaci%C3%B3n%20sobre%20los%20servicios"
-            target="_blank"
-            rel="noopener noreferrer"
+          <WhatsAppLink
+            message="Hola me interesa más información sobre los servicios"
             className="px-10 py-5 bg-gradient-to-r from-cyan-500 to-purple-600 text-white rounded-xl hover:shadow-2xl hover:shadow-cyan-500/50 transition-all duration-300 transform hover:scale-105 text-lg"
           >
             💬 Hablar con el Equipo
-          </a>
+          </WhatsAppLink>
           <a
             href="#pricing"
             className="px-10 py-5 border-2 border-cyan-400 text-cyan-400 rounded-xl hover:bg-cyan-400/10 transition-all duration-300 text-lg"

@@ -1,23 +1,37 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { sendCapiEvent } from '@/lib/capi';
-import { db } from '@/lib/firebase'; // Correct path from src/lib/firebase.ts
+import { db } from '@/lib/firebase';
 import { collection, addDoc } from 'firebase/firestore';
 
 export async function POST(req: NextRequest) {
+  console.log('[CAPI Contact] Received request');
+  
   try {
-    const body = await req.json();
+    // Handle both regular JSON and sendBeacon requests
+    let body;
+    const contentType = req.headers.get('content-type') || '';
+    
+    try {
+      body = await req.json();
+      console.log('[CAPI Contact] Parsed body:', JSON.stringify(body));
+    } catch (parseError) {
+      console.error('[CAPI Contact] Failed to parse JSON:', parseError);
+      return NextResponse.json({ success: false, error: 'Invalid JSON' }, { status: 400 });
+    }
+    
     const { name, email, phone, message, externalId, eventId, fbp, fbc, url } = body;
 
     const ip = req.headers.get('x-forwarded-for') || (req as any).ip || '127.0.0.1';
     const userAgent = req.headers.get('user-agent') || 'Unknown';
-    // Use the eventId sent from client to ensure deduplication
     const finalEventId = eventId || `contact-${externalId}-${Date.now()}`;
 
-    // 1. Save to Firebase (Server-side to ensure reliability)
+    console.log('[CAPI Contact] Processing event:', finalEventId);
+
+    // 1. Save to Firebase
     const leadData = {
-      event_name: 'Contact', // Explicitly saving event name
-      click_date: new Date().toISOString(), // User explicitly asked for click date
+      event_name: 'Contact',
+      click_date: new Date().toISOString(),
       name: name || null,
       email: email || null,
       phone: phone || null,
@@ -31,18 +45,20 @@ export async function POST(req: NextRequest) {
       ip_address: ip,
       user_agent: userAgent,
       url: url || null,
-      used: false, // Para rastrear si el evento ya fue utilizado
+      used: false,
     };
     
     try {
-        // Save to 'capi_events' collection as requested
-        await addDoc(collection(db, "capi_events"), leadData);
+      console.log('[CAPI Contact] Saving to Firebase...');
+      const docRef = await addDoc(collection(db, "capi_events"), leadData);
+      console.log('[CAPI Contact] ✅ Firebase saved successfully:', docRef.id);
     } catch (dbError) {
-        console.error("Error saving to Firebase in API:", dbError);
-        // We log but don't stop the flow so CAPI still fires
+      console.error('[CAPI Contact] ❌ Firebase error:', dbError);
+      // Continue to CAPI even if Firebase fails
     }
 
     // 2. Send CAPI Event
+    console.log('[CAPI Contact] Sending CAPI event...');
     await sendCapiEvent({
       eventName: 'Contact',
       eventId: finalEventId,
@@ -60,10 +76,11 @@ export async function POST(req: NextRequest) {
         content_name: 'Lead',
       },
     });
+    console.log('[CAPI Contact] ✅ CAPI event sent');
 
-    return NextResponse.json({ success: true, eventId });
+    return NextResponse.json({ success: true, eventId: finalEventId });
   } catch (error) {
-    console.error('CAPI Contact Error:', error);
+    console.error('[CAPI Contact] ❌ Unexpected error:', error);
     return NextResponse.json({ success: false, error: 'Internal Server Error' }, { status: 500 });
   }
 }

@@ -67,7 +67,7 @@ export const trackContact = (eventId?: string) => {
 const canUseGtag = () =>
   typeof window !== "undefined" && typeof (window as any).gtag === "function";
 
-export const trackContactCapi = async (data: { message?: string, phone?: string, email?: string } = {}) => {
+export const trackContactCapi = async (data: { message?: string, phone?: string, email?: string, name?: string } = {}) => {
   // Generate a unique event ID for Deduplication
   const eventId = `contact-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
@@ -103,6 +103,9 @@ export const trackContactCapi = async (data: { message?: string, phone?: string,
       fbc,
       url,
       message: data.message,
+      phone: data.phone,
+      email: data.email,
+      name: data.name,
     });
 
     // sendBeacon is designed to survive page navigation/closure

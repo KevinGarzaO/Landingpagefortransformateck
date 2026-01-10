@@ -1,3 +1,6 @@
+"use client";
+import { WhatsAppLink } from "../../components/WhatsAppLink";
+
 export function Upsells() {
   const upsells = [
     {
@@ -100,14 +103,12 @@ export function Upsells() {
         </div>
 
         <div className="mt-12 text-center">
-          <a
-            href="https://wa.me/528118582060?text=Hola%20me%20interesa%20el%20servicio%20de%20la%20landing%20web"
-            target="_blank"
-            rel="noopener noreferrer"
+          <WhatsAppLink
+            message="Hola me interesa el servicio de la landing web"
             className="inline-block px-10 py-4 bg-gradient-to-r from-cyan-600 to-purple-600 text-white rounded-xl hover:shadow-2xl hover:shadow-cyan-500/50 transition-all duration-300 transform hover:scale-105"
           >
             💬 Consultar Servicios Adicionales
-          </a>
+          </WhatsAppLink>
         </div>
       </div>
     </section>
