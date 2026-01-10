@@ -3,6 +3,7 @@ import '@/styles/index.css'
 import { Toaster } from 'sonner'
 
 import MetaPixel from '@/components/MetaPixel'
+import CapiTracker from '@/components/CapiTracker'
 
 // Use the production domain to ensure WhatsApp/Socials always find the image
 const baseUrl = "https://transformateck.com";
@@ -54,6 +55,7 @@ export default function RootLayout({
     <html lang="es">
       <body className="min-h-screen bg-black text-white antialiased">
         <MetaPixel />
+        <CapiTracker />
         {children}
         <Toaster />
       </body>

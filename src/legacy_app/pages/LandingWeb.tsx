@@ -3,14 +3,14 @@
 // import { Upsells } from "../components/Upsells";
 
 import { WhatsApp, ExpandMore, Link as LinkIcon, Business, AdsClick } from "@mui/icons-material";
-import { trackContact } from "../../utils/metaPixel";
+import { trackContactCapi } from "../../utils/metaPixel";
 import { useState } from "react";
 
 export function LandingWeb() {
   const whatsappBaseUrl = "https://wa.me/528118582060";
 
   const handleWhatsappClick = (message: string) => {
-    trackContact();
+    trackContactCapi({ message });
     const link = `${whatsappBaseUrl}?text=${encodeURIComponent(message)}`;
     window.open(link, "_blank");
   };

@@ -47,8 +47,51 @@ export const trackPageView = () => {
   (window as any).fbq("track", "PageView");
 };
 
-export const trackContact = () => {
+const getCookie = (name: string) => {
+  if (typeof document === 'undefined') return null;
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  return match ? match[2] : null;
+};
+
+export const trackContact = (eventId?: string) => {
   if (!canUseFbq()) return;
 
-  (window as any).fbq("track", "Contact");
+  (window as any).fbq("track", "Contact", {
+    value: 0.00,
+    currency: "MXN",
+    content_name: "Lead"
+  }, { eventID: eventId });
+};
+
+export const trackContactCapi = async (data: { message?: string, phone?: string, email?: string } = {}) => {
+  // Generate a unique event ID for Deduplication
+  const eventId = `contact-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+  // 1. Client-side Pixel with Event ID
+  trackContact(eventId);
+
+  // 2. Server-side CAPI
+  try {
+    const externalId = localStorage.getItem('fbp_external_id');
+    const fbp = getCookie('_fbp') || undefined;
+    const fbc = getCookie('_fbc') || undefined;
+    const url = window.location.href;
+    
+    // Fire and forget fetch
+    fetch('/api/capi/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        externalId,
+        eventId, // Send shared ID
+        fbp,
+        fbc,
+        url,
+        message: data.message,
+      }),
+      keepalive: true,
+    });
+  } catch (e) {
+    console.error("CAPI Contact Error", e);
+  }
 };
