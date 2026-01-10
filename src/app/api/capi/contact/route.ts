@@ -31,6 +31,7 @@ export async function POST(req: NextRequest) {
       ip_address: ip,
       user_agent: userAgent,
       url: url || null,
+      used: false, // Para rastrear si el evento ya fue utilizado
     };
     
     try {

@@ -1,8 +1,8 @@
 
 import { createHash } from 'crypto';
 
-const PIXEL_ID = process.env.META_PIXEL_ID;
-const ACCESS_TOKEN = process.env.META_ACCESS_TOKEN || process.env.META_WA_VERIFY_TOKEN; // Fallback if user insists on using that one, though unlikely correct.
+const PIXEL_ID = process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID;
+const ACCESS_TOKEN = process.env.NEXT_PUBLIC_META_ACCESS_TOKEN
 
 if (!PIXEL_ID) {
   console.warn("Meta Pixel ID is missing in environment variables.");
