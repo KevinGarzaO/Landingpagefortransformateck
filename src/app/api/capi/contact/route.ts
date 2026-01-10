@@ -10,7 +10,6 @@ export async function POST(req: NextRequest) {
   try {
     // Handle both regular JSON and sendBeacon requests
     let body;
-    const contentType = req.headers.get('content-type') || '';
     
     try {
       body = await req.json();
