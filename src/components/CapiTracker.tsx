@@ -24,6 +24,11 @@ export const getExternalId = (): string => {
     // Set cookie for 365 days
     document.cookie = `fbp_external_id=${id}; path=/; max-age=${60 * 60 * 24 * 365}; SameSite=Lax`;
   }
+
+  // Initialize entry time if not present
+  if (typeof sessionStorage !== 'undefined' && !sessionStorage.getItem('entry_time')) {
+    sessionStorage.setItem('entry_time', new Date().toISOString());
+  }
   
   return id;
 };

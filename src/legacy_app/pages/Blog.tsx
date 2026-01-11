@@ -279,6 +279,9 @@ export function Blog() {
           <WhatsAppLink
             message="Hola me interesa más información sobre los servicios"
             className="inline-block px-10 py-5 bg-gradient-to-r from-cyan-500 to-purple-600 text-white rounded-xl hover:shadow-2xl hover:shadow-cyan-500/50 transition-all duration-300 transform hover:scale-105"
+            component="Blog"
+            section="CTA"
+            buttonId="blog-main-contact"
           >
             💬 Contactar Ahora
           </WhatsAppLink>

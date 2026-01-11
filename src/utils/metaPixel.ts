@@ -53,6 +53,11 @@ const getCookie = (name: string) => {
   return match ? match[2] : null;
 };
 
+const getEntryTime = () => {
+  if (typeof sessionStorage === 'undefined') return null;
+  return sessionStorage.getItem('entry_time');
+};
+
 export const trackContact = (eventId?: string) => {
   if (!canUseFbq()) return;
 
@@ -67,7 +72,15 @@ export const trackContact = (eventId?: string) => {
 const canUseGtag = () =>
   typeof window !== "undefined" && typeof (window as any).gtag === "function";
 
-export const trackContactCapi = async (data: { message?: string, phone?: string, email?: string, name?: string } = {}) => {
+export const trackContactCapi = async (data: { 
+  message?: string, 
+  phone?: string, 
+  email?: string, 
+  name?: string,
+  component?: string,
+  section?: string,
+  id?: string
+} = {}) => {
   // Generate a unique event ID for Deduplication
   const eventId = `contact-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
@@ -106,6 +119,11 @@ export const trackContactCapi = async (data: { message?: string, phone?: string,
       phone: data.phone,
       email: data.email,
       name: data.name,
+      component: data.component,
+      section: data.section,
+      buttonId: data.id,
+      clickTime: new Date().toISOString(),
+      entryTime: getEntryTime(),
     });
 
     // sendBeacon is designed to survive page navigation/closure

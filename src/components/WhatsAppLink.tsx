@@ -7,12 +7,18 @@ interface WhatsAppLinkProps {
   message?: string;
   className?: string;
   children: ReactNode;
+  component?: string;
+  section?: string;
+  buttonId: string; // Required for precise tracking
 }
 
 export function WhatsAppLink({ 
   message = "Quiero mi auditoría gratuita por WhatsApp", 
   className = "", 
-  children 
+  children,
+  component,
+  section,
+  buttonId
 }: WhatsAppLinkProps) {
   
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -22,7 +28,12 @@ export function WhatsAppLink({
     
     try {
       console.log("[WhatsAppClick] Triggering CAPI event...");
-      trackContactCapi({ message });
+      trackContactCapi({ 
+        message,
+        component,
+        section,
+        id: buttonId
+      });
       console.log("[WhatsAppClick] CAPI event triggered");
     } catch (error) {
       console.error("[WhatsAppClick] Error tracking CAPI event:", error);

@@ -19,7 +19,22 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, error: 'Invalid JSON' }, { status: 400 });
     }
     
-    const { name, email, phone, message, externalId, eventId, fbp, fbc, url } = body;
+    const { 
+      name, 
+      email, 
+      phone, 
+      message, 
+      externalId, 
+      eventId, 
+      fbp, 
+      fbc, 
+      url,
+      component,
+      section,
+      buttonId,
+      entryTime,
+      clickTime
+    } = body;
 
     const ip = req.headers.get('x-forwarded-for') || (req as any).ip || '127.0.0.1';
     const userAgent = req.headers.get('user-agent') || 'Unknown';
@@ -30,7 +45,8 @@ export async function POST(req: NextRequest) {
     // 1. Save to Firebase
     const leadData = {
       event_name: 'Contact',
-      click_date: new Date().toISOString(),
+      click_date: clickTime || new Date().toISOString(),
+      entry_date: entryTime || null,
       name: name || null,
       email: email || null,
       phone: phone || null,
@@ -44,6 +60,9 @@ export async function POST(req: NextRequest) {
       ip_address: ip,
       user_agent: userAgent,
       url: url || null,
+      component: component || null,
+      section: section || null,
+      button_id: buttonId || null,
       used: false,
     };
     

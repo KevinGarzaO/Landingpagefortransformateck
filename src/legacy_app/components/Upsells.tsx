@@ -138,7 +138,12 @@ export function Upsells() {
         </div>
 
         <div className="mt-12 text-center">
-          <WhatsAppLink className="inline-block px-10 py-4 bg-gradient-to-r from-cyan-600 to-purple-600 text-white rounded-xl hover:shadow-2xl hover:shadow-cyan-500/50 transition-all duration-300 transform hover:scale-105">
+          <WhatsAppLink 
+            className="inline-block px-10 py-4 bg-gradient-to-r from-cyan-600 to-purple-600 text-white rounded-xl hover:shadow-2xl hover:shadow-cyan-500/50 transition-all duration-300 transform hover:scale-105"
+            component="Upsells"
+            section="Services"
+            buttonId="upsells-consult-services"
+          >
             💬 Consultar Servicios Adicionales
           </WhatsAppLink>
         </div>

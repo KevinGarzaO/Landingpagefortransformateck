@@ -211,6 +211,9 @@ export function Pricing() {
                     ? "bg-white text-purple-700 hover:bg-gray-100 shadow-xl"
                     : "bg-gradient-to-r from-cyan-600 to-purple-600 text-white hover:shadow-xl hover:shadow-cyan-500/50"
                 }`}
+                component="Pricing"
+                section="Plans"
+                buttonId={`pricing-plan-${index}`}
               >
                 🚀 Contratar Ahora
               </WhatsAppLink>

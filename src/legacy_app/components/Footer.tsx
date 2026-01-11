@@ -60,6 +60,9 @@ export function Footer() {
             <WhatsAppLink
               message="Hola me interesa más información sobre los servicios"
               className="inline-block px-6 py-3 bg-gradient-to-r from-cyan-500 to-purple-600 text-white rounded-lg hover:shadow-xl hover:shadow-cyan-500/50 transition-all duration-300 transform hover:scale-105"
+              component="Footer"
+              section="CompanyInfo"
+              buttonId="footer-company-contact"
             >
               💬 Contactar
             </WhatsAppLink>
@@ -117,6 +120,9 @@ export function Footer() {
               <WhatsAppLink
                 message="Hola me interesa más información de los servicios"
                 className="flex items-center gap-2 hover:text-cyan-400 transition-colors duration-300"
+                component="Footer"
+                section="ContactInfo"
+                buttonId="footer-phone-link"
               >
                 <span>📱</span>
                 <span>+52 81 1858 2060</span>

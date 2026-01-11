@@ -43,6 +43,9 @@ export function CTA() {
           <WhatsAppLink
             message="Hola me interesa más información sobre los servicios"
             className="px-10 py-5 bg-gradient-to-r from-cyan-500 to-purple-600 text-white rounded-xl hover:shadow-2xl hover:shadow-cyan-500/50 transition-all duration-300 transform hover:scale-105 text-lg"
+            component="CTA"
+            section="Main"
+            buttonId="cta-section-talk-team"
           >
             💬 Hablar con el Equipo
           </WhatsAppLink>

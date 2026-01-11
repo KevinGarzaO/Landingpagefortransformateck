@@ -54,6 +54,9 @@ export function Hero() {
             <WhatsAppLink
               message="Hola me interesa más información sobre los servicios"
               className="px-8 py-4 border-2 border-cyan-400 text-cyan-400 rounded-lg hover:bg-cyan-400/10 transition-all duration-300"
+              component="Hero"
+              section="Main"
+              buttonId="hero-talk-team"
             >
               Hablar con el Equipo
             </WhatsAppLink>
