@@ -8,49 +8,75 @@ export function Upsells() {
       title: "Formulario de Contacto",
       price: "$500",
       period: "MXN",
-      description: "Captura leads directamente desde tu landing. Integración con email y CRM.",
-      features: ["Diseño personalizado", "Validación de campos", "Notificaciones email"]
+      description:
+        "Captura leads directamente desde tu landing. Integración con email y CRM.",
+      features: [
+        "Diseño personalizado",
+        "Validación de campos",
+        "Notificaciones email",
+      ],
     },
     {
       icon: "🌐",
       title: "Hosting Renovación",
       price: "$1,200",
       period: "MXN/año",
-      description: "Mantén tu sitio online con servidores optimizados un año más.",
-      features: ["99.9% uptime", "SSL incluido", "Backups automáticos"]
+      description:
+        "Mantén tu sitio online con servidores optimizados un año más.",
+      features: ["99.9% uptime", "SSL incluido", "Backups automáticos"],
     },
     {
       icon: "📄",
       title: "Página Adicional",
       price: "$1,990",
       period: "MXN",
-      description: "Expande tu sitio con páginas extras: servicios, about, blog, etc.",
-      features: ["Hasta 5 secciones", "Diseño coherente", "Totalmente responsive"]
+      description:
+        "Expande tu sitio con páginas extras: servicios, about, blog, etc.",
+      features: [
+        "Hasta 5 secciones",
+        "Diseño coherente",
+        "Totalmente responsive",
+      ],
     },
     {
       icon: "🔄",
       title: "Cambios Extra",
       price: "$300",
       period: "MXN/ronda",
-      description: "Rondas adicionales de ajustes después de la entrega oficial.",
-      features: ["Cambios ilimitados por ronda", "48hrs de respuesta", "Soporte dedicado"]
+      description:
+        "Rondas adicionales de ajustes después de la entrega oficial.",
+      features: [
+        "Cambios ilimitados por ronda",
+        "48hrs de respuesta",
+        "Soporte dedicado",
+      ],
     },
     {
       icon: "➕",
       title: "Sección Extra",
       price: "$300",
       period: "MXN",
-      description: "Añade una sección adicional a tu landing con diseño personalizado.",
-      features: ["Diseño personalizado", "100% responsive", "Integración perfecta"]
+      description:
+        "Añade una sección adicional a tu landing con diseño personalizado.",
+      features: [
+        "Diseño personalizado",
+        "100% responsive",
+        "Integración perfecta",
+      ],
     },
     {
       icon: "📧",
       title: "Correos Corporativos",
       price: "$100",
       period: "MXN/mes/usuario",
-      description: "Gestión de correos electrónicos corporativos con tu dominio .com.",
-      features: ["Plan básico: $100/mes/usuario", "Plan standard: $200/mes/usuario", "Requiere dominio propio"]
-    }
+      description:
+        "Gestión de correos electrónicos corporativos con tu dominio .com.",
+      features: [
+        "Plan básico: $100/mes/usuario",
+        "Plan standard: $200/mes/usuario",
+        "Requiere dominio propio",
+      ],
+    },
   ];
 
   return (
@@ -77,22 +103,31 @@ export function Upsells() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {upsells.map((upsell, index) => (
-            <div 
+            <div
               key={index}
               className="p-6 rounded-2xl border-2 border-white/10 hover:border-purple-400/50 hover:shadow-2xl hover:shadow-purple-500/20 transition-all duration-300 bg-white/5 backdrop-blur-sm transform hover:scale-105 group"
             >
-              <div className="text-6xl mb-4 group-hover:scale-110 transition-transform duration-300">{upsell.icon}</div>
+              <div className="text-6xl mb-4 group-hover:scale-110 transition-transform duration-300">
+                {upsell.icon}
+              </div>
               <h3 className="text-xl mb-2 text-white">{upsell.title}</h3>
               <div className="mb-1">
                 <span className="text-3xl bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
                   {upsell.price}
                 </span>
               </div>
-              <div className="text-sm text-gray-400 mb-4">{upsell.period} + IVA</div>
-              <p className="text-gray-300 text-sm mb-4 leading-relaxed">{upsell.description}</p>
+              <div className="text-sm text-gray-400 mb-4">
+                {upsell.period} + IVA
+              </div>
+              <p className="text-gray-300 text-sm mb-4 leading-relaxed">
+                {upsell.description}
+              </p>
               <ul className="space-y-2">
                 {upsell.features.map((feature, idx) => (
-                  <li key={idx} className="flex items-center gap-2 text-sm text-gray-400">
+                  <li
+                    key={idx}
+                    className="flex items-center gap-2 text-sm text-gray-400"
+                  >
                     <span className="text-cyan-400">✓</span>
                     {feature}
                   </li>
@@ -103,10 +138,7 @@ export function Upsells() {
         </div>
 
         <div className="mt-12 text-center">
-          <WhatsAppLink
-            message="Hola me interesa el servicio de la landing web"
-            className="inline-block px-10 py-4 bg-gradient-to-r from-cyan-600 to-purple-600 text-white rounded-xl hover:shadow-2xl hover:shadow-cyan-500/50 transition-all duration-300 transform hover:scale-105"
-          >
+          <WhatsAppLink className="inline-block px-10 py-4 bg-gradient-to-r from-cyan-600 to-purple-600 text-white rounded-xl hover:shadow-2xl hover:shadow-cyan-500/50 transition-all duration-300 transform hover:scale-105">
             💬 Consultar Servicios Adicionales
           </WhatsAppLink>
         </div>
