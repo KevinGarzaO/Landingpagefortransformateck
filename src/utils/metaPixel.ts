@@ -154,3 +154,37 @@ export const trackContactCapi = async (data: {
     console.error("CAPI Contact Error", e);
   }
 };
+
+export const trackViewContentCapi = async (externalId: string) => {
+  // Generate a unique event ID for Deduplication
+  const eventId = `viewcontent-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+  // 1. Client-side Pixel
+  if (canUseFbq()) {
+    (window as any).fbq("track", "ViewContent", {}, { eventID: eventId });
+  }
+
+  // 2. Server-side CAPI
+  try {
+    const payload = JSON.stringify({
+      externalId: externalId,
+      url: window.location.href,
+      eventId: eventId
+    });
+
+    if (navigator.sendBeacon) {
+       const blob = new Blob([payload], { type: 'application/json' });
+       navigator.sendBeacon('/api/capi/viewcontent', blob);
+    } else {
+       await fetch('/api/capi/viewcontent', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: payload,
+      });
+    }
+  } catch (e) {
+    console.error("Failed to trigger CAPI ViewContent", e);
+  }
+};
