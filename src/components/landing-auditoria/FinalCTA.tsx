@@ -27,8 +27,13 @@ export const FinalCTA = () => {
           onViewportEnter={() => {
             const id = getExternalId();
             if (id) {
-              console.log("Tracking ViewContent CAPI with ID:", id);
-              trackViewContentCapi(id);
+              // Prevent duplicate ViewContent events
+              const viewContentKey = `viewcontent_tracked_${id}`;
+              if (!sessionStorage.getItem(viewContentKey)) {
+                sessionStorage.setItem(viewContentKey, 'true');
+                console.log("Tracking ViewContent CAPI with ID:", id);
+                trackViewContentCapi(id);
+              }
             }
           }}
         >

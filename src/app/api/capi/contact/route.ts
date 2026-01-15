@@ -1,6 +1,6 @@
 
 import { NextRequest, NextResponse } from 'next/server';
-import { sendCapiEvent } from '@/lib/capi';
+import { sendCapiEvent, getClientIp } from '@/lib/capi';
 import { db } from '@/lib/firebase';
 import { collection, addDoc } from 'firebase/firestore';
 
@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
       clickTime
     } = body;
 
-    const ip = req.headers.get('x-forwarded-for') || (req as any).ip || '127.0.0.1';
+    const ip = getClientIp(req);
     const userAgent = req.headers.get('user-agent') || 'Unknown';
     const finalEventId = eventId || `contact-${externalId}-${Date.now()}`;
 

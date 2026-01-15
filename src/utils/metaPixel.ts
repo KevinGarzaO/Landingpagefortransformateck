@@ -41,10 +41,52 @@ export const trackPurchase = (amount: number, items: MetaItem[]) => {
   });
 };
 
-export const trackPageView = () => {
+export const trackPageView = (eventId?: string, externalId?: string) => {
   if (!canUseFbq()) return;
 
-  (window as any).fbq("track", "PageView");
+  (window as any).fbq("track", "PageView", {
+    external_id: externalId
+  }, { eventID: eventId });
+};
+
+export const trackPageViewCapi = async () => {
+  // Generate a unique event ID for Deduplication
+  const eventId = `pageview-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  const externalId = localStorage.getItem('fbp_external_id') || undefined;
+
+  // 1. Client-side Pixel with external_id
+  trackPageView(eventId, externalId);
+
+  // 2. Server-side CAPI
+  if (!externalId) return; // Skip CAPI if no external_id
+
+  try {
+    const fbp = getCookie('_fbp') || undefined;
+    const fbc = getCookie('_fbc') || undefined;
+    const url = window.location.href;
+
+    const payload = JSON.stringify({
+      externalId,
+      eventId,
+      fbp,
+      fbc,
+      url,
+    });
+
+    if (navigator.sendBeacon) {
+      const blob = new Blob([payload], { type: 'application/json' });
+      navigator.sendBeacon('/api/capi/pageview', blob);
+    } else {
+      fetch('/api/capi/pageview', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: payload,
+        keepalive: true,
+      });
+    }
+  } catch (e) {
+    console.error("CAPI PageView Error", e);
+  }
 };
 
 const getCookie = (name: string) => {
@@ -58,13 +100,14 @@ const getEntryTime = () => {
   return sessionStorage.getItem('entry_time');
 };
 
-export const trackContact = (eventId?: string) => {
+export const trackContact = (eventId?: string, externalId?: string) => {
   if (!canUseFbq()) return;
 
   (window as any).fbq("track", "Contact", {
     value: 0.00,
     currency: "MXN",
-    content_name: "Lead"
+    content_name: "Lead",
+    external_id: externalId
   }, { eventID: eventId });
 };
 
@@ -83,9 +126,10 @@ export const trackContactCapi = async (data: {
 } = {}) => {
   // Generate a unique event ID for Deduplication
   const eventId = `contact-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  const externalId = localStorage.getItem('fbp_external_id') || undefined;
 
-  // 1. Client-side Pixel with Event ID
-  trackContact(eventId);
+  // 1. Client-side Pixel with Event ID and external_id
+  trackContact(eventId, externalId);
 
   // 2. Google Analytics Event
   if (canUseGtag()) {
@@ -104,7 +148,6 @@ export const trackContactCapi = async (data: {
 
   // 3. Server-side CAPI - Use sendBeacon for reliability during page navigation
   try {
-    const externalId = localStorage.getItem('fbp_external_id');
     const fbp = getCookie('_fbp') || undefined;
     const fbc = getCookie('_fbc') || undefined;
     const url = window.location.href;
@@ -155,13 +198,48 @@ export const trackContactCapi = async (data: {
   }
 };
 
+
+const getFbcValue = () => {
+  if (typeof window === 'undefined') return undefined;
+  
+  // 1. Try to get from cookie first
+  const cookieFbc = getCookie('_fbc');
+  if (cookieFbc) return cookieFbc;
+
+  // 2. If no cookie, try to get from URL query param 'fbclid'
+  try {
+    const urlParams = new URLSearchParams(window.location.search);
+    const fbclid = urlParams.get('fbclid');
+    
+    if (fbclid) {
+      // Format: fb.1.timestamp.fbclid
+      // "fb" = Facebook
+      // "1" = version
+      // timestamp = creation time in ms
+      return `fb.1.${Date.now()}.${fbclid}`;
+    }
+  } catch (e) {
+    console.error('Error parsing fbclid:', e);
+  }
+
+  return undefined;
+};
+
 export const trackViewContentCapi = async (externalId: string) => {
   // Generate a unique event ID for Deduplication
   const eventId = `viewcontent-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
-  // 1. Client-side Pixel
+  // Get cookies/URL params for enhanced matching
+  const fbp = getCookie('_fbp') || undefined;
+  const fbc = getFbcValue();
+
+  // 1. Client-side Pixel with external_id (same value as CAPI for matching)
   if (canUseFbq()) {
-    (window as any).fbq("track", "ViewContent", {}, { eventID: eventId });
+    (window as any).fbq("track", "ViewContent", {
+      external_id: externalId,
+      currency: "MXN",
+      value: 0.00
+    }, { eventID: eventId });
   }
 
   // 2. Server-side CAPI
@@ -169,7 +247,11 @@ export const trackViewContentCapi = async (externalId: string) => {
     const payload = JSON.stringify({
       externalId: externalId,
       url: window.location.href,
-      eventId: eventId
+      eventId: eventId,
+      fbp,
+      fbc,
+      currency: 'MXN',
+      value: 0.00
     });
 
     if (navigator.sendBeacon) {
@@ -188,3 +270,4 @@ export const trackViewContentCapi = async (externalId: string) => {
     console.error("Failed to trigger CAPI ViewContent", e);
   }
 };
+

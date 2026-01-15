@@ -1,5 +1,6 @@
 
 import { createHash } from 'crypto';
+import { NextRequest } from 'next/server';
 
 const PIXEL_ID = process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID;
 const ACCESS_TOKEN = process.env.NEXT_PUBLIC_META_ACCESS_TOKEN
@@ -15,6 +16,66 @@ if (!ACCESS_TOKEN) {
 export const hashData = (data: string): string => {
   if (!data) return '';
   return createHash('sha256').update(data.trim().toLowerCase()).digest('hex');
+};
+
+/**
+ * Extract client IP from request, prioritizing IPv6 over IPv4.
+ * Meta recommends using IPv6 when available for better event matching.
+ */
+export const getClientIp = (req: NextRequest): string => {
+  // x-forwarded-for can contain multiple IPs: "client, proxy1, proxy2"
+  const forwardedFor = req.headers.get('x-forwarded-for');
+  const realIp = req.headers.get('x-real-ip');
+  const cfConnectingIp = req.headers.get('cf-connecting-ip'); // Cloudflare
+  const cfConnectingIpv6 = req.headers.get('cf-connecting-ipv6'); // Cloudflare IPv6
+  
+  // Prioritize Cloudflare IPv6 if available
+  if (cfConnectingIpv6) {
+    return cfConnectingIpv6.trim();
+  }
+  
+  // Helper to check if IP is IPv6
+  const isIPv6 = (ip: string): boolean => {
+    return ip.includes(':') && !ip.startsWith('::ffff:');
+  };
+  
+  // Helper to extract clean IP
+  const cleanIp = (ip: string): string => {
+    // Remove port if present (for IPv4)
+    if (ip.includes(':') && !ip.includes('::')) {
+      return ip.split(':')[0];
+    }
+    return ip.trim();
+  };
+  
+  // Parse x-forwarded-for and find IPv6 if present
+  if (forwardedFor) {
+    const ips = forwardedFor.split(',').map(ip => ip.trim());
+    
+    // First, try to find an IPv6 address
+    const ipv6 = ips.find(ip => isIPv6(ip));
+    if (ipv6) {
+      return ipv6;
+    }
+    
+    // Otherwise, return the first (client) IP
+    if (ips.length > 0 && ips[0]) {
+      return cleanIp(ips[0]);
+    }
+  }
+  
+  // Check Cloudflare connecting IP
+  if (cfConnectingIp) {
+    return cfConnectingIp.trim();
+  }
+  
+  // Check x-real-ip
+  if (realIp) {
+    return realIp.trim();
+  }
+  
+  // Fallback to Next.js ip property or localhost
+  return (req as any).ip || '127.0.0.1';
 };
 
 type CapiEventData = {
