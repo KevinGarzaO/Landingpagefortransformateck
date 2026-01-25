@@ -106,7 +106,7 @@ export default function ChatGPTLandingPage() {
     setSelectedAgent(null);
   };
 
-  const handleStart = (text: string) => {
+  const handleStart = async (text: string) => {
     setIsLoading(true);
     setLoadingStatus("Iniciando análisis...");
     
@@ -118,24 +118,114 @@ export default function ChatGPTLandingPage() {
       setMessages(prev => [...prev, { role: 'user', content: text }]);
     }
     
-    // Simulation Sequence (Faster for testing: 4 seconds total)
-    setTimeout(() => setLoadingStatus("Escaneando estructura HTML y CSS..."), 1000);
-    setTimeout(() => setLoadingStatus("Evaluando métricas de rendimiento..."), 2000);
-    setTimeout(() => setLoadingStatus("Generando reporte final..."), 3000);
-    
-    setTimeout(() => {
-       setIsLoading(false);
-       setLoadingStatus("");
-       
-       const responseContent = !started
-         ? `# Análisis de ${text}\n\nHe analizado el sitio web **${text}** con nuestra IA.\n\n### Resumen Técnico\n\n* **Framework**: Next.js / React\n* **Estilos**: Tailwind CSS\n* **Rendimiento**: 98/100\n\n\`\`\`json\n{\n  "status": "success",\n  "analyzed_at": "${new Date().toISOString()}"\n}\n\`\`\`\n\n### Recomendaciones\n\n1. **Optimización de imágenes**: Se detectaron imágenes sin atributos width/height.\n2. **Accesibilidad**: Faltan etiquetas aria en botones principales.\n3. **SEO**: El meta description es demasiado corto.\n\n¿Te gustaría profundizar en algún punto?`
-         : `Entendido. He procesado tu solicitud sobre "${text}".\n\nHe actualizado el reporte con los nuevos parámetros. ¿Hay algo más específico que quieras consultar?`;
+    try {
+      // Update loading status periodically
+      const statusInterval = setInterval(() => {
+        setLoadingStatus(prev => {
+          if (prev === "Iniciando análisis...") return "Escaneando estructura HTML y CSS...";
+          if (prev === "Escaneando estructura HTML y CSS...") return "Evaluando métricas de rendimiento...";
+          if (prev === "Evaluando métricas de rendimiento...") return "Generando reporte final...";
+          return prev;
+        });
+      }, 2000);
 
-       setMessages(prev => [...prev, { 
-         role: 'assistant', 
-         content: responseContent
-       }]);
-    }, 4000);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/landing-analysis-expert`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          url: text,
+          type: 'free'
+        }),
+      });
+
+      clearInterval(statusInterval);
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      
+      setIsLoading(false);
+      setLoadingStatus("");
+      
+      // Extract score and format response
+      let analysisContent = data.content || data.message || data.analysis || '';
+      
+      // Try to get score from data.score
+      let score = data.score || 0;
+      
+      // If score is 0, try to find the JSON block at the end of content and parse the score from it
+      if (score === 0) {
+        const jsonMatch = analysisContent.match(/```json\s*(\{[\s\S]*?\})\s*```/i) || 
+                          analysisContent.match(/(\{[\s\S]*?"score"[\s\S]*?\})\s*$/);
+        if (jsonMatch) {
+          try {
+            const parsedJson = JSON.parse(jsonMatch[1]);
+            if (parsedJson.score) {
+              score = parsedJson.score;
+            }
+          } catch (e) {
+            console.error("Error parsing embedded JSON score", e);
+          }
+        }
+      }
+
+      // If still 0, try to extract from text patterns
+      if (score === 0) {
+        const scoreMatch = analysisContent.match(/score[^0-9]*(\d+)\/100/i) || 
+                          analysisContent.match(/(\d+)\/100/);
+        if (scoreMatch) {
+          score = parseInt(scoreMatch[1], 10);
+        }
+      }
+      
+      // Remove JSON block from the end of the content if present
+      analysisContent = analysisContent.replace(/\n*```json[\s\S]*?```\s*$/gi, '');
+      analysisContent = analysisContent.replace(/\n*\{"status"[\s\S]*?\}\s*$/gi, '');
+      
+      // Clean up bold markers and extra spaces
+      analysisContent = analysisContent.replace(/\*\*\s*\*\*/g, '');
+      analysisContent = analysisContent.replace(/\s{2,}/g, ' ');
+      
+      // Ensure specific spacing for the numbered list items to ensure they break lines
+      // Adds a double newline before any "Number. Emoji" pattern
+      analysisContent = analysisContent.replace(/([^\n])\s+(\d+\.\s+[\uD800-\uDBFF][\uDC00-\uDFFF])/g, '$1\n\n$2');
+      analysisContent = analysisContent.replace(/([^\n])\s+(\d+\.\s+)/g, '$1\n\n$2');
+      
+      // Determine traffic light color based on score
+      let scoreColor = '';
+      let scoreEmoji = '';
+      if (score >= 80) {
+        scoreColor = '🟢';
+        scoreEmoji = '✨';
+      } else if (score >= 50) {
+        scoreColor = '🟡';
+        scoreEmoji = '⚡';
+      } else {
+        scoreColor = '🔴';
+        scoreEmoji = '⚠️';
+      }
+      
+      // Format the response with score at the top
+      const responseContent = `# ${scoreColor} Score: ${score}/100 ${scoreEmoji}\n\n${analysisContent.trim()}`;
+      
+      setMessages(prev => [...prev, { 
+        role: 'assistant', 
+        content: responseContent
+      }]);
+    } catch (error) {
+      console.error('Analysis error:', error);
+      setIsLoading(false);
+      setLoadingStatus("");
+      
+      setMessages(prev => [...prev, { 
+        role: 'assistant', 
+        content: `❌ **Error al analizar**\n\nNo se pudo completar el análisis de "${text}". Por favor, verifica que la URL sea válida e inténtalo de nuevo.\n\n_Detalle: ${error instanceof Error ? error.message : 'Error desconocido'}_`
+      }]);
+    }
   };
 
   return (
@@ -168,7 +258,7 @@ export default function ChatGPTLandingPage() {
           <AnimatePresence>
             {!started && (
               <motion.div 
-                className={`absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-0 ${user ? 'pb-64' : 'pb-40'}`}
+                className={`absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-0 ${user ? 'pb-80 md:pb-64' : 'pb-40'}`}
                 exit={{ opacity: 0, y: 20, transition: { duration: 0.4 } }}
               >
                 <HeroHeadline text={currentTexts.headline} />

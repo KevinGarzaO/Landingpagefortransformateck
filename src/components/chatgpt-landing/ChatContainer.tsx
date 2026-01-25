@@ -1,4 +1,6 @@
 import { ChatMessageMarkdown } from './ChatMessageMarkdown';
+import { TypewriterText } from './TypewriterText';
+import { MessageActions } from './MessageActions';
 import { useEffect, useRef } from 'react';
 
 export interface Message {
@@ -16,6 +18,17 @@ export function ChatContainer({ messages, isLoading, loadingText }: ChatContaine
   const containerRef = useRef<HTMLDivElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const lastMessageRef = useRef<HTMLDivElement>(null);
+
+  // Scroll to bottom handler for typewriter effect
+  const handleScrollToBottom = () => {
+    const container = containerRef.current;
+    if (container) {
+      container.scrollTo({
+        top: container.scrollHeight,
+        behavior: 'auto'
+      });
+    }
+  };
 
   useEffect(() => {
     const lastMessage = messages[messages.length - 1];
@@ -77,7 +90,7 @@ export function ChatContainer({ messages, isLoading, loadingText }: ChatContaine
             <div 
               key={index}
               ref={isLast ? lastMessageRef : null} 
-              className={`w-full flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in fade-in slide-in-from-bottom-2 duration-300 scroll-mt-32`}
+              className={`w-full flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in fade-in slide-in-from-bottom-2 duration-300 scroll-mt-32 group`}
             >
               <div className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start w-full'} max-w-full`}>
                 
@@ -89,8 +102,19 @@ export function ChatContainer({ messages, isLoading, loadingText }: ChatContaine
                       : 'bg-transparent text-[#ECECF1] px-5 w-full text-left'
                   }`}
                 >
-                  <ChatMessageMarkdown content={msg.content} />
+                  {isLast && msg.role === 'assistant' && !isLoading ? (
+                    <TypewriterText content={msg.content} onType={handleScrollToBottom} />
+                  ) : (
+                    <ChatMessageMarkdown content={msg.content} />
+                  )}
                 </div>
+
+                {/* Action buttons for assistant messages */}
+                {msg.role === 'assistant' && (
+                  <div className="px-5">
+                    <MessageActions content={msg.content} />
+                  </div>
+                )}
 
               </div>
             </div>

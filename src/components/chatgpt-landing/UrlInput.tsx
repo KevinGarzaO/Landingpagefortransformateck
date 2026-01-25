@@ -62,10 +62,18 @@ export function UrlInput({ onSubmit, layoutId, isFooter, isLoading, selectedAgen
             <button
               type="button"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className={`p-2 rounded-full transition-all duration-200 hover:bg-[#3F3F3F] ${isMenuOpen ? 'bg-[#3F3F3F] text-white' : 'text-gray-400'}`}
-              title="Seleccionar Agente"
+              className={`p-2 rounded-full transition-all duration-200 
+                ${activeAgent 
+                  ? `${activeAgent.colors.active} text-white shadow-lg` 
+                  : `hover:bg-[#3F3F3F] ${isMenuOpen ? 'bg-[#3F3F3F] text-white' : 'text-gray-400'}`
+                }`}
+              title={activeAgent ? `Agente: ${activeAgent.label}` : "Seleccionar Agente"}
             >
-              <Plus size={20} />
+              {activeAgent ? (
+                <activeAgent.icon size={20} />
+              ) : (
+                <Plus size={20} />
+              )}
             </button>
 
             <AnimatePresence>
@@ -112,26 +120,6 @@ export function UrlInput({ onSubmit, layoutId, isFooter, isLoading, selectedAgen
             </AnimatePresence>
           </div>
         )}
-
-        {/* Selected Agent Badge */}
-        <AnimatePresence>
-          {activeAgent && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, width: 0 }}
-              animate={{ opacity: 1, scale: 1, width: 'auto' }}
-              exit={{ opacity: 0, scale: 0.9, width: 0 }}
-              className="flex items-center shrink-0 overflow-hidden mr-2 mb-1.5"
-            >
-               <div className={`
-                 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border
-                 ${activeAgent.colors.active} border-transparent bg-opacity-90 whitespace-nowrap
-               `}>
-                 <activeAgent.icon size={12} className="text-white" />
-                 <span>{activeAgent.label}</span>
-               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
 
         <TextareaAutosize
           value={value}
