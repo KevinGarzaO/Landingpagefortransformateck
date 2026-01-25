@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Plus, MessageSquare, X, LayoutDashboard, History, Settings, LogOut, Sparkles, User, Monitor, Briefcase, PenTool, Search } from 'lucide-react';
+import { Plus, MessageSquare, X, History, LogOut, Sparkles, User, Monitor, Briefcase, PenTool, Search } from 'lucide-react';
 
 interface SidebarProps {
   isOpen: boolean;

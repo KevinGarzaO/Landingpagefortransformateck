@@ -1,4 +1,4 @@
-import { X, Check, X as XIcon, Sparkles, Monitor, Briefcase, PenTool, Search, Zap, Star, TrendingUp, Crown, ArrowRight, Lightbulb, FileEdit, LayoutList, Info } from 'lucide-react';
+import { X, Check, X as XIcon, Sparkles, Monitor, Briefcase, PenTool, Search, Zap, Star, TrendingUp, Crown, ArrowRight, Lightbulb, LayoutList, Info } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 export interface CheckoutData {
@@ -291,7 +291,7 @@ function ContentPricingCard({ onAction }: { onAction: (data: CheckoutData) => vo
                <span className="text-xs font-bold uppercase tracking-wider bg-[#333] text-[#ECECF1] px-2.5 py-1 rounded-md border border-[#424242]">Plan Free</span>
                <h4 className="font-semibold text-emerald-400">Descubrimiento</h4>
              </div>
-             <div className="text-xs text-[#8E8EA0] italic hidden sm:block">"La IA te ayuda a estructurar, tú escribes"</div>
+             <div className="text-xs text-[#8E8EA0] italic hidden sm:block">&quot;La IA te ayuda a estructurar, tú escribes&quot;</div>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -464,16 +464,7 @@ function ContentPricingCard({ onAction }: { onAction: (data: CheckoutData) => vo
   );
 }
 
-function FeatureRow({ label, value, check }: any) {
-  return (
-    <div className="flex items-center justify-between text-xs py-1">
-      <span className="text-[#A1A1AA]">{label}</span>
-      <span className={`font-medium ${check ? 'text-[#ECECF1]' : 'text-[#8E8EA0]'}`}>
-        {value === false ? <XIcon size={14} className="text-red-500/50" /> : value}
-      </span>
-    </div>
-  );
-}
+/* FeatureRow was unused and removed */
 
 // Helper component for Standard Pricing Cards
 function PricingCard({ icon: Icon, color, title, description, features, individualPrices, ctaText, onAction }: any) {

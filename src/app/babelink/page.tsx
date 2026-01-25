@@ -119,11 +119,11 @@ export default function ChatGPTLandingPage() {
     }
     
     // Simulation Sequence (Faster for testing: 4 seconds total)
-    const t1 = setTimeout(() => setLoadingStatus("Escaneando estructura HTML y CSS..."), 1000);
-    const t2 = setTimeout(() => setLoadingStatus("Evaluando métricas de rendimiento..."), 2000);
-    const t3 = setTimeout(() => setLoadingStatus("Generando reporte final..."), 3000);
+    setTimeout(() => setLoadingStatus("Escaneando estructura HTML y CSS..."), 1000);
+    setTimeout(() => setLoadingStatus("Evaluando métricas de rendimiento..."), 2000);
+    setTimeout(() => setLoadingStatus("Generando reporte final..."), 3000);
     
-    const tEnd = setTimeout(() => {
+    setTimeout(() => {
        setIsLoading(false);
        setLoadingStatus("");
        

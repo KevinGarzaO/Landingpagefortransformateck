@@ -1,6 +1,4 @@
-import { User } from 'lucide-react';
 import { ChatMessageMarkdown } from './ChatMessageMarkdown';
-import { motion } from 'motion/react';
 import { useEffect, useRef } from 'react';
 
 export interface Message {

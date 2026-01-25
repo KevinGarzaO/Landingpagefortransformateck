@@ -1,4 +1,4 @@
-import { X, Github, Mail, History, Sparkles, Zap, FileText, TrendingUp } from 'lucide-react';
+import { X, Github, Mail, History, Sparkles, FileText, TrendingUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useState } from 'react';
 

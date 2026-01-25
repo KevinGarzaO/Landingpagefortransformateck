@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { User, Sparkles, Menu, PanelLeft, LogOut } from 'lucide-react';
+import { User, Sparkles, PanelLeft, LogOut } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 const logo = '/assets/babelink/3997d30ae8e2a01fe56c79d2019a0ee841ec5ee8.png';
 
