@@ -4,11 +4,24 @@ export const metadata: Metadata = {
   title: {
     absolute: 'Babelink',
   },
-  description: 'Analiza y optimiza tu web con IA',
+  description: 'Analizador de negocio con IA',
   icons: {
     icon: '/assets/babelink/babelink-favicon.png',
   },
   manifest: '/manifest.json',
+  openGraph: {
+    title: 'Babelink',
+    description: 'Analizador de negocio con IA',
+    images: [
+      {
+        url: '/assets/babelink/babelink-favicon.png',
+        width: 800,
+        height: 800,
+        alt: 'Babelink Logo',
+      },
+    ],
+    type: 'website',
+  },
 };
 
 export default function ChatGPTLandingLayout({
