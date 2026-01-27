@@ -207,66 +207,14 @@ export default function ChatGPTLandingPage() {
       setIsLoading(false);
       setLoadingStatus("");
       
-      // Extract score and format response
-      let analysisContent = data.content || data.message || data.analysis || '';
-      
-      // Try to get score from data.score
-      let score = data.score || 0;
-      
-      // If score is 0, try to find the JSON block at the end of content and parse the score from it
-      if (score === 0) {
-        const jsonMatch = analysisContent.match(/```json\s*(\{[\s\S]*?\})\s*```/i) || 
-                          analysisContent.match(/(\{[\s\S]*?"score"[\s\S]*?\})\s*$/);
-        if (jsonMatch) {
-          try {
-            const parsedJson = JSON.parse(jsonMatch[1]);
-            if (parsedJson.score) {
-              score = parsedJson.score;
-            }
-          } catch (e) {
-            console.error("Error parsing embedded JSON score", e);
-          }
-        }
+      // Generate Markdown from JSON response
+      let responseContent = "";
+      try {
+        responseContent = generateAnalysisMarkdown(data);
+      } catch (err) {
+        console.error("Error generating markdown:", err);
+        responseContent = "❌ **Error al procesar el análisis**\n\nRecibimos los datos pero hubo un error al darles formato.";
       }
-
-      // If still 0, try to extract from text patterns
-      if (score === 0) {
-        const scoreMatch = analysisContent.match(/score[^0-9]*(\d+)\/100/i) || 
-                          analysisContent.match(/(\d+)\/100/);
-        if (scoreMatch) {
-          score = parseInt(scoreMatch[1], 10);
-        }
-      }
-      
-      // Remove JSON block from the end of the content if present
-      analysisContent = analysisContent.replace(/\n*```json[\s\S]*?```\s*$/gi, '');
-      analysisContent = analysisContent.replace(/\n*\{"status"[\s\S]*?\}\s*$/gi, '');
-      
-      // Clean up bold markers and extra spaces
-      analysisContent = analysisContent.replace(/\*\*\s*\*\*/g, '');
-      analysisContent = analysisContent.replace(/\s{2,}/g, ' ');
-      
-      // Ensure specific spacing for the numbered list items to ensure they break lines
-      // Adds a double newline before any "Number. Emoji" pattern
-      analysisContent = analysisContent.replace(/([^\n])\s+(\d+\.\s+[\uD800-\uDBFF][\uDC00-\uDFFF])/g, '$1\n\n$2');
-      analysisContent = analysisContent.replace(/([^\n])\s+(\d+\.\s+)/g, '$1\n\n$2');
-      
-      // Determine traffic light color based on score
-      let scoreColor = '';
-      let scoreEmoji = '';
-      if (score >= 80) {
-        scoreColor = '🟢';
-        scoreEmoji = '✨';
-      } else if (score >= 50) {
-        scoreColor = '🟡';
-        scoreEmoji = '⚡';
-      } else {
-        scoreColor = '🔴';
-        scoreEmoji = '⚠️';
-      }
-      
-      // Format the response with score at the top
-      const responseContent = `# ${scoreColor} Score: ${score}/100 ${scoreEmoji}\n\n${analysisContent.trim()}`;
       
       setMessages(prev => [...prev, { 
         role: 'assistant', 
@@ -282,6 +230,100 @@ export default function ChatGPTLandingPage() {
         content: `❌ **Error al analizar**\n\nNo se pudo completar el análisis de "${text}". Por favor, verifica que la URL sea válida e inténtalo de nuevo.\n\n_Detalle: ${error instanceof Error ? error.message : 'Error desconocido'}_`
       }]);
     }
+  };
+
+  // Helper function for status icons
+  const getStatusIcon = (status: string): string => {
+    if (!status) return '❓';
+    const s = status.toLowerCase();
+    if (['bien', 'sano', 'bajo', 'excelente', 'optimo', 'óptimo', 'bueno'].some(k => s.includes(k))) return '✅';
+    if (['alerta', 'medio', 'regular', 'atención', 'atencion', 'mejorable'].some(k => s.includes(k))) return '⚠️';
+    if (['crítico', 'critico', 'alto', 'mal', 'pobre', 'urgente'].some(k => s.includes(k))) return '❌';
+    return 'ℹ️';
+  };
+
+  // Helper to generate the markdown
+  const generateAnalysisMarkdown = (data: any): string => {
+    const separator = "\n\n__________________________________________________\n\n";
+    
+    // 1. Technical Score
+    const techVal = data.technical_score?.value || 0;
+    
+    let md = `🟢 *Score Técnico:* ${techVal} / 100\n\n`;
+    
+    // Performance
+    md += `### ⚡ Performance & Velocidad\n`;
+    md += `*Estado:* ${getStatusIcon(data.technical_score?.performance?.status)} ${data.technical_score?.performance?.status || 'N/A'}\n`;
+    md += `${data.technical_score?.performance?.description || ''}\n\n`;
+
+    // SEO
+    md += `### 🔍 SEO Técnico\n`;
+    md += `*Estado:* ${getStatusIcon(data.technical_score?.seo?.status)} ${data.technical_score?.seo?.status || 'N/A'}\n`;
+    md += `${data.technical_score?.seo?.description || ''}\n\n`;
+
+    // Security
+    md += `### 🛡️ Seguridad & Confianza Técnica\n`;
+    md += `*Estado:* ${getStatusIcon(data.technical_score?.security?.status)} ${data.technical_score?.security?.status || 'N/A'}\n`;
+    md += `${data.technical_score?.security?.description || ''}`;
+
+    md += separator;
+
+    // 2. Conversion Risk
+    const convLevel = data.conversion_risk?.level || 'DESCONOCIDO';
+    md += `🟠 *Riesgo de Conversión:* ${convLevel}\n\n`;
+
+    // Message Clarity
+    md += `### 🎯 Claridad del Mensaje\n`;
+    md += `*Estado:* ${getStatusIcon(data.conversion_risk?.message_clarity?.status)}\n`;
+    md += `${data.conversion_risk?.message_clarity?.description || ''}\n\n`;
+
+    // Visual Hierarchy (mapping from likely key)
+    md += `### 🖱️ Jerarquía Visual\n`;
+    md += `*Estado:* ${getStatusIcon(data.conversion_risk?.visual_hierarchy?.status)}\n`;
+    md += `${data.conversion_risk?.visual_hierarchy?.description || ''}\n\n`;
+
+    // CTA
+    md += `### 🚀 Llamados a la Acción (CTA)\n`;
+    md += `*Estado:* ${getStatusIcon(data.conversion_risk?.cta?.status)}\n`;
+    md += `${data.conversion_risk?.cta?.description || ''}`;
+
+    md += separator;
+
+    // 3. Commercial Status
+    const commStatus = data.commercial_status?.status || 'DESCONOCIDO';
+    md += `🔴 *Estado Comercial:* ${commStatus}\n\n`;
+
+    // Commercial Intent
+    md += `### 💰 Intención Comercial\n`;
+    md += `*Estado:* ${getStatusIcon(data.commercial_status?.commercial_intent?.status)}\n`;
+    md += `${data.commercial_status?.commercial_intent?.description || ''}\n\n`;
+
+    // Buying Confidence
+    md += `### 🔒 Confianza para Comprar\n`;
+    md += `*Estado:* ${getStatusIcon(data.commercial_status?.buying_confidence?.status)}\n`;
+    md += `${data.commercial_status?.buying_confidence?.description || ''}\n\n`;
+
+    // Conversion Flow
+    md += `### 📉 Flujo de Conversión\n`;
+    md += `*Estado:* ${getStatusIcon(data.commercial_status?.conversion_flow?.status)}\n`;
+    md += `${data.commercial_status?.conversion_flow?.description || ''}`;
+
+    md += separator;
+
+    // 4. General Score & Conclusion
+    const genScore = data.general_score || 0;
+    md += `📊 *Score General:* ${genScore} / 100\n\n`;
+
+    md += `### 🧠 Conclusión Puntual\n`;
+    md += `${data.conclusion || ''}`;
+
+    md += separator;
+
+    // 5. Next Step
+    md += `🎯 *Siguiente Paso Recomendado*\n`;
+    md += `${data.recommended_next_step || ''}`;
+
+    return md;
   };
 
   return (
