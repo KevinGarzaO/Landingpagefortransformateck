@@ -83,8 +83,8 @@ export function ChatContainer({ messages, isLoading, loadingText }: ChatContaine
   }, [messages, isLoading, loadingText]);
 
   return (
-    <div ref={containerRef} className="h-full w-full overflow-y-auto pb-48 pt-0">
-      <div className="flex flex-col w-full max-w-3xl mx-auto px-4 md:px-6 gap-6 pt-24 md:pt-32">
+    <div ref={containerRef} className="h-full w-full overflow-y-auto">
+      <div className="flex flex-col w-full max-w-3xl mx-auto px-4 md:px-6 gap-6 py-6">
         {messages.map((msg, index) => {
           const isLast = index === messages.length - 1;
           return (

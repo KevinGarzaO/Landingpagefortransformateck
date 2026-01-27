@@ -376,7 +376,7 @@ export default function ChatGPTLandingPage() {
 
           {/* Chat Area */}
           {started && (
-            <div className="flex-1 w-full h-full">
+            <div className="flex-1 w-full h-full overflow-hidden mt-[60px] mb-[140px]">
               <ChatContainer messages={messages} isLoading={isLoading} loadingText={loadingStatus} />
             </div>
           )}
