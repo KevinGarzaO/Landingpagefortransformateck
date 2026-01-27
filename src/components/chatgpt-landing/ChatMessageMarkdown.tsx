@@ -28,10 +28,6 @@ export function ChatMessageMarkdown({ content }: ChatMessageMarkdownProps) {
   // Handles "## CONCLUSIÓN FINAL" or just "CONCLUSIÓN FINAL"
   fixedContent = fixedContent.replace(/([^\n])\s*#{0,6}\s*(CONCLUSIÓN FINAL:?)/g, '$1\n\n**CONCLUSIÓN FINAL:**');
   
-  // Ensure the Lock icon/paragraph is on its own line.
-  // Matches "...limitada. 🔒" -> "...limitada.\n\n🔒"
-  fixedContent = fixedContent.replace(/([^\n])\s*(🔒)/g, '$1\n\n$2');
-
   // Clean up any potential triple newlines to just double
   fixedContent = fixedContent.replace(/\n{3,}/g, '\n\n');
 

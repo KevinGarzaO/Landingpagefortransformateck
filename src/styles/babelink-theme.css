@@ -118,3 +118,45 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 }
+
+/* Scrollbar estilo ChatGPT */
+.babelink-theme ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.babelink-theme ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.babelink-theme ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.babelink-theme ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.35);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+/* Para Firefox */
+.babelink-theme {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+/* Scrollbar que aparece solo al hacer hover en el contenedor */
+.babelink-theme .overflow-y-auto {
+  scrollbar-gutter: stable;
+}
+
+.babelink-theme .overflow-y-auto::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.babelink-theme .overflow-y-auto:hover::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.25);
+}
