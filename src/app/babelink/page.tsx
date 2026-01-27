@@ -284,8 +284,10 @@ export default function ChatGPTLandingPage() {
 
     // CTA
     md += `### 🚀 Llamados a la Acción (CTA)\n`;
-    md += `**Estado:** ${getStatusIcon(data.conversion_risk?.cta?.status)}\n\n`;
-    md += `${data.conversion_risk?.cta?.description || ''}`;
+    const ctaStatus = data.conversion_risk?.cta_effectiveness?.status || data.conversion_risk?.cta?.status;
+    const ctaDesc = data.conversion_risk?.cta_effectiveness?.description || data.conversion_risk?.cta?.description;
+    md += `**Estado:** ${getStatusIcon(ctaStatus)}\n\n`;
+    md += `${ctaDesc || ''}`;
 
     md += separator;
 
@@ -293,15 +295,19 @@ export default function ChatGPTLandingPage() {
     const commStatus = data.commercial_status?.status || 'DESCONOCIDO';
     md += `# 🔴 Estado Comercial: ${commStatus}\n\n`;
 
-    // Commercial Intent
+    // Commercial Intent (mapped from sales_intent)
     md += `### 💰 Intención Comercial\n`;
-    md += `**Estado:** ${getStatusIcon(data.commercial_status?.commercial_intent?.status)}\n\n`;
-    md += `${data.commercial_status?.commercial_intent?.description || ''}\n\n`;
+    const salesIntentStatus = data.commercial_status?.sales_intent?.status || data.commercial_status?.commercial_intent?.status;
+    const salesIntentDesc = data.commercial_status?.sales_intent?.description || data.commercial_status?.commercial_intent?.description;
+    md += `**Estado:** ${getStatusIcon(salesIntentStatus)}\n\n`;
+    md += `${salesIntentDesc || ''}\n\n`;
 
-    // Buying Confidence
+    // Buying Confidence (mapped from trust_elements)
     md += `### 🔒 Confianza para Comprar\n`;
-    md += `**Estado:** ${getStatusIcon(data.commercial_status?.buying_confidence?.status)}\n\n`;
-    md += `${data.commercial_status?.buying_confidence?.description || ''}\n\n`;
+    const trustStatus = data.commercial_status?.trust_elements?.status || data.commercial_status?.buying_confidence?.status;
+    const trustDesc = data.commercial_status?.trust_elements?.description || data.commercial_status?.buying_confidence?.description;
+    md += `**Estado:** ${getStatusIcon(trustStatus)}\n\n`;
+    md += `${trustDesc || ''}\n\n`;
 
     // Conversion Flow
     md += `### 📉 Flujo de Conversión\n`;
@@ -315,13 +321,13 @@ export default function ChatGPTLandingPage() {
     md += `# 📊 Score General: ${genScore} / 100\n\n`;
 
     md += `### 🧠 Conclusión Puntual\n`;
-    md += `**${data.conclusion || ''}**\n\n`;  // Bold conclusion
+    md += `${data.conclusion || ''}\n\n`; 
 
     md += separator;
 
     // 5. Next Step
-    md += `🎯 *Siguiente Paso Recomendado*\n`;
-    md += `**${data.recommended_next_step || ''}**`; // Bold next step
+    md += `### 🎯 Siguiente Paso Recomendado\n`;
+    md += `${data.recommended_next_step || ''}`;
 
     return md;
   };
