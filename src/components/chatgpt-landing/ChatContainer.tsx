@@ -6,6 +6,7 @@ import { useEffect, useRef } from 'react';
 export interface Message {
   role: 'user' | 'assistant';
   content: string;
+  skipAnimation?: boolean;
 }
 
 interface ChatContainerProps {
@@ -102,7 +103,7 @@ export function ChatContainer({ messages, isLoading, loadingText }: ChatContaine
                       : 'bg-transparent text-[#ECECF1] px-5 w-full text-left'
                   }`}
                 >
-                  {isLast && msg.role === 'assistant' && !isLoading ? (
+                  {isLast && msg.role === 'assistant' && !isLoading && !msg.skipAnimation ? (
                     <TypewriterText content={msg.content} onType={handleScrollToBottom} />
                   ) : (
                     <ChatMessageMarkdown content={msg.content} />

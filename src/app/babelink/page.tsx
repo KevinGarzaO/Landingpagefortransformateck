@@ -14,6 +14,7 @@ import { PaymentPage } from '@/components/chatgpt-landing/PaymentPage';
 import { PricingModal } from '@/components/chatgpt-landing/PricingModal';
 import { Inter } from 'next/font/google';
 import '@/styles/babelink-theme.css';
+import { usePWAInstall } from '@/hooks/usePWAInstall';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -42,6 +43,8 @@ export default function ChatGPTLandingPage() {
     period: 'once',
     features: ['Auditoría profunda', 'Insights accionables', 'Recomendaciones personalizadas']
   });
+  
+  const { isInstallable, promptInstall } = usePWAInstall();
   
   const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
     try {
@@ -84,7 +87,12 @@ export default function ChatGPTLandingPage() {
       try {
         const parsedMessages = JSON.parse(savedMessages);
         if (parsedMessages.length > 0) {
-          setMessages(parsedMessages);
+          // Marcar mensajes restaurados para que NO se animen
+          const hydratedMessages = parsedMessages.map((msg: any) => ({
+            ...msg,
+            skipAnimation: true
+          }));
+          setMessages(hydratedMessages);
         }
       } catch (e) {
         console.error('Error parsing saved messages', e);
@@ -286,6 +294,8 @@ export default function ChatGPTLandingPage() {
         onLogout={handleLogoutRequest}
         onOpenAuth={() => setIsAuthModalOpen(true)}
         onOpenPricing={() => setIsPricingModalOpen(true)}
+        isInstallable={isInstallable}
+        onInstall={promptInstall}
       />
 
       <div className={`flex-1 flex flex-col h-full transition-all duration-300 ${isSidebarOpen ? 'md:pl-[260px]' : 'md:pl-0'}`}>
@@ -297,6 +307,8 @@ export default function ChatGPTLandingPage() {
           onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
           isSidebarOpen={isSidebarOpen}
           onOpenPricing={() => setIsPricingModalOpen(true)}
+          isInstallable={isInstallable}
+          onInstall={promptInstall}
         />
         
         {/* Background/Layout Container */}

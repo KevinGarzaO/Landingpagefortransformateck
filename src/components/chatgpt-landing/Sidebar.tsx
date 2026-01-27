@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Plus, MessageSquare, X, History, LogOut, Sparkles, User, Monitor, Briefcase, PenTool, Search, Download } from 'lucide-react';
-import { usePWAInstall } from '@/hooks/usePWAInstall';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -11,11 +10,12 @@ interface SidebarProps {
   onLogout?: () => void;
   onOpenAuth?: () => void;
   onOpenPricing?: () => void;
+  isInstallable?: boolean;
+  onInstall?: () => void;
 }
 
-export function Sidebar({ isOpen, onClose, user, onNewChat, onLogout, onOpenAuth, onOpenPricing }: SidebarProps) {
+export function Sidebar({ isOpen, onClose, user, onNewChat, onLogout, onOpenAuth, onOpenPricing, isInstallable, onInstall }: SidebarProps) {
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const { isInstallable, promptInstall } = usePWAInstall();
 
   // Datos simulados de historial
   const history = user 
@@ -160,11 +160,11 @@ export function Sidebar({ isOpen, onClose, user, onNewChat, onLogout, onOpenAuth
                    <LogOut size={16} />
                    Cerrar sesión
                  </button>
-                 {isInstallable && (
+                 {isInstallable && onInstall && (
                     <button 
                       onClick={() => {
                         setShowUserMenu(false);
-                        promptInstall();
+                        onInstall();
                       }}
                       className="w-full text-left px-3 py-2.5 text-sm text-[#ECECF1] hover:bg-[#383838] transition-colors flex items-center gap-2 border-t border-[#424242]"
                     >
