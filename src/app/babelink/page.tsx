@@ -274,19 +274,19 @@ export default function ChatGPTLandingPage() {
 
     // Message Clarity
     md += `### 🎯 Claridad del Mensaje\n`;
-    md += `**Estado:** ${getStatusIcon(data.conversion_risk?.message_clarity?.status)}\n\n`;
+    md += `**Estado:** ${getStatusIcon(data.conversion_risk?.message_clarity?.status)} ${data.conversion_risk?.message_clarity?.status || 'N/A'}\n\n`;
     md += `${data.conversion_risk?.message_clarity?.description || ''}\n\n`;
 
     // Visual Hierarchy (mapping from likely key)
     md += `### 🖱️ Jerarquía Visual\n`;
-    md += `**Estado:** ${getStatusIcon(data.conversion_risk?.visual_hierarchy?.status)}\n\n`;
+    md += `**Estado:** ${getStatusIcon(data.conversion_risk?.visual_hierarchy?.status)} ${data.conversion_risk?.visual_hierarchy?.status || 'N/A'}\n\n`;
     md += `${data.conversion_risk?.visual_hierarchy?.description || ''}\n\n`;
 
     // CTA
     md += `### 🚀 Llamados a la Acción (CTA)\n`;
     const ctaStatus = data.conversion_risk?.cta_effectiveness?.status || data.conversion_risk?.cta?.status;
     const ctaDesc = data.conversion_risk?.cta_effectiveness?.description || data.conversion_risk?.cta?.description;
-    md += `**Estado:** ${getStatusIcon(ctaStatus)}\n\n`;
+    md += `**Estado:** ${getStatusIcon(ctaStatus)} ${ctaStatus || 'N/A'}\n\n`;
     md += `${ctaDesc || ''}`;
 
     md += separator;
@@ -299,19 +299,19 @@ export default function ChatGPTLandingPage() {
     md += `### 💰 Intención Comercial\n`;
     const salesIntentStatus = data.commercial_status?.sales_intent?.status || data.commercial_status?.commercial_intent?.status;
     const salesIntentDesc = data.commercial_status?.sales_intent?.description || data.commercial_status?.commercial_intent?.description;
-    md += `**Estado:** ${getStatusIcon(salesIntentStatus)}\n\n`;
+    md += `**Estado:** ${getStatusIcon(salesIntentStatus)} ${salesIntentStatus || 'N/A'}\n\n`;
     md += `${salesIntentDesc || ''}\n\n`;
 
     // Buying Confidence (mapped from trust_elements)
     md += `### 🔒 Confianza para Comprar\n`;
     const trustStatus = data.commercial_status?.trust_elements?.status || data.commercial_status?.buying_confidence?.status;
     const trustDesc = data.commercial_status?.trust_elements?.description || data.commercial_status?.buying_confidence?.description;
-    md += `**Estado:** ${getStatusIcon(trustStatus)}\n\n`;
+    md += `**Estado:** ${getStatusIcon(trustStatus)} ${trustStatus || 'N/A'}\n\n`;
     md += `${trustDesc || ''}\n\n`;
 
     // Conversion Flow
     md += `### 📉 Flujo de Conversión\n`;
-    md += `**Estado:** ${getStatusIcon(data.commercial_status?.conversion_flow?.status)}\n\n`;
+    md += `**Estado:** ${getStatusIcon(data.commercial_status?.conversion_flow?.status)} ${data.commercial_status?.conversion_flow?.status || 'N/A'}\n\n`;
     md += `${data.commercial_status?.conversion_flow?.description || ''}`;
 
     md += separator;
