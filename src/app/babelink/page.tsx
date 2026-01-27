@@ -249,79 +249,79 @@ export default function ChatGPTLandingPage() {
     // 1. Technical Score
     const techVal = data.technical_score?.value || 0;
     
-    let md = `🟢 *Score Técnico:* ${techVal} / 100\n\n`;
+    let md = `# 🟢 Score Técnico: ${techVal} / 100\n\n`;
     
     // Performance
     md += `### ⚡ Performance & Velocidad\n`;
-    md += `*Estado:* ${getStatusIcon(data.technical_score?.performance?.status)} ${data.technical_score?.performance?.status || 'N/A'}\n`;
+    md += `**Estado:** ${getStatusIcon(data.technical_score?.performance?.status)} ${data.technical_score?.performance?.status || 'N/A'}\n\n`;
     md += `${data.technical_score?.performance?.description || ''}\n\n`;
 
     // SEO
     md += `### 🔍 SEO Técnico\n`;
-    md += `*Estado:* ${getStatusIcon(data.technical_score?.seo?.status)} ${data.technical_score?.seo?.status || 'N/A'}\n`;
+    md += `**Estado:** ${getStatusIcon(data.technical_score?.seo?.status)} ${data.technical_score?.seo?.status || 'N/A'}\n\n`;
     md += `${data.technical_score?.seo?.description || ''}\n\n`;
 
     // Security
     md += `### 🛡️ Seguridad & Confianza Técnica\n`;
-    md += `*Estado:* ${getStatusIcon(data.technical_score?.security?.status)} ${data.technical_score?.security?.status || 'N/A'}\n`;
+    md += `**Estado:** ${getStatusIcon(data.technical_score?.security?.status)} ${data.technical_score?.security?.status || 'N/A'}\n\n`;
     md += `${data.technical_score?.security?.description || ''}`;
 
     md += separator;
 
     // 2. Conversion Risk
     const convLevel = data.conversion_risk?.level || 'DESCONOCIDO';
-    md += `🟠 *Riesgo de Conversión:* ${convLevel}\n\n`;
+    md += `# 🟠 Riesgo de Conversión: ${convLevel}\n\n`;
 
     // Message Clarity
     md += `### 🎯 Claridad del Mensaje\n`;
-    md += `*Estado:* ${getStatusIcon(data.conversion_risk?.message_clarity?.status)}\n`;
+    md += `**Estado:** ${getStatusIcon(data.conversion_risk?.message_clarity?.status)}\n\n`;
     md += `${data.conversion_risk?.message_clarity?.description || ''}\n\n`;
 
     // Visual Hierarchy (mapping from likely key)
     md += `### 🖱️ Jerarquía Visual\n`;
-    md += `*Estado:* ${getStatusIcon(data.conversion_risk?.visual_hierarchy?.status)}\n`;
+    md += `**Estado:** ${getStatusIcon(data.conversion_risk?.visual_hierarchy?.status)}\n\n`;
     md += `${data.conversion_risk?.visual_hierarchy?.description || ''}\n\n`;
 
     // CTA
     md += `### 🚀 Llamados a la Acción (CTA)\n`;
-    md += `*Estado:* ${getStatusIcon(data.conversion_risk?.cta?.status)}\n`;
+    md += `**Estado:** ${getStatusIcon(data.conversion_risk?.cta?.status)}\n\n`;
     md += `${data.conversion_risk?.cta?.description || ''}`;
 
     md += separator;
 
     // 3. Commercial Status
     const commStatus = data.commercial_status?.status || 'DESCONOCIDO';
-    md += `🔴 *Estado Comercial:* ${commStatus}\n\n`;
+    md += `# 🔴 Estado Comercial: ${commStatus}\n\n`;
 
     // Commercial Intent
     md += `### 💰 Intención Comercial\n`;
-    md += `*Estado:* ${getStatusIcon(data.commercial_status?.commercial_intent?.status)}\n`;
+    md += `**Estado:** ${getStatusIcon(data.commercial_status?.commercial_intent?.status)}\n\n`;
     md += `${data.commercial_status?.commercial_intent?.description || ''}\n\n`;
 
     // Buying Confidence
     md += `### 🔒 Confianza para Comprar\n`;
-    md += `*Estado:* ${getStatusIcon(data.commercial_status?.buying_confidence?.status)}\n`;
+    md += `**Estado:** ${getStatusIcon(data.commercial_status?.buying_confidence?.status)}\n\n`;
     md += `${data.commercial_status?.buying_confidence?.description || ''}\n\n`;
 
     // Conversion Flow
     md += `### 📉 Flujo de Conversión\n`;
-    md += `*Estado:* ${getStatusIcon(data.commercial_status?.conversion_flow?.status)}\n`;
+    md += `**Estado:** ${getStatusIcon(data.commercial_status?.conversion_flow?.status)}\n\n`;
     md += `${data.commercial_status?.conversion_flow?.description || ''}`;
 
     md += separator;
 
     // 4. General Score & Conclusion
     const genScore = data.general_score || 0;
-    md += `📊 *Score General:* ${genScore} / 100\n\n`;
+    md += `# 📊 Score General: ${genScore} / 100\n\n`;
 
     md += `### 🧠 Conclusión Puntual\n`;
-    md += `${data.conclusion || ''}`;
+    md += `**${data.conclusion || ''}**\n\n`;  // Bold conclusion
 
     md += separator;
 
     // 5. Next Step
     md += `🎯 *Siguiente Paso Recomendado*\n`;
-    md += `${data.recommended_next_step || ''}`;
+    md += `**${data.recommended_next_step || ''}**`; // Bold next step
 
     return md;
   };
