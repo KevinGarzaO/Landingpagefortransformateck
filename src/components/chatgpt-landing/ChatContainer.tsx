@@ -91,7 +91,7 @@ export function ChatContainer({ messages, isLoading, loadingText }: ChatContaine
             <div 
               key={index}
               ref={isLast ? lastMessageRef : null} 
-              className={`w-full flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in fade-in slide-in-from-bottom-2 duration-300 scroll-mt-32 group`}
+              className={`w-full flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} ${!msg.skipAnimation ? 'animate-in fade-in slide-in-from-bottom-2 duration-300' : ''} scroll-mt-32 group`}
             >
               <div className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start w-full'} max-w-full`}>
                 

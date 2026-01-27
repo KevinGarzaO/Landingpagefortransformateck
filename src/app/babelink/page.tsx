@@ -370,7 +370,7 @@ export default function ChatGPTLandingPage() {
 
           {/* Chat Area */}
           {started && (
-            <div className="flex-1 w-full h-full animate-in fade-in duration-500">
+            <div className="flex-1 w-full h-full">
               <ChatContainer messages={messages} isLoading={isLoading} loadingText={loadingStatus} />
             </div>
           )}
