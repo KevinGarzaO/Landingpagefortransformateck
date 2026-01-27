@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { User, Sparkles, PanelLeft, LogOut } from 'lucide-react';
+import { User, Sparkles, PanelLeft, LogOut, Download } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { usePWAInstall } from '@/hooks/usePWAInstall';
 const logo = '/assets/babelink/3997d30ae8e2a01fe56c79d2019a0ee841ec5ee8.png';
 
 interface HeaderProps {
@@ -15,6 +16,7 @@ interface HeaderProps {
 
 export function Header({ started, onOpenAuth, user, onLogout, onToggleSidebar, isSidebarOpen, onOpenPricing }: HeaderProps) {
   const [showMenu, setShowMenu] = useState(false);
+  const { isInstallable, promptInstall } = usePWAInstall();
 
   return (
     <header 
@@ -90,6 +92,18 @@ export function Header({ started, onOpenAuth, user, onLogout, onToggleSidebar, i
                    <LogOut size={16} />
                    Cerrar sesión
                  </button>
+                 {isInstallable && (
+                    <button 
+                      onClick={() => {
+                        setShowMenu(false);
+                        promptInstall();
+                      }}
+                      className="w-full text-left px-3 py-2.5 text-sm text-[#ECECF1] hover:bg-[#383838] transition-colors flex items-center gap-2 border-t border-[#424242]"
+                    >
+                      <Download size={16} className="text-blue-400" />
+                      Instalar App
+                    </button>
+                 )}
                </motion.div>
              )}
            </AnimatePresence>

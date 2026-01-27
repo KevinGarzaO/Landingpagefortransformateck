@@ -74,7 +74,45 @@ export default function ChatGPTLandingPage() {
     if (savedHasAccount) {
       setHasAccount(true);
     }
+
+    // Restaurar estado del chat
+    const savedMessages = localStorage.getItem('chat_messages');
+    const savedStarted = localStorage.getItem('chat_started');
+    const savedAgent = localStorage.getItem('chat_agent');
+
+    if (savedMessages) {
+      try {
+        const parsedMessages = JSON.parse(savedMessages);
+        if (parsedMessages.length > 0) {
+          setMessages(parsedMessages);
+        }
+      } catch (e) {
+        console.error('Error parsing saved messages', e);
+      }
+    }
+    
+    if (savedStarted === 'true') {
+      setStarted(true);
+    }
+
+    if (savedAgent) {
+      setSelectedAgent(savedAgent as AgentType);
+    }
   }, []);
+
+  // Guardar estado del chat cuando cambie
+  useEffect(() => {
+    // Solo guardar si hay algo relevante o se ha iniciado
+    if (started || messages.length > 0) {
+      localStorage.setItem('chat_messages', JSON.stringify(messages));
+      localStorage.setItem('chat_started', String(started));
+      if (selectedAgent) {
+        localStorage.setItem('chat_agent', selectedAgent);
+      } else {
+        localStorage.removeItem('chat_agent');
+      }
+    }
+  }, [messages, started, selectedAgent]);
 
   const handleLoginSuccess = (email: string) => {
     setUser({
@@ -96,6 +134,12 @@ export default function ChatGPTLandingPage() {
     setSelectedAgent(null);
     localStorage.removeItem('user_token');
     localStorage.removeItem('user_email');
+    // Limpiar también el chat al cerrar sesión
+    setStarted(false);
+    setMessages([]);
+    localStorage.removeItem('chat_messages');
+    localStorage.removeItem('chat_started');
+    localStorage.removeItem('chat_agent');
   };
 
   const handleNewChat = () => {
@@ -104,6 +148,10 @@ export default function ChatGPTLandingPage() {
     setIsLoading(false);
     setLoadingStatus("");
     setSelectedAgent(null);
+    // Limpiar estado guardado
+    localStorage.removeItem('chat_messages');
+    localStorage.removeItem('chat_started');
+    localStorage.removeItem('chat_agent');
   };
 
   const handleStart = async (text: string) => {
