@@ -60,6 +60,18 @@ export default function ChatGPTLandingPage() {
   const activeAgentData = selectedAgent ? agents.find(a => a.id === selectedAgent) : null;
   const currentTexts = activeAgentData ? activeAgentData.texts : defaultTexts;
 
+  // Función para limpiar el chat y resetear el estado
+  const clearChatState = () => {
+    setStarted(false);
+    setMessages([]);
+    setIsLoading(false);
+    setLoadingStatus("");
+    setSelectedAgent(null);
+    localStorage.removeItem('chat_messages');
+    localStorage.removeItem('chat_started');
+    localStorage.removeItem('chat_agent');
+  };
+
   useEffect(() => {
     const token = localStorage.getItem('user_token');
     const email = localStorage.getItem('user_email');
@@ -78,49 +90,37 @@ export default function ChatGPTLandingPage() {
       setHasAccount(true);
     }
 
-    // Restaurar estado del chat
-    const savedMessages = localStorage.getItem('chat_messages');
-    const savedStarted = localStorage.getItem('chat_started');
-    const savedAgent = localStorage.getItem('chat_agent');
-
-    if (savedMessages) {
-      try {
-        const parsedMessages = JSON.parse(savedMessages);
-        if (parsedMessages.length > 0) {
-          // Marcar mensajes restaurados para que NO se animen
-          const hydratedMessages = parsedMessages.map((msg: any) => ({
-            ...msg,
-            skipAnimation: true
-          }));
-          setMessages(hydratedMessages);
-        }
-      } catch (e) {
-        console.error('Error parsing saved messages', e);
-      }
-    }
+    // Detectar si es una nueva sesión (la app fue cerrada y reabierta)
+    // sessionStorage se borra automáticamente cuando se cierra la pestaña/app
+    const isExistingSession = sessionStorage.getItem('babelink_session_active');
     
-    if (savedStarted === 'true') {
-      setStarted(true);
+    if (!isExistingSession) {
+      // Es una nueva sesión - limpiar el chat
+      clearChatState();
+      // Marcar que la sesión está activa
+      sessionStorage.setItem('babelink_session_active', 'true');
     }
 
-    if (savedAgent) {
-      setSelectedAgent(savedAgent as AgentType);
-    }
+    // Listener para cuando la app se reabre desde el cache (PWA/bfcache)
+    const handlePageShow = (event: PageTransitionEvent) => {
+      if (event.persisted) {
+        // La página fue restaurada desde el cache del navegador
+        // Verificar si la sesión sigue activa
+        const sessionActive = sessionStorage.getItem('babelink_session_active');
+        if (!sessionActive) {
+          clearChatState();
+          sessionStorage.setItem('babelink_session_active', 'true');
+        }
+      }
+    };
+
+    window.addEventListener('pageshow', handlePageShow);
+
+    return () => {
+      window.removeEventListener('pageshow', handlePageShow);
+    };
   }, []);
 
-  // Guardar estado del chat cuando cambie
-  useEffect(() => {
-    // Solo guardar si hay algo relevante o se ha iniciado
-    if (started || messages.length > 0) {
-      localStorage.setItem('chat_messages', JSON.stringify(messages));
-      localStorage.setItem('chat_started', String(started));
-      if (selectedAgent) {
-        localStorage.setItem('chat_agent', selectedAgent);
-      } else {
-        localStorage.removeItem('chat_agent');
-      }
-    }
-  }, [messages, started, selectedAgent]);
 
   const handleLoginSuccess = (email: string) => {
     setUser({
@@ -156,10 +156,6 @@ export default function ChatGPTLandingPage() {
     setIsLoading(false);
     setLoadingStatus("");
     setSelectedAgent(null);
-    // Limpiar estado guardado
-    localStorage.removeItem('chat_messages');
-    localStorage.removeItem('chat_started');
-    localStorage.removeItem('chat_agent');
   };
 
   const handleStart = async (text: string) => {
