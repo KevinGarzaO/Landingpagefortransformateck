@@ -67,11 +67,11 @@ export default function ChatGPTLandingPage() {
     setIsLoading(false);
     setLoadingStatus("");
     setSelectedAgent(null);
-    localStorage.removeItem('chat_messages');
-    localStorage.removeItem('chat_started');
-    localStorage.removeItem('chat_agent');
+    sessionStorage.removeItem('babelink_chat_messages');
+    sessionStorage.removeItem('babelink_chat_started');
   };
 
+  // Efecto para detectar nueva sesión y restaurar chat si existe
   useEffect(() => {
     const token = localStorage.getItem('user_token');
     const email = localStorage.getItem('user_email');
@@ -95,10 +95,23 @@ export default function ChatGPTLandingPage() {
     const isExistingSession = sessionStorage.getItem('babelink_session_active');
     
     if (!isExistingSession) {
-      // Es una nueva sesión - limpiar el chat
+      // Es una nueva sesión - limpiar el chat y marcar sesión activa
       clearChatState();
-      // Marcar que la sesión está activa
       sessionStorage.setItem('babelink_session_active', 'true');
+    } else {
+      // Sesión existente - restaurar el chat si existe
+      const savedMessages = sessionStorage.getItem('babelink_chat_messages');
+      const savedStarted = sessionStorage.getItem('babelink_chat_started');
+      
+      if (savedMessages && savedStarted === 'true') {
+        try {
+          const parsedMessages = JSON.parse(savedMessages);
+          setMessages(parsedMessages);
+          setStarted(true);
+        } catch {
+          // Si hay error al parsear, no hacer nada
+        }
+      }
     }
 
     // Listener para cuando la app se reabre desde el cache (PWA/bfcache)
@@ -120,6 +133,14 @@ export default function ChatGPTLandingPage() {
       window.removeEventListener('pageshow', handlePageShow);
     };
   }, []);
+
+  // Guardar el estado del chat cuando cambia
+  useEffect(() => {
+    if (started && messages.length > 0) {
+      sessionStorage.setItem('babelink_chat_messages', JSON.stringify(messages));
+      sessionStorage.setItem('babelink_chat_started', 'true');
+    }
+  }, [started, messages]);
 
 
   const handleLoginSuccess = (email: string) => {
