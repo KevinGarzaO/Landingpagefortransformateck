@@ -14,14 +14,14 @@ export function TypewriterText({ content, speed = 30, onComplete, onType }: Type
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const typingCounterRef = useRef(0);
 
-  // Función de vibración háptica suave (solo Android)
+  // Función de vibración háptica muy suave (solo Android)
   const vibrateOnType = useCallback(() => {
     if (typeof navigator === 'undefined' || !('vibrate' in navigator)) return;
     
     typingCounterRef.current++;
-    // Vibrar cada 4 caracteres para una sensación suave como ChatGPT
-    if (typingCounterRef.current % 4 === 0) {
-      navigator.vibrate(8); // Vibración muy corta (8ms)
+    // Vibrar cada 12 caracteres con duración mínima para una sensación casi imperceptible
+    if (typingCounterRef.current % 12 === 0) {
+      navigator.vibrate(1); // Vibración mínima (1ms)
     }
   }, []);
 
