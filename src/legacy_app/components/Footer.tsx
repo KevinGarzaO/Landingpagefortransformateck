@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
-import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
-import { WhatsAppLink } from "../../components/WhatsAppLink";
+import { Linkedin } from "lucide-react";
 
 // Update logo path
 const logo = "/assets/logo_3.png";
@@ -9,23 +8,12 @@ const logo = "/assets/logo_3.png";
 export function Footer() {
   const currentYear = new Date().getFullYear();
 
-  const services = [
-    "Apps Mobile",
-    "Apps Web",
-    "Landing Pages",
-    "E-commerce",
-    "Sistemas Web",
-    "Chatbot IA WhatsApp",
-    "Copywriting",
-    "Marketing Ads",
-  ];
-
   const socialLinks = [
-    { name: "Facebook", icon: Facebook, url: "https://facebook.com" },
-    { name: "Instagram", icon: Instagram, url: "https://instagram.com" },
-    { name: "LinkedIn", icon: Linkedin, url: "https://linkedin.com" },
-    { name: "Twitter", icon: Twitter, url: "https://twitter.com" },
-    { name: "Twitter", icon: Twitter, url: "https://twitter.com" },
+    {
+      name: "LinkedIn",
+      icon: Linkedin,
+      url: "https://www.linkedin.com/in/rusogarzao/",
+    },
   ];
 
   return (
@@ -40,10 +28,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
           {/* Company Info */}
           <div>
-            <Link
-              href="/"
-              className="flex items-center gap-3 group mb-4"
-            >
+            <Link href="/" className="flex items-center gap-3 group mb-4">
               <img
                 src={logo}
                 alt="Transformateck"
@@ -57,40 +42,12 @@ export function Footer() {
               Fábrica de productos digitales. Transformamos ideas en realidad
               con tecnología de vanguardia.
             </p>
-            <WhatsAppLink
-              message="Hola me interesa más información sobre los servicios"
-              className="inline-block px-6 py-3 bg-gradient-to-r from-cyan-500 to-purple-600 text-white rounded-lg hover:shadow-xl hover:shadow-cyan-500/50 transition-all duration-300 transform hover:scale-105"
-              component="Footer"
-              section="CompanyInfo"
-              buttonId="footer-company-contact"
-            >
-              💬 Contactar
-            </WhatsAppLink>
-          </div>
-
-          {/* Services */}
-          <div>
-            <h3 className="text-white text-xl mb-4 bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-              Servicios
-            </h3>
-            <ul className="space-y-2">
-              {services.map((service, i) => (
-                <li key={i}>
-                  <Link
-                    href="#"
-                    className="text-gray-400 hover:text-cyan-400 transition-colors duration-300 text-sm"
-                  >
-                    {service}
-                  </Link>
-                </li>
-              ))}
-            </ul>
           </div>
 
           {/* Social Media */}
           <div>
             <h3 className="text-white text-xl mb-4 bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-              Síguenos
+              Sígueme en redes sociales
             </h3>
             <div className="space-y-3 mb-6">
               {socialLinks.map((social, i) => {
@@ -117,16 +74,6 @@ export function Footer() {
                 <span>📧</span>
                 <span>kevin.garza@transformateck.com</span>
               </a>
-              <WhatsAppLink
-                message="Hola me interesa más información de los servicios"
-                className="flex items-center gap-2 hover:text-cyan-400 transition-colors duration-300"
-                component="Footer"
-                section="ContactInfo"
-                buttonId="footer-phone-link"
-              >
-                <span>📱</span>
-                <span>+52 81 1858 2060</span>
-              </WhatsAppLink>
             </div>
           </div>
         </div>

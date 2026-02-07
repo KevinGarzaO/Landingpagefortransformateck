@@ -6,7 +6,6 @@ import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
 import Image from "next/image";
 import { Metadata } from "next";
-import { BlogCTA } from "./BlogCTA";
 
 // JSON-LD Helper Component
 function JsonLd({ data }: { data: any }) {
@@ -19,30 +18,38 @@ function JsonLd({ data }: { data: any }) {
 }
 
 // Generate Metadata for SEO
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
   const { slug } = await params;
   const post = await getBlogPostBySlug(slug);
 
   if (!post) {
     return {
-      title: 'Post no encontrado',
+      title: "Post no encontrado",
     };
   }
 
-  const publishedTime = post.date instanceof Timestamp 
-    ? post.date.toDate().toISOString() 
-    : new Date(post.date).toISOString();
-    
-  const modifiedTime = post.updatedAt instanceof Timestamp 
-    ? post.updatedAt.toDate().toISOString() 
-    : new Date(post.updatedAt).toISOString();
+  const publishedTime =
+    post.date instanceof Timestamp
+      ? post.date.toDate().toISOString()
+      : new Date(post.date).toISOString();
+
+  const modifiedTime =
+    post.updatedAt instanceof Timestamp
+      ? post.updatedAt.toDate().toISOString()
+      : new Date(post.updatedAt).toISOString();
 
   return {
     title: `${post.title} | Transformateck`,
-    description: post.excerpt || `Lee el artículo "${post.title}" en Transformateck.`,
+    description:
+      post.excerpt || `Lee el artículo "${post.title}" en Transformateck.`,
     openGraph: {
       title: `${post.title} | Transformateck`,
-      description: post.excerpt || `Lee el artículo "${post.title}" en Transformateck.`,
+      description:
+        post.excerpt || `Lee el artículo "${post.title}" en Transformateck.`,
       url: `https://transformateck.com/blog/${slug}`,
       siteName: "Transformateck",
       locale: "es_MX",
@@ -54,8 +61,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     twitter: {
       card: "summary_large_image",
       title: `${post.title} | Transformateck`,
-      description: post.excerpt || `Lee el artículo "${post.title}" en Transformateck.`,
-      creator: "@Transformateck", 
+      description:
+        post.excerpt || `Lee el artículo "${post.title}" en Transformateck.`,
+      creator: "@Transformateck",
     },
     alternates: {
       canonical: `https://transformateck.com/blog/${slug}`,
@@ -63,55 +71,62 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
-export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function BlogPostPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
 
   // Parallel fetching
   const [post, recentFn] = await Promise.all([
     getBlogPostBySlug(slug),
-    getBlogPosts(7) // Fetch 7 to allow filtering out the current one
+    getBlogPosts(7), // Fetch 7 to allow filtering out the current one
   ]);
 
   if (!post) {
     return (
-        <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center text-white px-4 text-center">
-            <h1 className="text-4xl font-bold mb-4">Post no encontrado</h1>
-            <p className="text-gray-400 mb-8 max-w-md">No pudimos encontrar el artículo que buscas. Puede que haya sido eliminado o la URL sea incorrecta.</p>
-            <p className="text-xs text-gray-600 mb-8 font-mono bg-black/50 p-2 rounded">
-                Slug: {slug} <br/>
-                Verifica la consola para más detalles.
-            </p>
-            <Link 
-                href="/blog"
-                className="px-6 py-3 bg-cyan-600 text-white rounded-lg hover:bg-cyan-500 transition-colors"
-            >
-                Volver al Blog
-            </Link>
-        </div>
+      <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center text-white px-4 text-center">
+        <h1 className="text-4xl font-bold mb-4">Post no encontrado</h1>
+        <p className="text-gray-400 mb-8 max-w-md">
+          No pudimos encontrar el artículo que buscas. Puede que haya sido
+          eliminado o la URL sea incorrecta.
+        </p>
+        <p className="text-xs text-gray-600 mb-8 font-mono bg-black/50 p-2 rounded">
+          Slug: {slug} <br />
+          Verifica la consola para más detalles.
+        </p>
+        <Link
+          href="/blog"
+          className="px-6 py-3 bg-cyan-600 text-white rounded-lg hover:bg-cyan-500 transition-colors"
+        >
+          Volver al Blog
+        </Link>
+      </div>
     );
   }
 
   // Filter related posts
   const relatedPosts = recentFn.posts
-    .filter(p => p.id !== post.id)
+    .filter((p) => p.id !== post.id)
     .slice(0, 6);
 
   // Date Formatting
-  const dateToDisplay = post.date instanceof Timestamp 
-    ? post.date.toDate() 
-    : new Date(post.date);
+  const dateToDisplay =
+    post.date instanceof Timestamp ? post.date.toDate() : new Date(post.date);
 
-  const formattedDate = dateToDisplay.toLocaleString('es-MX', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
+  const formattedDate = dateToDisplay.toLocaleString("es-MX", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   });
 
   const publishedTime = dateToDisplay.toISOString();
-  const modifiedTime = post.updatedAt instanceof Timestamp 
-    ? post.updatedAt.toDate().toISOString() 
-    : new Date(post.updatedAt).toISOString();
-  
+  const modifiedTime =
+    post.updatedAt instanceof Timestamp
+      ? post.updatedAt.toDate().toISOString()
+      : new Date(post.updatedAt).toISOString();
+
   const ogImage = post.image || "https://transformateck.com/assets/logo.png";
 
   // Construct JSON-LD
@@ -143,14 +158,13 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-gray-200 selection:bg-cyan-500/30 selection:text-cyan-200">
-      
       {/* Inject JSON-LD */}
       <JsonLd data={jsonLd} />
 
       {/* Navigation Bar */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/80 backdrop-blur-md border-b border-white/5">
         <div className="max-w-4xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Link 
+          <Link
             href="/blog"
             className="group flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors"
           >
@@ -160,13 +174,18 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               stroke="currentColor"
               viewBox="0 0 24 24"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 19l-7-7 7-7" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M15 19l-7-7 7-7"
+              />
             </svg>
             Volver al Blog
           </Link>
-          
+
           <div className="text-sm font-medium text-gray-500">
-            {post.type || 'Blog'}
+            {post.type || "Blog"}
           </div>
         </div>
       </nav>
@@ -174,13 +193,12 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       {/* Main Content */}
       <main className="pt-32 pb-20 px-6">
         <article className="max-w-3xl mx-auto">
-          
           {/* Header */}
           <header className="mb-12 text-center">
-             {/* Category & Date */}
-             <div className="flex items-center justify-center gap-3 text-sm mb-6">
+            {/* Category & Date */}
+            <div className="flex items-center justify-center gap-3 text-sm mb-6">
               <span className="px-3 py-1 bg-cyan-500/10 text-cyan-400 rounded-full border border-cyan-500/20 font-medium tracking-wide uppercase text-xs">
-                {post.type || 'Blog'}
+                {post.type || "Blog"}
               </span>
               <span className="text-gray-500">•</span>
               <time className="text-gray-400">{formattedDate}</time>
@@ -195,9 +213,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             <div className="flex items-center justify-center gap-4 mt-8 p-4 bg-white/5 rounded-2xl border border-white/5 inline-flex">
               <div className="relative">
                 <div className="w-12 h-12 rounded-full overflow-hidden ring-2 ring-cyan-500/20 p-0.5 bg-black">
-                  <img 
-                    src={post.authorImg || "/assets/logo.png"} 
-                    alt={post.authorName} 
+                  <img
+                    src={post.authorImg || "/assets/logo.png"}
+                    alt={post.authorName}
                     className="w-full h-full object-cover rounded-full"
                   />
                 </div>
@@ -210,7 +228,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                   {post.authorName || "Transformateck Team"}
                 </p>
                 <p className="text-cyan-400 text-xs font-medium">
-                  {post.type ? `Editor de ${post.type}` : 'Editor de Contenido'}
+                  {post.type ? `Editor de ${post.type}` : "Editor de Contenido"}
                 </p>
               </div>
             </div>
@@ -222,7 +240,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               remarkPlugins={[remarkGfm, remarkBreaks]}
               components={{
                 h1: ({ ...props }) => (
-                   <h1
+                  <h1
                     className="mb-8 text-3xl font-bold leading-tight text-white sm:text-4xl"
                     {...props}
                   />
@@ -260,23 +278,35 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                   <strong className="font-bold text-white" {...props} />
                 ),
                 ul: ({ ...props }) => (
-                  <ul className="list-disc ml-6 mb-6 text-gray-300 space-y-2" {...props} />
+                  <ul
+                    className="list-disc ml-6 mb-6 text-gray-300 space-y-2"
+                    {...props}
+                  />
                 ),
                 ol: ({ ...props }) => (
-                  <ol className="list-decimal ml-6 mb-6 text-gray-300 space-y-2" {...props} />
+                  <ol
+                    className="list-decimal ml-6 mb-6 text-gray-300 space-y-2"
+                    {...props}
+                  />
                 ),
                 li: ({ ...props }) => <li className="mb-2 pl-2" {...props} />,
                 blockquote: ({ ...props }) => (
-                  <blockquote className="border-l-4 border-cyan-500 pl-4 py-2 my-6 bg-white/5 rounded-r italic text-gray-400" {...props} />
+                  <blockquote
+                    className="border-l-4 border-cyan-500 pl-4 py-2 my-6 bg-white/5 rounded-r italic text-gray-400"
+                    {...props}
+                  />
                 ),
                 code: ({ className, children, ...props }: any) => {
-                   const match = /language-(\w+)/.exec(className || '')
-                   const isInline = !match
-                   return (
-                     <code className={`${isInline ? 'bg-cyan-900/30 text-cyan-300 px-1 py-0.5 rounded text-sm' : 'block bg-gray-900 p-4 rounded-lg overflow-x-auto text-sm text-gray-200 border border-white/10 my-4'}`} {...props}>
-                       {children}
-                     </code>
-                   )
+                  const match = /language-(\w+)/.exec(className || "");
+                  const isInline = !match;
+                  return (
+                    <code
+                      className={`${isInline ? "bg-cyan-900/30 text-cyan-300 px-1 py-0.5 rounded text-sm" : "block bg-gray-900 p-4 rounded-lg overflow-x-auto text-sm text-gray-200 border border-white/10 my-4"}`}
+                      {...props}
+                    >
+                      {children}
+                    </code>
+                  );
                 },
                 img: ({ ...props }) => (
                   <div className="overflow-hidden rounded-xl border border-white/10 my-8 shadow-2xl bg-black">
@@ -296,10 +326,12 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           {/* Related Posts Section */}
           {relatedPosts.length > 0 && (
             <div className="border-t border-white/10 pt-16">
-              <h3 className="text-2xl font-bold text-white mb-8">Artículos Similares</h3>
+              <h3 className="text-2xl font-bold text-white mb-8">
+                Artículos Similares
+              </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {relatedPosts.map((relatedPost) => (
-                  <Link 
+                  <Link
                     key={relatedPost.id}
                     href={`/blog/${relatedPost.slug}`}
                     className="group bg-white/5 rounded-xl overflow-hidden border border-white/5 hover:border-cyan-500/50 transition-all duration-300 block"
@@ -327,7 +359,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                     </div>
                     <div className="p-4">
                       <div className="flex items-center gap-2 mb-2 text-xs">
-                        <span className="text-cyan-400 font-medium uppercase tracking-wider">{relatedPost.type || 'Blog'}</span>
+                        <span className="text-cyan-400 font-medium uppercase tracking-wider">
+                          {relatedPost.type || "Blog"}
+                        </span>
                       </div>
                       <h4 className="text-white font-medium line-clamp-2 group-hover:text-cyan-400 transition-colors">
                         {relatedPost.title}
@@ -338,12 +372,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               </div>
             </div>
           )}
-
         </article>
       </main>
-
-      {/* CTA Section - Full Width */}
-      <BlogCTA />
     </div>
   );
 }

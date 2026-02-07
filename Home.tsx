@@ -20,7 +20,6 @@ export function Home() {
     }
   };
 
-
   return (
     <>
       <div className="pt-20">
@@ -120,7 +119,11 @@ export function Home() {
                 </span>
               </button>
               <button
-                onClick={() => handleWhatsappClick("Hola me interesa más información sobre los servicios")}
+                onClick={() =>
+                  handleWhatsappClick(
+                    "Hola me interesa más información sobre los servicios",
+                  )
+                }
                 className="px-8 py-4 border-2 border-cyan-400 text-cyan-400 rounded-xl hover:bg-cyan-400/10 backdrop-blur-sm transition-all duration-300"
               >
                 💬 Hablar con Expertos
@@ -386,12 +389,6 @@ export function Home() {
                 className="px-10 py-5 bg-gradient-to-r from-cyan-500 to-purple-600 text-white rounded-xl hover:shadow-2xl hover:shadow-cyan-500/50 transition-all duration-300 transform hover:scale-105"
               >
                 🚀 Explorar Servicios
-              </button>
-              <button
-                onClick={() => handleWhatsappClick("Hola me interesa agendar una consultoría")}
-                className="px-10 py-5 border-2 border-cyan-400 text-cyan-400 rounded-xl hover:bg-cyan-400/10 transition-all duration-300"
-              >
-                💬 Agendar Consultoría
               </button>
             </div>
           </div>

@@ -380,15 +380,6 @@ export function Home() {
               >
                 🚀 Explorar Servicios
               </button>
-              <WhatsAppLink
-                message="Hola me interesa más información sobre los servicios"
-                className="px-10 py-5 border-2 border-cyan-400 text-cyan-400 rounded-xl hover:bg-cyan-400/10 transition-all duration-300"
-                component="Home"
-                section="CTA"
-                buttonId="cta-consultation"
-              >
-                💬 Agendar Consultoría
-              </WhatsAppLink>
             </div>
           </div>
         </section>
