@@ -8,6 +8,10 @@ export const metadata: Metadata = {
     title: "Paga Seguro | Transformateck",
     description: "Transformateck - Paga de forma segura y rápida tus proyectos de landings profesionales optimizadas para conversión.",
   },
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function PaymentsPage() {

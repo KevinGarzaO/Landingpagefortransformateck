@@ -22,6 +22,10 @@ export const metadata: Metadata = {
     ],
     type: 'website',
   },
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function ChatGPTLandingLayout({

@@ -8,6 +8,10 @@ export const metadata: Metadata = {
     title: "Landing Web | Transformateck",
     description: "Transformateck - Creamos landings profesionales optimizadas para conversión. Diseño premium, hosting incluido y entrega express en 48-72hrs.",
   },
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function LandingWebPage() {

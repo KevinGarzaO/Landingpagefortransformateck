@@ -42,6 +42,20 @@ export const metadata: Metadata = {
   icons: {
     icon: '/assets/favicon.png',
   },
+  alternates: {
+    canonical: baseUrl,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
+  },
   verification: {
     google: 'dMk6KakNFe4mmGMtDxf3PoNBO5xV-S8cS38Ar6BtwBo',
   },
