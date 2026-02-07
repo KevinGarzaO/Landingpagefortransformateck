@@ -25,8 +25,8 @@ export function Blog() {
         setHasMore(result.hasMore);
         setLastVisible(result.lastVisible);
       } catch (err) {
-        console.error('Error loading posts:', err);
-        setError('Error al cargar los posts. Por favor intenta de nuevo.');
+        console.error("Error loading posts:", err);
+        setError("Error al cargar los posts. Por favor intenta de nuevo.");
       } finally {
         setLoading(false);
       }
@@ -41,11 +41,11 @@ export function Blog() {
     try {
       setLoadingMore(true);
       const result = await getBlogPosts(12, lastVisible);
-      setBlogPosts(prev => [...prev, ...result.posts]);
+      setBlogPosts((prev) => [...prev, ...result.posts]);
       setHasMore(result.hasMore);
       setLastVisible(result.lastVisible);
     } catch (err) {
-      console.error('Error loading more posts:', err);
+      console.error("Error loading more posts:", err);
     } finally {
       setLoadingMore(false);
     }
@@ -54,14 +54,14 @@ export function Blog() {
   // Helper function to get category color gradient
   const getCategoryGradient = (type: string) => {
     const gradients: Record<string, string> = {
-      'tecnologia': 'from-cyan-500 to-blue-500',
-      'desarrollo': 'from-purple-500 to-pink-500',
-      'marketing': 'from-orange-500 to-red-500',
-      'ia': 'from-green-500 to-emerald-500',
-      'seo': 'from-indigo-500 to-purple-500',
-      'diseño': 'from-pink-500 to-rose-500',
+      tecnologia: "from-cyan-500 to-blue-500",
+      desarrollo: "from-purple-500 to-pink-500",
+      marketing: "from-orange-500 to-red-500",
+      ia: "from-green-500 to-emerald-500",
+      seo: "from-indigo-500 to-purple-500",
+      diseño: "from-pink-500 to-rose-500",
     };
-    return gradients[type?.toLowerCase()] || 'from-cyan-500 to-purple-500';
+    return gradients[type?.toLowerCase()] || "from-cyan-500 to-purple-500";
   };
 
   return (
@@ -83,7 +83,6 @@ export function Blog() {
         </div>
 
         {/* Animated Orbs Removed */}
-
 
         <div className="relative z-10 max-w-7xl mx-auto text-center">
           <div className="inline-block px-4 py-2 bg-cyan-500/20 border border-cyan-500/50 rounded-full text-cyan-400 text-sm mb-6">
@@ -126,7 +125,9 @@ export function Blog() {
           {!loading && !error && blogPosts.length === 0 && (
             <div className="flex flex-col items-center justify-center py-20">
               <div className="text-6xl mb-4">📝</div>
-              <p className="text-gray-400 text-center">No hay posts disponibles en este momento.</p>
+              <p className="text-gray-400 text-center">
+                No hay posts disponibles en este momento.
+              </p>
             </div>
           )}
 
@@ -136,7 +137,8 @@ export function Blog() {
               {blogPosts.map((post, index) => {
                 const gradient = getCategoryGradient(post.type);
                 // Calculate read time from markdown content (approx 200 words per minute)
-                const wordCount = post.markdownContent?.split(/\s+/).length || 0;
+                const wordCount =
+                  post.markdownContent?.split(/\s+/).length || 0;
                 const readTime = Math.ceil(wordCount / 200);
 
                 return (
@@ -182,7 +184,7 @@ export function Blog() {
                         {/* Category & Read Time */}
                         <div className="flex items-center gap-3 mb-3">
                           <span className="px-3 py-1 bg-white/10 text-cyan-400 text-xs rounded-full capitalize border border-white/5">
-                            {post.type || 'General'}
+                            {post.type || "General"}
                           </span>
                           <span className="text-gray-500 text-xs">
                             {readTime} min
@@ -205,13 +207,14 @@ export function Blog() {
                         <div className="flex items-center justify-between pt-4 border-t border-white/10">
                           <span className="text-gray-500 text-xs">
                             {(() => {
-                              const dateToDisplay = post.date instanceof Timestamp 
-                                ? post.date.toDate() 
-                                : new Date(post.date);
-                              return dateToDisplay.toLocaleString('es-MX', {
-                                year: 'numeric',
-                                month: 'short',
-                                day: 'numeric'
+                              const dateToDisplay =
+                                post.date instanceof Timestamp
+                                  ? post.date.toDate()
+                                  : new Date(post.date);
+                              return dateToDisplay.toLocaleString("es-MX", {
+                                year: "numeric",
+                                month: "short",
+                                day: "numeric",
                               });
                             })()}
                           </span>
@@ -267,25 +270,6 @@ export function Blog() {
       {/* CTA Section */}
       <section className="py-20 px-4 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
         {/* Animated Circles */}
-
-
-        <div className="max-w-4xl mx-auto text-center relative z-10">
-          <h2 className="text-4xl md:text-5xl text-white mb-6">
-            ¿Tienes un Proyecto en Mente?
-          </h2>
-          <p className="text-xl text-gray-300 mb-8">
-            Hablemos sobre cómo podemos ayudarte a hacerlo realidad
-          </p>
-          <WhatsAppLink
-            message="Hola me interesa más información sobre los servicios"
-            className="inline-block px-10 py-5 bg-gradient-to-r from-cyan-500 to-purple-600 text-white rounded-xl hover:shadow-2xl hover:shadow-cyan-500/50 transition-all duration-300 transform hover:scale-105"
-            component="Blog"
-            section="CTA"
-            buttonId="blog-main-contact"
-          >
-            💬 Contactar Ahora
-          </WhatsAppLink>
-        </div>
       </section>
 
       <style>{`
