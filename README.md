@@ -1,5 +1,3 @@
----
-
 ## 🌐 Transformateck — El punto de encuentro entre tecnología e IA
 
 **Transformateck** es mi proyecto principal, un espacio digital diseñado para compartir conocimientos, recursos y estrategias sobre tecnología, desarrollo y la implementación estratégica de la inteligencia artificial en negocios y productos digitales.
