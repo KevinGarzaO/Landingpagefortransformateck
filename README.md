@@ -1,11 +1,14 @@
+---
 
-  # Landing Page for Transformateck
+## 🌐 Transformateck — El punto de encuentro entre tecnología e IA
 
-  This is a code bundle for Landing Page for Transformateck. The original project is available at https://www.figma.com/design/AGQL5SOWaVPH0MjjHC3Y5u/Landing-Page-for-Transformateck.
+**Transformateck** es mi proyecto principal, un espacio digital diseñado para compartir conocimientos, recursos y estrategias sobre tecnología, desarrollo y la implementación estratégica de la inteligencia artificial en negocios y productos digitales.
 
-  ## Running the code
+🔗 Sitio web: **https://transformateck.com/**
 
-  Run `npm i` to install the dependencies.
+En Transformateck, el enfoque está en contenido de calidad que:
+- Enseña tecnologías modernas aplicadas a problemas reales.
+- Explica cómo usar IA para mejorar procesos, productos y servicios.
+- Ayuda a emprendedores a integrar herramientas tecnológicas sin frustraciones.
 
-  Run `npm run dev` to start the development server.
-  
+---
