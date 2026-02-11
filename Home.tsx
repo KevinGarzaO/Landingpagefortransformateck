@@ -98,27 +98,6 @@ export function Home() {
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-20 animate-in slide-in-from-bottom duration-700 delay-400">
               <button
-                onClick={scrollToServices}
-                className="group px-8 py-4 bg-gradient-to-r from-cyan-500 to-purple-600 text-white rounded-xl hover:shadow-2xl hover:shadow-cyan-500/50 transition-all duration-300 transform hover:scale-105 relative overflow-hidden"
-              >
-                <span className="relative z-10 flex items-center justify-center gap-2">
-                  🚀 Ver Servicios
-                  <svg
-                    className="w-5 h-5 group-hover:translate-x-1 transition-transform"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17 8l4 4m0 0l-4 4m4-4H3"
-                    />
-                  </svg>
-                </span>
-              </button>
-              <button
                 onClick={() =>
                   handleWhatsappClick(
                     "Hola me interesa más información sobre los servicios",
@@ -155,251 +134,252 @@ export function Home() {
           </div>
         </section>
 
-        {/* What We Do */}
-        <section
-          id="services"
-          className="py-24 px-4 bg-gradient-to-b from-black via-slate-900 to-black relative overflow-hidden"
-        >
-          {/* Background Elements */}
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-0 left-1/4 w-px h-full bg-gradient-to-b from-transparent via-cyan-500 to-transparent"></div>
-            <div className="absolute top-0 left-2/4 w-px h-full bg-gradient-to-b from-transparent via-purple-500 to-transparent"></div>
-            <div className="absolute top-0 left-3/4 w-px h-full bg-gradient-to-b from-transparent via-cyan-500 to-transparent"></div>
-          </div>
-
+        {/* About Kevin Garza */}
+        <section className="py-24 px-4 bg-black relative overflow-hidden">
           <div className="max-w-7xl mx-auto relative z-10">
-            <div className="text-center mb-16">
-              <div className="inline-block px-4 py-2 bg-purple-500/20 border border-purple-500/50 rounded-full text-purple-400 text-sm mb-6">
-                💼 QUÉ HACEMOS
+            <div className="flex flex-col md:flex-row items-center gap-12">
+              <div className="w-full md:w-1/3">
+                <div className="relative aspect-square rounded-2xl overflow-hidden border-2 border-cyan-500/20 shadow-2xl shadow-cyan-500/10">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10"></div>
+                  {/* Placeholder for Kevin's photo - User needs to upload to public/assets/kevin-profile.jpg */}
+                  <img
+                    src="https://firebasestorage.googleapis.com/v0/b/babelink-ia.firebasestorage.app/o/all%2FKevinGarza.png?alt=media&token=6f54050d-2d2a-4c16-82a2-140f72a6fdcc"
+                    alt="Kevin Garza"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src =
+                        "https://via.placeholder.com/400x400?text=Kevin+Garza";
+                    }}
+                  />
+                  <div className="absolute bottom-6 left-6 z-20">
+                    <h3 className="text-2xl font-bold text-white">
+                      Kevin Garza
+                    </h3>
+                    <p className="text-cyan-400">
+                      Desarrollador & Emprendedor
+                    </p>
+                  </div>
+                </div>
               </div>
-              <h2 className="text-4xl md:text-6xl mb-6">
-                <span className="text-white">Tu Equipo Completo de</span>
-                <br />
-                <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-                  Producto Digital
-                </span>
-              </h2>
-              <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-                No solo desarrollamos. Creamos, diseñamos, optimizamos y
-                lanzamos productos que generan impacto real en tu negocio.
-              </p>
+              <div className="w-full md:w-2/3">
+                <div className="inline-block px-4 py-2 bg-cyan-500/10 border border-cyan-500/30 rounded-full text-cyan-400 text-sm mb-6">
+                  👋 SOBRE MÍ
+                </div>
+                <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
+                  Creador de{" "}
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">
+                    Transformateck
+                  </span>
+                </h2>
+                <div className="space-y-6 text-gray-400 text-lg leading-relaxed">
+                  <p>
+                    ¡Hola! Soy Kevin Garza, un desarrollador apasionado por la
+                    tecnología, la inteligencia artificial y la construcción de
+                    productos digitales que generan impacto real. Mi enfoque
+                    está en crear soluciones prácticas, útiles y escalables.
+                  </p>
+                  <p>
+                    Combino desarrollo web y móvil con estrategias de negocio
+                    centradas en el crecimiento orgánico, el contenido creativo
+                    y la productividad potenciada por IA.
+                  </p>
+                  <blockquote className="border-l-4 border-purple-500 pl-6 text-xl text-gray-300 italic my-8">
+                    "Mi filosofía es simple: crear herramientas y experiencias
+                    que conecten a las personas con el futuro de la tecnología,
+                    enfocado en la aplicabilidad real y en ayudar a otros a
+                    crecer con menos barreras de entrada."
+                  </blockquote>
+                </div>
+              </div>
             </div>
+          </div>
+        </section>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Transformateck Vision */}
+        <section className="py-24 px-4 bg-slate-900/50 relative overflow-hidden">
+          <div className="max-w-4xl mx-auto text-center relative z-10">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-8">
+              🌐 Transformateck — El punto de encuentro entre tecnología e IA
+            </h2>
+            <p className="text-xl text-gray-400 mb-12">
+              Transformateck es mi proyecto principal, un espacio digital
+              diseñado para compartir conocimientos, recursos y estrategias
+              sobre tecnología, desarrollo y la implementación estratégica de la
+              inteligencia artificial.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
               {[
                 {
-                  icon: "📱",
-                  title: "Apps Mobile",
-                  description:
-                    "Aplicaciones móviles nativas para iOS y Android. Experiencias fluidas y de alto rendimiento.",
-                  gradient: "from-purple-500 to-pink-500",
-                },
-                {
-                  icon: "💻",
-                  title: "Apps Web",
-                  description:
-                    "Aplicaciones web progresivas (PWA) modernas, rápidas y accesibles desde cualquier navegador.",
-                  gradient: "from-blue-500 to-purple-500",
-                },
-                {
-                  icon: "🚀",
-                  title: "Landing Pages",
-                  description:
-                    "Páginas de aterrizaje optimizadas para conversión. De la idea al lanzamiento en 48-72hrs.",
-                  gradient: "from-cyan-500 to-teal-500",
-                },
-                {
-                  icon: "🛒",
-                  title: "E-commerce",
-                  description:
-                    "Tiendas online completas con pasarelas de pago, inventario y gestión de ventas integrada.",
-                  gradient: "from-orange-500 to-red-500",
-                },
-                {
-                  icon: "⚙️",
-                  title: "Sistemas Web",
-                  description:
-                    "Plataformas personalizadas, CRM, dashboards y herramientas internas para tu negocio.",
-                  gradient: "from-indigo-500 to-purple-500",
+                  icon: "🎓",
+                  text: "Enseña tecnologías modernas aplicadas a problemas reales.",
                 },
                 {
                   icon: "🤖",
-                  title: "Chatbot IA WhatsApp",
-                  description:
-                    "Automatización inteligente con IA para atención 24/7. Respuestas personalizadas y conversacionales.",
-                  gradient: "from-green-500 to-emerald-500",
+                  text: "Explica cómo usar IA para mejorar procesos, productos y servicios.",
                 },
                 {
-                  icon: "✍️",
-                  title: "Copywriting para Blogs",
-                  description:
-                    "Contenido automatizado con agentes de IA. Artículos optimizados SEO que atraen, educan y convierten.",
-                  gradient: "from-pink-500 to-rose-500",
+                  icon: "🚀",
+                  text: "Ayuda a emprendedores a integrar herramientas tecnológicas sin frustraciones.",
                 },
-                {
-                  icon: "📊",
-                  title: "Marketing Ads",
-                  description:
-                    "Campañas automatizadas en Google, Meta y más. Estrategias basadas en datos para maximizar ROI.",
-                  gradient: "from-yellow-500 to-orange-500",
-                },
-              ].map((service, i) => (
+              ].map((item, i) => (
                 <div
                   key={i}
-                  className="group relative p-8 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-cyan-500/50 transition-all duration-300 overflow-hidden"
+                  className="p-6 bg-white/5 border border-white/10 rounded-xl"
                 >
-                  {/* Gradient Overlay on Hover */}
-                  <div
-                    className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}
-                  ></div>
-
-                  <div className="relative z-10">
-                    <div className="text-6xl mb-4 group-hover:scale-110 transition-transform duration-300">
-                      {service.icon}
-                    </div>
-                    <h3 className="text-2xl text-white mb-3">
-                      {service.title}
-                    </h3>
-                    <p className="text-gray-400 leading-relaxed">
-                      {service.description}
-                    </p>
-                  </div>
-
-                  {/* Corner Accent */}
-                  <div
-                    className={`absolute top-0 right-0 w-20 h-20 bg-gradient-to-br ${service.gradient} opacity-20 blur-2xl group-hover:opacity-30 transition-opacity duration-300`}
-                  ></div>
+                  <div className="text-3xl mb-4">{item.icon}</div>
+                  <p className="text-gray-300">{item.text}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Process */}
-        <section className="py-24 px-4 bg-black relative overflow-hidden">
-          {/* Animated Background Lines */}
-          <div className="absolute inset-0 opacity-20">
-            <div
-              className="absolute inset-0"
-              style={{
-                backgroundImage: `
-              linear-gradient(90deg, transparent 0%, rgba(6, 182, 212, 0.3) 50%, transparent 100%)
-            `,
-                backgroundSize: "200% 100%",
-                animation: "shimmer 3s infinite",
-              }}
-            ></div>
-          </div>
-
-          <div className="max-w-7xl mx-auto relative z-10">
+        {/* Roles & Projects */}
+        <section className="py-24 px-4 bg-black relative">
+          <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
-              <div className="inline-block px-4 py-2 bg-cyan-500/20 border border-cyan-500/50 rounded-full text-cyan-400 text-sm mb-6">
-                🔄 NUESTRO PROCESO
-              </div>
-              <h2 className="text-4xl md:text-6xl mb-6 text-white">
-                De la Idea a la Realidad
+              <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">
+                💼 Mis Roles y Proyectos
               </h2>
-              <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-                Un flujo de trabajo probado que garantiza éxito en cada proyecto
+              <p className="text-gray-400">
+                Áreas donde genero valor y disrupción
               </p>
             </div>
 
-            <div className="relative">
-              {/* Connecting Line */}
-              <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 via-purple-500 to-cyan-500 opacity-20"></div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Card 1 */}
+              <div className="group p-8 rounded-2xl bg-gradient-to-b from-slate-900 to-black border border-white/10 hover:border-cyan-500/50 transition-all">
+                <div className="w-14 h-14 bg-cyan-500/20 rounded-xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">
+                  🛠️
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-4">
+                  1. Desarrollo Web y Apps
+                </h3>
+                <p className="text-gray-400 mb-6">
+                  Lidero la construcción de plataformas modernas usando Next.js,
+                  TypeScript y PWA.
+                </p>
+                <ul className="space-y-3 text-sm text-gray-500">
+                  <li className="flex gap-2">
+                    <span className="text-cyan-500">✓</span> Plataformas de
+                    contenido y comunidad
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-cyan-500">✓</span> Apps móviles
+                    híbridas de alto engagement
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-cyan-500">✓</span> Integración de
+                    notificaciones y automatización
+                  </li>
+                </ul>
+              </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                {[
-                  {
-                    step: "01",
-                    title: "Consultoría",
-                    desc: "Entendemos tu visión y objetivos",
-                    icon: "💡",
-                  },
-                  {
-                    step: "02",
-                    title: "Diseño",
-                    desc: "Creamos prototipos profesionales",
-                    icon: "🎨",
-                  },
-                  {
-                    step: "03",
-                    title: "Desarrollo",
-                    desc: "Construimos con tecnología de punta",
-                    icon: "⚙️",
-                  },
-                  {
-                    step: "04",
-                    title: "Lanzamiento",
-                    desc: "Ponemos tu producto en marcha",
-                    icon: "🚀",
-                  },
-                ].map((phase, i) => (
-                  <div key={i} className="relative">
-                    {/* Number Badge */}
-                    <div className="flex justify-center mb-6">
-                      <div className="relative w-20 h-20 bg-gradient-to-br from-cyan-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg shadow-cyan-500/50">
-                        <span className="text-white text-xl">{phase.step}</span>
-                        {/* Pulse Effect */}
-                        <div className="absolute inset-0 rounded-full bg-cyan-500 animate-ping opacity-20"></div>
-                      </div>
-                    </div>
+              {/* Card 2 */}
+              <div className="group p-8 rounded-2xl bg-gradient-to-b from-slate-900 to-black border border-white/10 hover:border-purple-500/50 transition-all">
+                <div className="w-14 h-14 bg-purple-500/20 rounded-xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">
+                  🤖
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-4">
+                  2. IA Aplicada
+                </h3>
+                <p className="text-gray-400 mb-6">
+                  La IA como herramienta estratégica, no solo como moda.
+                </p>
+                <ul className="space-y-3 text-sm text-gray-500">
+                  <li className="flex gap-2">
+                    <span className="text-purple-500">✓</span> Aumento de
+                    eficiencia y automatización
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-purple-500">✓</span> Generación de
+                    contenido inteligente
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-purple-500">✓</span> Estrategias de
+                    integración sin costos elevados
+                  </li>
+                </ul>
+              </div>
 
-                    <div className="text-center">
-                      <div className="text-5xl mb-4">{phase.icon}</div>
-                      <h3 className="text-2xl text-white mb-2">
-                        {phase.title}
-                      </h3>
-                      <p className="text-gray-400">{phase.desc}</p>
-                    </div>
-                  </div>
-                ))}
+              {/* Card 3 */}
+              <div className="group p-8 rounded-2xl bg-gradient-to-b from-slate-900 to-black border border-white/10 hover:border-pink-500/50 transition-all">
+                <div className="w-14 h-14 bg-pink-500/20 rounded-xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">
+                  📣
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-4">
+                  3. Contenido y Estrategia
+                </h3>
+                <p className="text-gray-400 mb-6">
+                  Creo contenido diario en redes sociales para democratizar la
+                  tecnología.
+                </p>
+                <ul className="space-y-3 text-sm text-gray-500">
+                  <li className="flex gap-2">
+                    <span className="text-pink-500">✓</span> YouTube Shorts,
+                    Instagram, TikTok
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-pink-500">✓</span> Influencers
+                    virtuales basados en IA
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-pink-500">✓</span> Estrategias
+                    basadas en métricas
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="py-24 px-4 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
-          {/* Animated Circles */}
-          <div className="absolute inset-0">
-            <div className="absolute top-10 left-10 w-72 h-72 bg-cyan-500 rounded-full blur-3xl opacity-20 animate-pulse"></div>
-            <div
-              className="absolute bottom-10 right-10 w-96 h-96 bg-purple-500 rounded-full blur-3xl opacity-20 animate-pulse"
-              style={{ animationDelay: "1s" }}
-            ></div>
-          </div>
-
-          <div className="max-w-4xl mx-auto text-center relative z-10">
-            <h2 className="text-4xl md:text-6xl text-white mb-6">
-              ¿Listo Para Transformar
-              <br />
-              <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-                Tu Idea en Realidad?
-              </span>
-            </h2>
-            <p className="text-xl text-gray-300 mb-12 max-w-2xl mx-auto">
-              Únete a cientos de negocios que confiaron en nosotros para crear
-              sus productos digitales
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button
-                onClick={scrollToServices}
-                className="px-10 py-5 bg-gradient-to-r from-cyan-500 to-purple-600 text-white rounded-xl hover:shadow-2xl hover:shadow-cyan-500/50 transition-all duration-300 transform hover:scale-105"
-              >
-                🚀 Explorar Servicios
-              </button>
+        {/* Objectives & Future */}
+        <section className="py-24 px-4 bg-gradient-to-b from-black to-slate-900 relative">
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-white/5 backdrop-blur-sm rounded-3xl p-8 md:p-12 border border-cyan-500/20">
+              <h2 className="text-3xl font-bold text-white mb-8 text-center">
+                🎯 Objetivos y Visión
+              </h2>
+              <div className="space-y-6 text-gray-300">
+                <p>
+                  Mi visión es reducir la brecha entre quienes quieren aprender
+                  tecnología e IA y quienes no tienen recursos. Quiero crear
+                  productos digitales que empoderen a los usuarios a construir
+                  sus propios caminos.
+                </p>
+                <div className="h-px bg-white/10 my-8"></div>
+                <h3 className="text-xl font-bold text-white mb-4">
+                  🔥 ¿Qué sigue?
+                </h3>
+                <ul className="space-y-4">
+                  <li className="flex items-start gap-3">
+                    <span className="text-cyan-400 mt-1">➤</span>
+                    <span>
+                      Expandir la presencia de Transformateck con contenido
+                      estratégico de valor.
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-cyan-400 mt-1">➤</span>
+                    <span>
+                      Fortalecer nuestra autoridad digital para escalar el
+                      impacto.
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-cyan-400 mt-1">➤</span>
+                    <span>
+                      Lanzar nuevas guías, cursos y herramientas que ayuden a
+                      otros a crecer con tecnología e IA.
+                    </span>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </section>
 
-        <style>{`
-        @keyframes shimmer {
-          0% { background-position: -200% 0; }
-          100% { background-position: 200% 0; }
-        }
-      `}</style>
+
       </div>
     </>
   );
