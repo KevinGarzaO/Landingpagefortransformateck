@@ -1,24 +1,6 @@
 "use client";
-import { trackContactCapi } from "./src/utils/metaPixel";
-
-// Update logo path to public asset
-const logo = "/assets/logo.png";
 
 export function Home() {
-  const whatsappBaseUrl = "https://wa.me/528118582060";
-
-  const handleWhatsappClick = (message: string) => {
-    trackContactCapi({ message });
-    const link = `${whatsappBaseUrl}?text=${encodeURIComponent(message)}`;
-    window.open(link, "_blank");
-  };
-
-  const scrollToServices = () => {
-    const servicesSection = document.getElementById("services");
-    if (servicesSection) {
-      servicesSection.scrollIntoView({ behavior: "smooth" });
-    }
-  };
 
   return (
     <>
@@ -65,69 +47,50 @@ export function Home() {
           </div>
 
           <div className="relative z-10 max-w-7xl mx-auto px-4 py-20 text-center">
-            <img
-              src={logo}
-              alt="Transformateck"
-              className="h-32 md:h-40 mx-auto mb-8 brightness-0 invert animate-in fade-in zoom-in duration-700 hidden md:block"
-            />
-            <h2 className="text-5xl md:hidden bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent mb-8 animate-in fade-in zoom-in duration-700">
-              Transformateck
+            <h2 className="text-5xl md:text-7xl lg:text-8xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent mb-8 animate-in fade-in zoom-in duration-700">
+              Kevin Garza
             </h2>
 
             <div className="mb-8 animate-in slide-in-from-bottom duration-700 delay-100">
               <div className="inline-block px-6 py-3 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-500/50 rounded-full backdrop-blur-sm mb-6">
                 <span className="text-cyan-400 text-sm md:text-base">
-                  ⚡ FÁBRICA DE PRODUCTOS DIGITALES
+                  👨‍💻 DESARROLLADOR & EMPRENDEDOR
                 </span>
               </div>
             </div>
 
             <h1 className="text-5xl md:text-7xl lg:text-8xl mb-8 leading-tight animate-in slide-in-from-bottom duration-700 delay-200">
-              <span className="text-white">Creamos El</span>
+              <span className="text-white">Construyendo el</span>
               <br />
               <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-500 bg-clip-text text-transparent font-bold">
-                Futuro Digital
+                Futuro con Tecnología e IA
               </span>
             </h1>
 
             <p className="text-xl md:text-2xl text-gray-400 mb-12 max-w-4xl mx-auto leading-relaxed animate-in slide-in-from-bottom duration-700 delay-300">
-              Transformamos ideas en productos digitales extraordinarios. Desde
-              el concepto hasta el lanzamiento, nuestro equipo de expertos
-              construye tu visión con tecnología de vanguardia.
+              Ayudo a emprendedores y empresas a escalar sus negocios mediante
+              desarrollo de software, automatización e inteligencia artificial
+              aplicada.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-20 animate-in slide-in-from-bottom duration-700 delay-400">
-              <button
-                onClick={() =>
-                  handleWhatsappClick(
-                    "Hola me interesa más información sobre los servicios",
-                  )
-                }
-                className="px-8 py-4 border-2 border-cyan-400 text-cyan-400 rounded-xl hover:bg-cyan-400/10 backdrop-blur-sm transition-all duration-300"
-              >
-                💬 Hablar con Expertos
-              </button>
-            </div>
-
-            {/* Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto animate-in fade-in duration-700 delay-500">
+            {/* Personal Brand Highlights */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto animate-in fade-in duration-700 delay-400">
               {[
-                { number: "100+", label: "Proyectos Lanzados", icon: "🚀" },
-                { number: "48hrs", label: "Entrega Rápida", icon: "⚡" },
-                { number: "15+", label: "Profesionales", icon: "👥" },
-                { number: "99%", label: "Satisfacción", icon: "⭐" },
-              ].map((stat, i) => (
+                { label: "Desarrollo Web & Apps", icon: "🛠️" },
+                { label: "IA Aplicada", icon: "🤖" },
+                { label: "Contenido & Estrategia", icon: "📣" },
+                { label: "Emprendimiento Digital", icon: "🚀" },
+              ].map((item, i) => (
                 <div
                   key={i}
                   className="p-6 bg-white/5 backdrop-blur-sm rounded-2xl border border-cyan-500/20 hover:border-cyan-500/50 transition-all duration-300 group"
                 >
-                  <div className="text-4xl mb-2 group-hover:scale-110 transition-transform">
-                    {stat.icon}
+                  <div className="text-4xl mb-3 group-hover:scale-110 transition-transform">
+                    {item.icon}
                   </div>
-                  <div className="text-3xl md:text-4xl bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent mb-1">
-                    {stat.number}
+                  <div className="text-sm md:text-base text-gray-300 font-medium">
+                    {item.label}
                   </div>
-                  <div className="text-gray-500 text-sm">{stat.label}</div>
                 </div>
               ))}
             </div>
