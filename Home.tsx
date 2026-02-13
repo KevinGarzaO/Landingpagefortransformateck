@@ -1,6 +1,44 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { getBlogPosts, type BlogPost } from "@/lib/firestore";
+import Link from "next/link";
+import Image from "next/image";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+
+
 export function Home() {
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchPosts() {
+      try {
+        const result = await getBlogPosts(30);
+        setBlogPosts(result.posts);
+      } catch (err) {
+        console.error("Error loading posts:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchPosts();
+  }, []);
+
+  // Helper function to get category color gradient (copied from Blog.tsx)
+  const getCategoryGradient = (type: string) => {
+    const gradients: Record<string, string> = {
+      tecnologia: "from-cyan-500 to-blue-500",
+      desarrollo: "from-purple-500 to-pink-500",
+      marketing: "from-orange-500 to-red-500",
+      ia: "from-green-500 to-emerald-500",
+      seo: "from-indigo-500 to-purple-500",
+      diseño: "from-pink-500 to-rose-500",
+    };
+    return gradients[type?.toLowerCase()] || "from-cyan-500 to-purple-500";
+  };
 
   return (
     <>
@@ -338,6 +376,142 @@ export function Home() {
                   </li>
                 </ul>
               </div>
+            </div>
+          </div>
+
+        </section>
+
+
+
+        {/* Blog Posts Grid - Added to Home */}
+        <section className="py-24 px-4 bg-black">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16">
+              <div className="inline-block px-4 py-2 bg-cyan-500/20 border border-cyan-500/50 rounded-full text-cyan-400 text-sm mb-6">
+                📝 NUESTRO BLOG
+              </div>
+              <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">
+                Últimas{" "}
+                <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+                  Publicaciones
+                </span>
+              </h2>
+              <p className="text-gray-400 max-w-2xl mx-auto">
+                Artículos recientes sobre tecnología, IA y desarrollo.
+              </p>
+            </div>
+
+            {/* Loading State */}
+            {loading && (
+              <div className="flex flex-col items-center justify-center py-20">
+                <div className="w-16 h-16 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+                <p className="text-gray-400">Cargando posts...</p>
+              </div>
+            )}
+
+            {/* Posts Grid */}
+            {!loading && blogPosts.length > 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {blogPosts.map((post, index) => {
+                  const gradient = getCategoryGradient(post.type);
+                  // Calculate read time from markdown content (approx 200 words per minute)
+                  const wordCount =
+                    post.markdownContent?.split(/\s+/).length || 0;
+                  const readTime = Math.ceil(wordCount / 200);
+
+                  return (
+                    <article
+                      key={post.id}
+                      className="group relative bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-cyan-500/50 transition-all duration-300 overflow-hidden"
+                    >
+                      <Link href={`/blog/${post.slug}`} className="block h-full">
+                        {/* Gradient Overlay on Hover */}
+                        <div
+                          className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300 pointer-events-none`}
+                        ></div>
+
+                        {/* Image */}
+                        <div className="relative h-48 bg-gray-900 border-b border-white/10 flex items-center justify-center overflow-hidden">
+                          <div
+                            className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-20 pointer-events-none`}
+                          ></div>
+                          {post.image ? (
+                            <Image
+                              src={post.image}
+                              alt={post.title}
+                              fill
+                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                              className="object-cover relative z-10 group-hover:scale-110 transition-transform duration-500"
+                            />
+                          ) : (
+                            <Image
+                              src="/assets/logo.png"
+                              alt={post.title}
+                              width={80}
+                              height={80}
+                              className="brightness-0 invert relative z-10 group-hover:scale-110 transition-transform duration-500"
+                            />
+                          )}
+                        </div>
+
+                        {/* Content */}
+                        <div className="p-6 relative z-10">
+                          {/* Category & Read Time */}
+                          <div className="flex items-center gap-3 mb-3">
+                            <span className="px-3 py-1 bg-white/10 text-cyan-400 text-xs rounded-full capitalize border border-white/5">
+                              {post.type || "General"}
+                            </span>
+                            <span className="text-gray-500 text-xs">
+                              {readTime} min
+                            </span>
+                          </div>
+
+                          {/* Title */}
+                          <h3 className="text-xl text-white font-medium mb-3 group-hover:text-cyan-400 transition-colors duration-300">
+                            {post.title}
+                          </h3>
+
+                          {/* Excerpt */}
+                          <div className="text-gray-400 text-sm mb-4 line-clamp-3 leading-relaxed">
+                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                              {post.excerpt || ""}
+                            </ReactMarkdown>
+                          </div>
+
+                          {/* Footer */}
+                          <div className="flex items-center justify-between pt-4 border-t border-white/10">
+                            <span className="text-cyan-400 text-sm flex items-center gap-1 group-hover:gap-2 transition-all duration-300">
+                              Leer artículo
+                              <svg
+                                className="w-4 h-4 ml-1"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={1.5}
+                                  d="M17 8l4 4m0 0l-4 4m4-4H3"
+                                />
+                              </svg>
+                            </span>
+                          </div>
+                        </div>
+                      </Link>
+                    </article>
+                  );
+                })}
+              </div>
+            )}
+            
+            <div className="text-center mt-12">
+               <Link 
+                href="/blog"
+                className="inline-block px-8 py-3 bg-white/5 border border-white/20 rounded-full text-white hover:bg-white/10 hover:border-cyan-500/50 transition-all duration-300"
+               >
+                 Ver todos los artículos
+               </Link>
             </div>
           </div>
         </section>

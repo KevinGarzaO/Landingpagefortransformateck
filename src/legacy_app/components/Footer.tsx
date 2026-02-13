@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { Linkedin } from "lucide-react";
+import { Linkedin, Newspaper } from "lucide-react";
 
 // Update logo path
 const logo = "/assets/logo_3.png";
@@ -13,6 +13,11 @@ export function Footer() {
       name: "LinkedIn",
       icon: Linkedin,
       url: "https://www.linkedin.com/in/rusogarzao/",
+    },
+    {
+      name: "Substack",
+      icon: Newspaper,
+      url: "https://substack.com/@kevingarza",
     },
   ];
 

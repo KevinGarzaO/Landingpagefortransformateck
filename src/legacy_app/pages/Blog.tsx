@@ -20,7 +20,7 @@ export function Blog() {
     async function fetchPosts() {
       try {
         setLoading(true);
-        const result = await getBlogPosts(12);
+        const result = await getBlogPosts(30);
         setBlogPosts(result.posts);
         setHasMore(result.hasMore);
         setLastVisible(result.lastVisible);
@@ -40,7 +40,7 @@ export function Blog() {
 
     try {
       setLoadingMore(true);
-      const result = await getBlogPosts(12, lastVisible);
+      const result = await getBlogPosts(30, lastVisible);
       setBlogPosts((prev) => [...prev, ...result.posts]);
       setHasMore(result.hasMore);
       setLastVisible(result.lastVisible);
@@ -99,6 +99,67 @@ export function Blog() {
             Artículos, tutoriales y recursos sobre desarrollo web, IA y
             tecnología
           </p>
+        </div>
+      </section>
+
+      {/* About Kevin Garza */}
+      <section className="py-24 px-4 bg-black relative overflow-hidden">
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="flex flex-col md:flex-row items-center gap-12">
+            <div className="w-full md:w-1/3">
+              <div className="relative aspect-square rounded-2xl overflow-hidden border-2 border-cyan-500/20 shadow-2xl shadow-cyan-500/10">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10"></div>
+                {/* Placeholder for Kevin's photo - User needs to upload to public/assets/kevin-profile.jpg */}
+                <img
+                  src="https://firebasestorage.googleapis.com/v0/b/babelink-ia.firebasestorage.app/o/all%2FKevinGarza.png?alt=media&token=6f54050d-2d2a-4c16-82a2-140f72a6fdcc"
+                  alt="Kevin Garza"
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src =
+                      "https://via.placeholder.com/400x400?text=Kevin+Garza";
+                  }}
+                />
+                <div className="absolute bottom-6 left-6 z-20">
+                  <h3 className="text-2xl font-bold text-white">
+                    Kevin Garza
+                  </h3>
+                  <p className="text-cyan-400">
+                    Desarrollador & Emprendedor
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="w-full md:w-2/3">
+              <div className="inline-block px-4 py-2 bg-cyan-500/10 border border-cyan-500/30 rounded-full text-cyan-400 text-sm mb-6">
+                👋 SOBRE MÍ
+              </div>
+              <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
+                Creador de{" "}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">
+                  Transformateck
+                </span>
+              </h2>
+              <div className="space-y-6 text-gray-400 text-lg leading-relaxed">
+                <p>
+                  ¡Hola! Soy Kevin Garza, un desarrollador apasionado por la
+                  tecnología, la inteligencia artificial y la construcción de
+                  productos digitales que generan impacto real. Mi enfoque
+                  está en crear soluciones prácticas, útiles y escalables.
+                </p>
+                <p>
+                  Combino desarrollo web y móvil con estrategias de negocio
+                  centradas en el crecimiento orgánico, el contenido creativo
+                  y la productividad potenciada por IA.
+                </p>
+                <blockquote className="border-l-4 border-purple-500 pl-6 text-xl text-gray-300 italic my-8">
+                  {'"'}Mi filosofía es simple: crear herramientas y experiencias
+                  que conecten a las personas con el futuro de la tecnología,
+                  enfocado en la aplicabilidad real y en ayudar a otros a
+                  crecer con menos barreras de entrada.{'"'}
+                </blockquote>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
