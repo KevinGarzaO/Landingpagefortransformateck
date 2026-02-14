@@ -1,4 +1,5 @@
 import { getBlogPostBySlug, getBlogPosts } from "@/lib/firestore";
+import { BlogCTA } from "./BlogCTA";
 import { Timestamp } from "firebase/firestore";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
@@ -374,6 +375,9 @@ export default async function BlogPostPage({
           )}
         </article>
       </main>
+
+      {/* Substack Subscription CTA */}
+      <BlogCTA />
     </div>
   );
 }
