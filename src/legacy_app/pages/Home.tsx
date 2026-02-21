@@ -68,7 +68,7 @@ export function Home() {
             <div className="mb-8 animate-in slide-in-from-bottom duration-700 delay-100">
               <div className="inline-block px-6 py-3 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-500/50 rounded-full backdrop-blur-sm mb-6">
                 <span className="text-cyan-400 text-sm md:text-base">
-                  ⚡ FÁBRICA DE PRODUCTOS DIGITALES
+                  🤖 COMUNIDAD DE IA EN ESPAÑOL
                 </span>
               </div>
             </div>

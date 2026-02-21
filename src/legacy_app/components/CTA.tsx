@@ -34,9 +34,9 @@ export function CTA() {
         </h2>
 
         <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed">
-          Únete a cientos de emprendedores y negocios que ya transformaron su
-          presencia digital con Transformateck. No es solo un sitio web, es tu
-          fábrica de crecimiento.
+          Somos +600 construyendo la comunidad de IA más activa en español.
+          Dinámicas semanales, encuentros los sábados. Comparte con alguien
+          que deba estar aquí.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">

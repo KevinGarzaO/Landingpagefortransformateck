@@ -3,10 +3,10 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Landing Web",
-  description: "Transformateck - Creamos landings profesionales optimizadas para conversión. Diseño premium, hosting incluido y entrega express en 48-72hrs.",
+  description: "Transformateck - La comunidad de IA más activa en español. Somos +600 miembros con dinámicas semanales y encuentros los sábados.",
   openGraph: {
     title: "Landing Web | Transformateck",
-    description: "Transformateck - Creamos landings profesionales optimizadas para conversión. Diseño premium, hosting incluido y entrega express en 48-72hrs.",
+    description: "Transformateck - La comunidad de IA más activa en español. Somos +600 miembros con dinámicas semanales y encuentros los sábados.",
   },
   robots: {
     index: false,

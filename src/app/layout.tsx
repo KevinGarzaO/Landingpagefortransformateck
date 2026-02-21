@@ -15,10 +15,10 @@ export const metadata: Metadata = {
     default: 'Transformateck',
     template: '%s | Transformateck',
   },
-  description: 'Transformateck - Somos una fábrica de productos digitales que utiliza IA para crear apps móviles, web, e-commerce y más en 48-72hrs.',
+  description: 'Transformateck - La comunidad de IA más activa en español. Somos +600 miembros con dinámicas semanales y encuentros los sábados. Únete y crece con nosotros.',
   openGraph: {
     title: 'Transformateck',
-    description: 'Transformateck - Somos una fábrica de productos digitales que utiliza IA para crear apps móviles, web, e-commerce y más en 48-72hrs.',
+    description: 'Transformateck - La comunidad de IA más activa en español. Somos +600 miembros con dinámicas semanales y encuentros los sábados. Únete y crece con nosotros.',
     url: baseUrl,
     siteName: 'Transformateck',
     locale: 'es_MX',
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Transformateck',
-    description: 'Fábrica de productos digitales con IA.',
+    description: 'La comunidad de IA más activa en español. +600 miembros, dinámicas semanales y encuentros los sábados.',
     images: ['https://transformateck.com/assets/transformateck-social-card.jpg'],
   },
   icons: {

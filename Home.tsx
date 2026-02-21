@@ -200,13 +200,13 @@ export function Home() {
         <section className="py-24 px-4 bg-slate-900/50 relative overflow-hidden">
           <div className="max-w-4xl mx-auto text-center relative z-10">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-8">
-              🌐 Transformateck — El punto de encuentro entre tecnología e IA
+              🌐 Transformateck — La comunidad de IA más grande en español
             </h2>
             <p className="text-xl text-gray-400 mb-12">
-              Transformateck es mi proyecto principal, un espacio digital
-              diseñado para compartir conocimientos, recursos y estrategias
-              sobre tecnología, desarrollo y la implementación estratégica de la
-              inteligencia artificial.
+              Somos +600 miembros construyendo la comunidad de IA más activa en
+              español. Dinámicas semanales, encuentros los sábados y un espacio
+              para compartir conocimientos, recursos y estrategias sobre
+              inteligencia artificial. Ayúdanos a llegar a 1,000.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
               {[

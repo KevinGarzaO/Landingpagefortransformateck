@@ -3,10 +3,10 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Paga Seguro",
-  description: "Transformateck - Paga de forma segura y rápida tus proyectos de landings profesionales optimizadas para conversión.",
+  description: "Transformateck - La comunidad de IA más activa en español. Somos +600 miembros construyendo juntos.",
   openGraph: {
     title: "Paga Seguro | Transformateck",
-    description: "Transformateck - Paga de forma segura y rápida tus proyectos de landings profesionales optimizadas para conversión.",
+    description: "Transformateck - La comunidad de IA más activa en español. Somos +600 miembros construyendo juntos.",
   },
   robots: {
     index: false,

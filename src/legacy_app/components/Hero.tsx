@@ -29,7 +29,7 @@ export function Hero() {
 
         <div className="max-w-5xl mx-auto text-center">
           <div className="inline-block mb-6 px-4 py-2 bg-cyan-500/20 border border-cyan-500/50 rounded-full text-cyan-300 text-sm">
-            🚀 Fábrica de Productos Digitales
+            🤖 Comunidad de IA en Español
           </div>
 
           <h1 className="text-5xl md:text-7xl mb-6 text-white leading-tight">

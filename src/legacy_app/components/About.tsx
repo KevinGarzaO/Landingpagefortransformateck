@@ -12,15 +12,15 @@ export function About() {
               ✨ Quiénes Somos
             </div>
             <h2 className="text-4xl md:text-5xl mb-6 text-gray-900">
-              Tu Fábrica de
+              Tu Comunidad de
               <span className="block bg-gradient-to-r from-cyan-600 to-purple-600 bg-clip-text text-transparent">
-                Productos Digitales
+                Inteligencia Artificial
               </span>
             </h2>
             <p className="text-xl text-gray-600 mb-6 leading-relaxed">
-              En <strong className="text-gray-900">Transformateck</strong>, no solo creamos sitios web. 
-              Somos una fábrica completa de productos digitales que te acompaña desde la 
-              primera idea hasta el lanzamiento exitoso.
+              En <strong className="text-gray-900">Transformateck</strong>, somos +600 miembros 
+              construyendo la comunidad de IA más activa en español. Dinámicas semanales 
+              y encuentros los sábados para crecer juntos.
             </p>
             <p className="text-lg text-gray-600 mb-8 leading-relaxed">
               Nuestro equipo de profesionales especializados trabaja en cada detalle: 

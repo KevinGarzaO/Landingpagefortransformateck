@@ -46,11 +46,11 @@ export async function generateMetadata({
   return {
     title: `${post.title} | Transformateck`,
     description:
-      post.excerpt || `Lee el artículo "${post.title}" en Transformateck.`,
+      post.excerpt || `Lee "${post.title}" en la comunidad de IA más activa en español.`,
     openGraph: {
       title: `${post.title} | Transformateck`,
       description:
-        post.excerpt || `Lee el artículo "${post.title}" en Transformateck.`,
+        post.excerpt || `Lee "${post.title}" en la comunidad de IA más activa en español.`,
       url: `https://transformateck.com/blog/${slug}`,
       siteName: "Transformateck",
       locale: "es_MX",
@@ -63,7 +63,7 @@ export async function generateMetadata({
       card: "summary_large_image",
       title: `${post.title} | Transformateck`,
       description:
-        post.excerpt || `Lee el artículo "${post.title}" en Transformateck.`,
+        post.excerpt || `Lee "${post.title}" en la comunidad de IA más activa en español.`,
       creator: "@Transformateck",
     },
     alternates: {
@@ -135,7 +135,7 @@ export default async function BlogPostPage({
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     headline: post.title,
-    description: post.excerpt || "Lee este artículo en Transformateck",
+    description: post.excerpt || "Lee este artículo en la comunidad de IA más activa en español",
     image: ogImage,
     author: {
       "@type": "Person",

@@ -56,8 +56,8 @@ export function Footer() {
               </span>
             </Link>
             <p className="text-gray-400 mb-6 leading-relaxed">
-              Fábrica de productos digitales. Transformamos ideas en realidad
-              con tecnología de vanguardia.
+              La comunidad de IA más activa en español. +600 miembros
+              aprendiendo y construyendo juntos.
             </p>
           </div>
 
