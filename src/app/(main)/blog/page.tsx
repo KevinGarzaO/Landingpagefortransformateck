@@ -7,6 +7,10 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Blog | Transformateck",
     description: "Artículos, tutoriales y recursos sobre IA y tecnología por la comunidad de IA más activa en español. Somos +600 aprendiendo juntos.",
+    url: "https://transformateck.com/blog",
+  },
+  alternates: {
+    canonical: "https://transformateck.com/blog",
   },
 };
 

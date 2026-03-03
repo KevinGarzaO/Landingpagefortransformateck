@@ -5,16 +5,20 @@ import { db } from '@/lib/firebase'
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://transformateck.com'
   
-  // Static routes
+  // Static routes — ordenadas por prioridad para influenciar los Sitelinks de Google
   const routes = [
-    '',
-    '/blog',
-  ].map((route) => ({
-    url: `${baseUrl}${route}`,
+    { path: '', priority: 1.0 },           // Home
+    { path: '/blog', priority: 0.9 },       // Blog
+    { path: '/babelink', priority: 0.9 },   // Babelink
+    // Agrega aquí nuevas páginas principales en el futuro:
+    // { path: '/nueva-pagina', priority: 0.9 },
+  ].map(({ path, priority }) => ({
+    url: `${baseUrl}${path}`,
     lastModified: new Date(),
     changeFrequency: 'daily' as const,
-    priority: route === '' ? 1 : 0.8,
+    priority,
   }))
+
 
   // Dynamic blog posts
   let blogPosts: MetadataRoute.Sitemap = []
@@ -49,7 +53,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         url: `${baseUrl}/blog/${data.slug}`,
         lastModified: lastModified,
         changeFrequency: 'weekly' as const,
-        priority: 0.7,
+        priority: 0.6,  // menor que las páginas principales (0.9) para que Google prefiera mostrarlas en Sitelinks
       }
     })
   } catch (error) {

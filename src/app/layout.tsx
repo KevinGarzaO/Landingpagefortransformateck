@@ -40,7 +40,12 @@ export const metadata: Metadata = {
     images: ['https://transformateck.com/assets/transformateck-social-card.jpg'],
   },
   icons: {
-    icon: '/assets/favicon.png',
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/assets/favicon.png', type: 'image/png' },
+    ],
+    apple: '/assets/favicon.png',
+    shortcut: '/favicon.ico',
   },
   alternates: {
     canonical: baseUrl,
@@ -61,6 +66,51 @@ export const metadata: Metadata = {
   },
 }
 
+// JSON-LD: WebSite + SiteNavigation — le dice a Google cuáles son tus páginas principales
+// Para agregar más páginas en el futuro, añade un objeto más al array SiteNavigationElement
+const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': 'https://transformateck.com/#website',
+      url: 'https://transformateck.com',
+      name: 'Transformateck',
+      description: 'La comunidad de IA más activa en español',
+      inLanguage: 'es-MX',
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: 'https://transformateck.com/blog?q={search_term_string}',
+        'query-input': 'required name=search_term_string',
+      },
+    },
+    {
+      '@type': 'ItemList',
+      name: 'Navegación principal',
+      itemListElement: [
+        {
+          '@type': 'SiteNavigationElement',
+          position: 1,
+          name: 'Inicio',
+          url: 'https://transformateck.com',
+        },
+        {
+          '@type': 'SiteNavigationElement',
+          position: 2,
+          name: 'Blog',
+          url: 'https://transformateck.com/blog',
+        },
+        {
+          '@type': 'SiteNavigationElement',
+          position: 3,
+          name: 'Babelink',
+          url: 'https://transformateck.com/babelink',
+        },
+      ],
+    },
+  ],
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -69,6 +119,10 @@ export default function RootLayout({
   return (
     <html lang="es">
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
         {/* Google Analytics */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-3RWYRZ63PV"

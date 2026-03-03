@@ -43,6 +43,8 @@ export async function generateMetadata({
       ? post.updatedAt.toDate().toISOString()
       : new Date(post.updatedAt).toISOString();
 
+  const ogImage = post.image || 'https://transformateck.com/assets/transformateck-social-card.jpg';
+
   return {
     title: `${post.title} | Transformateck`,
     description:
@@ -58,6 +60,14 @@ export async function generateMetadata({
       publishedTime,
       modifiedTime,
       authors: [post.authorName || "Transformateck Team"],
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
@@ -65,6 +75,7 @@ export async function generateMetadata({
       description:
         post.excerpt || `Lee "${post.title}" en la comunidad de IA más activa en español.`,
       creator: "@Transformateck",
+      images: [ogImage],
     },
     alternates: {
       canonical: `https://transformateck.com/blog/${slug}`,
