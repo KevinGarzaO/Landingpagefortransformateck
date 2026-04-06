@@ -1,5 +1,6 @@
 "use client";
 const logo = "/assets/logo.png";
+import Link from "next/link";
 import { WhatsAppLink } from "../../components/WhatsAppLink";
 
 export function LandingComunidad() {
@@ -426,12 +427,12 @@ export function LandingComunidad() {
               >
                 💬 Quiero Unirme
               </WhatsAppLink>
-              <a
+              <Link
                 href="/"
                 className="px-10 py-5 border-2 border-cyan-400 text-cyan-400 rounded-xl hover:bg-cyan-400/10 transition-all duration-300 text-lg"
               >
                 Ver Servicios
-              </a>
+              </Link>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-12 border-t border-white/10">
