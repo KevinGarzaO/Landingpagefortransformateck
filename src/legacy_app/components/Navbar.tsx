@@ -12,6 +12,7 @@ export function Navbar() {
 
   const menuItems = [
     { path: "/", label: "Inicio", icon: "🏠" },
+    { path: "/comunidad", label: "Comunidad", icon: "👥" },
     { path: "/blog", label: "Blog", icon: "📝" },
     { path: "/babelink", label: "Babelink", icon: "🔍" },
   ];
