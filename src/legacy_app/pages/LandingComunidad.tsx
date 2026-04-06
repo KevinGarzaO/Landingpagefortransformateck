@@ -66,15 +66,14 @@ export function LandingComunidad() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-20 animate-in slide-in-from-bottom duration-700 delay-400">
-              <WhatsAppLink
-                message="Hola, quiero unirme a la comunidad de IA de Transformateck"
+              <a
+                href="https://substack.com/@kevingarza"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="group px-8 py-4 bg-gradient-to-r from-cyan-500 to-purple-600 text-white rounded-xl hover:shadow-2xl hover:shadow-cyan-500/50 transition-all duration-300 transform hover:scale-105"
-                component="LandingComunidad"
-                section="Hero"
-                buttonId="comunidad-hero-join"
               >
                 🚀 Unirme Ahora
-              </WhatsAppLink>
+              </a>
               <a
                 href="#que-obtienes"
                 className="px-8 py-4 border-2 border-cyan-400 text-cyan-400 rounded-xl hover:bg-cyan-400/10 backdrop-blur-sm transition-all duration-300"
@@ -349,9 +348,11 @@ export function LandingComunidad() {
 
             <div className="bg-gradient-to-br from-white/5 to-purple-500/10 rounded-3xl border border-white/10 p-10 md:p-16">
               <div className="flex flex-col md:flex-row items-center gap-10">
-                <div className="w-32 h-32 rounded-full bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center text-6xl flex-shrink-0 shadow-xl shadow-cyan-500/30">
-                  👨‍💻
-                </div>
+                <img
+                  src="/assets/kevin-garza.jpg"
+                  alt="Kevin Garza"
+                  className="w-32 h-32 rounded-full object-cover flex-shrink-0 shadow-xl shadow-cyan-500/30 border-2 border-cyan-500/50"
+                />
                 <div>
                   <h3 className="text-3xl text-white mb-2">Kevin Garza</h3>
                   <p className="text-cyan-400 mb-4 text-lg">
@@ -418,15 +419,14 @@ export function LandingComunidad() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-              <WhatsAppLink
-                message="Hola, quiero unirme a la comunidad de IA de Transformateck"
+              <a
+                href="https://substack.com/@kevingarza"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="px-10 py-5 bg-gradient-to-r from-cyan-500 to-purple-600 text-white rounded-xl hover:shadow-2xl hover:shadow-cyan-500/50 transition-all duration-300 transform hover:scale-105 text-lg"
-                component="LandingComunidad"
-                section="CTA"
-                buttonId="comunidad-cta-join"
               >
-                💬 Quiero Unirme
-              </WhatsAppLink>
+                📰 Únete en Substack
+              </a>
               <Link
                 href="/"
                 className="px-10 py-5 border-2 border-cyan-400 text-cyan-400 rounded-xl hover:bg-cyan-400/10 transition-all duration-300 text-lg"
