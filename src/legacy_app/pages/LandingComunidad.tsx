@@ -1,7 +1,6 @@
 "use client";
 const logo = "/assets/logo.png";
 import Link from "next/link";
-import { WhatsAppLink } from "../../components/WhatsAppLink";
 
 export function LandingComunidad() {
   return (

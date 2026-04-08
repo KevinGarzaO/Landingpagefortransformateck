@@ -41,7 +41,7 @@ export function TypewriterText({ content, speed = 30, onComplete, onType }: Type
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
-  }, [content, speed, onComplete]);
+  }, [content, speed, onComplete, onType]);
 
   return <ChatMessageMarkdown content={displayedText} />;
 }

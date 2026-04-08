@@ -6,6 +6,15 @@ const withPWA = withPWAInit({
     disable: process.env.NODE_ENV === "development",
     register: true,
     skipWaiting: true,
+    runtimeCaching: [
+        {
+            urlPattern: /^https:\/\/firebasestorage\.googleapis\.com\/.*/i,
+            handler: 'NetworkOnly',
+            options: {
+                cacheName: 'firebase-images',
+            },
+        },
+    ],
 });
 
 const nextConfig = {
